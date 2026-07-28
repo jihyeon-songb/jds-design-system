@@ -1,35 +1,43 @@
-# JDS Design System Design
+# JDS 디자인 시스템 설계
 
-## Summary
+이 문서는 JDS의 목표, 패키지 구조, 토큰 체계, 컴포넌트, 접근성 기준, 검증 방법, 배포 정책을 정의한다.
 
-JDS (jh design system) is a public React design system distributed through npm. It provides 20 general-purpose components with shared behavior and accessibility while allowing products to change their visual identity through CSS-variable token overrides.
+## 개요
 
-The first release contains two public packages:
+JDS(jh design system)는 npm으로 공개 배포하는 React 디자인 시스템이다. 20개의 범용 컴포넌트가 동작과 접근성을 공유한다. 각 서비스는 CSS 변수 기반 토큰을 재정의해 서로 다른 시각 테마를 적용한다.
+
+첫 릴리스는 다음 두 패키지를 공개한다:
 
 - `@jds/tokens`
 - `@jds/components`
 
-Storybook is developed in the same repository but is not published as an npm package. Additional theme packages are created only when a real product needs one.
+Storybook은 같은 저장소에서 개발하지만 npm 패키지로 배포하지 않는다. 실제 서비스에서 두 번째 테마가 필요할 때 별도 테마 패키지를 추가한다.
 
-## Goals
+## 목표
 
-- Give all components consistent APIs, states, keyboard behavior, focus management, and accessibility semantics.
-- Let designers change or add tokens without editing component implementation.
-- Let products create distinct themes by overriding semantic tokens rather than copying components.
-- Meet WCAG 2.2 AA as the baseline.
-- Publish independently consumable React packages to npm.
+JDS는 다음 목표를 충족해야 한다:
 
-## Non-goals
+- 모든 컴포넌트에 일관된 API, 상태, 키보드 동작, 포커스 관리, 접근성 의미를 적용한다
+- 디자이너가 컴포넌트 구현을 수정하지 않고 토큰을 변경하거나 추가할 수 있게 한다
+- 컴포넌트를 복제하지 않고 의미 토큰을 재정의해 서비스별 테마를 만든다
+- 웹 콘텐츠 접근성 지침(Web Content Accessibility Guidelines, WCAG) 2.2 AA를 기본 기준으로 삼는다
+- 독립적으로 설치할 수 있는 React 패키지를 npm에 배포한다
 
-- Commerce-specific components are not part of the first 20.
-- JDS will not build a custom Figma plugin.
-- JDS will not include a JavaScript theme provider.
-- Automated npm publishing is deferred until releases become frequent.
-- Visual-regression infrastructure is deferred until the component library has stable reference designs.
+## 제외 범위
 
-## Repository
+첫 릴리스에서는 다음 작업을 제외한다:
 
-JDS uses a pnpm workspace monorepo:
+- 커머스 전용 컴포넌트
+- 자체 Figma 플러그인
+- JavaScript 기반 ThemeProvider
+- npm 자동 배포
+- 시각적 회귀 검사 인프라
+
+npm 자동 배포는 릴리스가 반복될 때 추가한다. 시각적 회귀 검사는 컴포넌트의 기준 디자인이 안정된 뒤 추가한다.
+
+## 저장소 구조
+
+JDS는 pnpm workspace 기반 모노레포로 구성한다:
 
 ```text
 jh-design-system/
@@ -37,64 +45,66 @@ jh-design-system/
 │   ├── tokens/       # @jds/tokens
 │   └── components/   # @jds/components
 └── apps/
-    └── storybook/    # documentation and component verification
+    └── storybook/    # 문서와 컴포넌트 검증
 ```
 
-Packages build and publish independently. Workspace development keeps token, component, documentation, and test changes synchronized.
+각 패키지는 독립적으로 빌드하고 배포한다. 토큰, 컴포넌트, 문서, 테스트는 하나의 workspace에서 함께 검증한다.
 
-## Package Architecture
+## 패키지 구조
 
 ### `@jds/tokens`
 
-The tokens package owns token source files and generates:
+토큰 패키지는 토큰 원본을 관리하고 다음 파일을 생성한다:
 
-- CSS custom properties
-- JavaScript token exports
-- TypeScript declarations
+- CSS 사용자 정의 속성
+- JavaScript 토큰 모듈
+- TypeScript 타입 선언
 
-Token source files use the stable DTCG 2025.10 JSON format so they can be exchanged with compatible design tools.
+토큰 원본은 디자인 토큰 커뮤니티 그룹(Design Tokens Community Group, DTCG) 2025.10 JSON 형식을 사용한다. 이 형식을 지원하는 디자인 도구와 토큰 파일을 교환할 수 있다.
 
 ### `@jds/components`
 
-The components package owns React APIs, states, accessibility behavior, and JDS styling. Components consume semantic CSS variables and contain no hard-coded product colors, spacing, typography, shadows, or border radii.
+컴포넌트 패키지는 React API, 상태, 접근성 동작, JDS 기본 스타일을 관리한다. 모든 스타일은 의미 토큰을 사용한다. 서비스에 종속된 색상, 간격, 글꼴, 그림자, 모서리 반경을 컴포넌트에 직접 입력하지 않는다.
 
-Native HTML behavior is used wherever it is sufficient. Complex widgets use Radix UI primitives for WAI-ARIA semantics, keyboard navigation, and focus management. JDS adds its own API, tokens, default styles, documentation, and tests. shadcn/ui is a reference for composable component APIs and documentation, not a runtime dependency or distribution model.
+네이티브 HTML이 필요한 동작을 제공하면 그대로 사용한다. 네이티브 HTML만으로 구현하기 어려운 위젯은 Radix UI를 사용해 WAI-ARIA 의미, 키보드 탐색, 포커스를 관리한다. JDS는 Radix UI 위에 자체 API, 토큰, 기본 스타일, 문서, 테스트를 제공한다.
 
-React and Radix UI are peer dependencies so consuming applications do not receive duplicate runtime copies.
+shadcn/ui에서는 조합 가능한 API와 문서 구성을 참고한다. shadcn/ui를 런타임 의존성이나 배포 방식으로 사용하지 않는다.
 
-## Token Model
+React와 Radix UI는 peer dependency로 선언해 소비 서비스가 같은 런타임을 중복 설치하지 않게 한다.
 
-Tokens have three layers:
+## 토큰 체계
 
-1. Primitive tokens store raw design values such as `blue.600`, `space.4`, and `radius.2`.
-2. Semantic tokens describe intent such as `color.action.primary`, `color.surface.default`, and `radius.control`.
-3. Component tokens describe exceptional component-specific needs such as `button.background`.
+토큰은 세 단계로 구성한다:
 
-Components primarily consume semantic tokens. A theme overrides semantic values while inheriting all unspecified values from the default theme. Component tokens are added only when one component genuinely needs an independent value.
+1. Primitive 토큰은 `blue.600`, `space.4`, `radius.2` 같은 원시 값을 정의한다
+2. Semantic 토큰은 `color.action.primary`, `color.surface.default`, `radius.control` 같은 사용 목적을 정의한다
+3. Component 토큰은 `button.background`처럼 한 컴포넌트만 필요한 예외 값을 정의한다
 
-Token changes flow through the system as follows:
+컴포넌트는 Semantic 토큰을 우선 사용한다. 테마가 값을 지정하지 않은 Semantic 토큰은 기본 테마의 값을 상속한다. 한 컴포넌트에 독립적인 값이 필요할 때만 Component 토큰을 추가한다.
+
+토큰 변경은 다음 순서로 적용한다:
 
 ```text
-Figma or token editor
+Figma 또는 토큰 편집 도구
         ↓
 DTCG *.tokens.json
-        ↓ validation and build
+        ↓ 검증과 빌드
 @jds/tokens
         ↓
 @jds/components
         ↓
-product theme CSS overrides
+서비스 테마 CSS 재정의
 ```
 
-The token build rejects invalid token types, missing aliases, circular references, and duplicate output names. A partial theme safely falls back to the default semantic values.
+토큰 빌드는 잘못된 타입, 존재하지 않는 별칭, 순환 참조, 중복된 출력 이름을 감지하면 실패한다. 일부 값만 정의한 테마는 나머지 값을 기본 테마에서 상속한다.
 
-Products activate themes through CSS imports or a `data-theme` attribute. No runtime JavaScript is required, so theming also works during server rendering.
+서비스는 CSS import 또는 `data-theme` 속성으로 테마를 활성화한다. 런타임 JavaScript를 사용하지 않으므로 서버 렌더링에서도 같은 테마를 적용할 수 있다.
 
-## Components
+## 컴포넌트 20개
 
-The first release contains 20 general-purpose components:
+첫 릴리스는 다음 범용 컴포넌트를 포함한다.
 
-### Input
+### 입력
 
 1. Input
 2. Textarea
@@ -105,7 +115,7 @@ The first release contains 20 general-purpose components:
 7. Label
 8. FormField
 
-### Action and information
+### 동작과 정보
 
 9. Button
 10. IconButton
@@ -113,7 +123,7 @@ The first release contains 20 general-purpose components:
 12. Badge
 13. Avatar
 
-### Navigation and overlays
+### 탐색과 오버레이
 
 14. Tabs
 15. Accordion
@@ -123,78 +133,87 @@ The first release contains 20 general-purpose components:
 19. Toast
 20. Pagination
 
-## Component API Rules
+## 컴포넌트 API 규칙
 
-- Components forward refs and applicable native HTML attributes.
-- Stateful components support controlled and uncontrolled use where both modes are meaningful.
-- Visual and interactive states are exposed through stable `data-state` attributes.
-- Variants and sizes use a small documented union rather than arbitrary strings.
-- Required accessibility information is represented in TypeScript where practical. For example, `IconButton` requires an accessible name.
-- Public APIs wrap primitive implementation details so JDS can update its internal dependency without changing consumer code.
+모든 컴포넌트는 다음 API 규칙을 따른다:
 
-## Accessibility Contract
+- ref와 적용 가능한 네이티브 HTML 속성을 전달한다
+- 상태를 외부에서 제어할 필요가 있는 컴포넌트는 controlled 방식과 uncontrolled 방식을 지원한다
+- 시각 상태와 상호작용 상태를 안정적인 `data-state` 속성으로 노출한다
+- variant와 size는 임의 문자열이 아닌 문서화된 TypeScript 유니온으로 제한한다
+- 필수 접근성 정보는 가능한 범위에서 TypeScript로 강제한다
+- `IconButton`은 접근 가능한 이름을 필수로 받는다
+- 외부 API가 Radix UI의 내부 구현에 직접 의존하지 않게 감싼다
 
-WCAG 2.2 AA is the minimum target. JDS also adopts the applicable WAI-ARIA Authoring Practices interaction patterns.
+## 접근성 기준
 
-- Every interactive component is operable with a keyboard and has a visible focus indicator.
-- Focus order remains logical and focused elements are not hidden by authored overlays or sticky content.
-- The focus indicator is at least 2 CSS pixels thick and maintains a 3:1 visual difference from its unfocused state.
-- `FormField` connects labels, descriptions, requirements, and errors to the form control.
-- `Dialog` and `Drawer` move focus inside when opened, keep modal focus contained, close with Escape where safe, and return focus to the trigger.
-- `Toast` and `Alert` announce relevant status changes without unexpectedly moving focus.
-- Tabs, Accordion, RadioGroup, and other composite widgets follow their WAI-ARIA keyboard patterns.
-- State and meaning are never communicated by color alone.
-- Text, icons, controls, boundaries, and focus indicators meet applicable contrast requirements.
-- Interactive targets meet the WCAG 2.2 AA minimum of 24 by 24 CSS pixels. Buttons and icon buttons default to at least 44 by 44 CSS pixels.
-- Hover-only information and actions are prohibited; equivalent keyboard and touch behavior is required.
-- Components respect browser zoom, `prefers-reduced-motion`, forced-colors mode, and high-contrast settings.
-- Native HTML elements are preferred over recreating semantics with ARIA.
+JDS는 WCAG 2.2 AA를 최소 기준으로 삼고, 해당하는 WAI-ARIA Authoring Practices 패턴을 적용한다:
 
-## Documentation
+- 모든 상호작용 컴포넌트를 키보드로 조작할 수 있어야 한다
+- 모든 상호작용 컴포넌트에 보이는 포커스 표시를 제공한다
+- 포커스 순서를 논리적으로 유지하고 포커스가 오버레이나 고정 콘텐츠에 완전히 가려지지 않게 한다
+- 포커스 표시는 최소 2 CSS px 두께와 비포커스 상태 대비 3:1 이상의 시각 차이를 갖는다
+- `FormField`는 label, 설명, 필수 여부, 오류 메시지를 입력 요소와 연결한다
+- `Dialog`와 `Drawer`는 열릴 때 내부로 포커스를 이동하고 모달 포커스를 내부에 유지한다
+- 안전하게 닫을 수 있는 `Dialog`와 `Drawer`는 Escape 키를 지원하고 닫힌 뒤 트리거로 포커스를 돌려보낸다
+- `Toast`와 `Alert`는 포커스를 강제로 옮기지 않고 필요한 상태 변경을 보조 기술에 알린다
+- `Tabs`, `Accordion`, `RadioGroup`과 복합 위젯은 WAI-ARIA 키보드 패턴을 따른다
+- 색상만으로 상태와 의미를 전달하지 않는다
+- 텍스트, 아이콘, 컨트롤 경계, 포커스 표시가 해당 명도 대비 기준을 충족해야 한다
+- 상호작용 대상은 WCAG 2.2 AA의 최소 크기인 24 x 24 CSS px을 충족해야 한다
+- `Button`과 `IconButton`의 기본 상호작용 영역은 최소 44 x 44 CSS px로 설정한다
+- hover에서만 확인할 수 있는 정보나 동작을 만들지 않는다
+- 키보드와 터치 환경에서 같은 기능을 제공한다
+- 브라우저 확대, `prefers-reduced-motion`, forced-colors 모드, 고대비 설정을 존중한다
+- ARIA로 의미를 다시 만들기 전에 네이티브 HTML 요소를 우선 사용한다
 
-Storybook documents each component's:
+## 문서
 
-- purpose and appropriate usage
-- API and composition
-- default, hover, focus, active, disabled, invalid, and loading states where applicable
-- theme behavior
-- accessible-name and labeling requirements
-- keyboard interaction table
-- examples with short, long, and error-state content
+Storybook은 각 컴포넌트에 다음 내용을 제공한다:
 
-Storybook uses its official accessibility addon to run axe against rendered stories. Accessibility violations fail the relevant story test.
+- 목적과 사용 조건
+- API와 조합 방법
+- 해당하는 기본, hover, focus, active, disabled, invalid, loading 상태
+- 테마 적용 결과
+- 접근 가능한 이름과 label 요구사항
+- 키보드 조작표
+- 짧은 콘텐츠, 긴 콘텐츠, 오류 상태 예시
 
-## Verification
+Storybook의 공식 접근성 addon으로 렌더링된 모든 Story에 axe 검사를 실행한다. 접근성 위반을 발견하면 해당 Story 테스트를 실패 처리한다.
 
-Each component leaves the smallest useful set of checks:
+## 검증
 
-- Type checking for public props and generated token declarations
-- Component behavior tests for state transitions and event handling
-- Browser interaction tests for keyboard navigation and focus behavior in complex widgets
-- Automated axe checks for every Storybook story
-- Manual keyboard review for all interactive components
-- Manual screen-reader review for Dialog, Drawer, Tabs, Select, Tooltip, Toast, RadioGroup, and Accordion
-- Manual review at browser zoom, reduced-motion, and forced-colors settings
+각 컴포넌트는 다음 항목을 검증한다:
 
-Automated checks do not replace manual accessibility testing. A release must pass type checking, tests, and production builds.
+- 공개 props와 생성된 토큰 타입의 TypeScript 검사
+- 상태 변경과 이벤트 처리를 확인하는 컴포넌트 테스트
+- 복합 위젯의 키보드 탐색과 포커스를 확인하는 브라우저 테스트
+- 모든 Storybook Story에 대한 axe 자동 검사
+- 모든 상호작용 컴포넌트의 수동 키보드 검사
+- `Dialog`, `Drawer`, `Tabs`, `Select`, `Tooltip`, `Toast`, `RadioGroup`, `Accordion`의 수동 스크린리더 검사
+- 브라우저 확대, 모션 감소, forced-colors 설정의 수동 검사
 
-## Publishing and Versioning
+자동 검사는 수동 접근성 검사를 대체하지 않는다. 릴리스 전에 타입 검사, 테스트, 프로덕션 빌드를 모두 통과해야 한다.
 
-Both npm packages are public and share a release cadence. The initial workflow uses an explicit manual publish after verification.
+## 배포와 버전 정책
 
-- Adding a token or backward-compatible component capability increments the minor version.
-- Changing a token value or fixing behavior without changing the API increments the patch version.
-- Removing or renaming a token, changing component API compatibility, or changing established interaction behavior increments the major version.
+두 npm 패키지는 공개 배포하며 같은 릴리스 주기를 사용한다. 첫 버전은 모든 검증이 끝난 뒤 명시적인 수동 명령으로 배포한다.
 
-The npm scope is `@jds`, matching the approved package names. Publishing requires access to that npm scope; if the scope cannot be claimed, only the scope prefix changes while package boundaries and APIs remain the same.
+버전은 다음 규칙으로 변경한다:
 
-## References
+- 토큰 추가와 하위 호환 컴포넌트 기능 추가는 minor 버전을 올린다
+- API를 바꾸지 않는 토큰 값 수정과 동작 수정은 patch 버전을 올린다
+- 토큰 제거 또는 이름 변경, 컴포넌트 API 호환성 변경, 기존 상호작용 동작 변경은 major 버전을 올린다
 
-- W3C Web Content Accessibility Guidelines 2.2
-- W3C ARIA Authoring Practices Guide
-- Design Tokens Community Group Format Module 2025.10
-- Radix Primitives accessibility guidance
-- shadcn/ui component composition
-- Carbon Design System accessibility tests
-- GOV.UK Design System accessibility strategy
-- Storybook accessibility testing
+npm scope는 승인된 패키지 이름에 맞춰 `@jds`를 사용한다. npm에서 해당 scope를 소유할 수 없으면 package scope만 사용자 계정이나 조직 이름으로 바꾸고 패키지 구조와 API는 유지한다.
+
+## 참고 자료
+
+- [웹 콘텐츠 접근성 지침 2.2](https://www.w3.org/TR/WCAG22/)
+- [WAI-ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)
+- [DTCG Format Module 2025.10](https://www.designtokens.org/TR/2025.10/format/)
+- [Radix Primitives 접근성 지침](https://www.radix-ui.com/primitives/docs/overview/accessibility)
+- [shadcn/ui 컴포넌트](https://ui.shadcn.com/docs/components)
+- [Carbon Design System 접근성 검사](https://carbondesignsystem.com/components/button/accessibility/)
+- [GOV.UK Design System 접근성 전략](https://design-system.service.gov.uk/accessibility/accessibility-strategy/)
+- [Storybook 접근성 검사](https://storybook.js.org/docs/writing-tests/accessibility-testing)
