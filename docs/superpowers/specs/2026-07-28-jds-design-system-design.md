@@ -66,11 +66,11 @@ jh-design-system/
 
 컴포넌트 패키지는 React API, 상태, 접근성 동작, JDS 기본 스타일을 관리한다. 모든 스타일은 의미 토큰을 사용한다. 서비스에 종속된 색상, 간격, 글꼴, 그림자, 모서리 반경을 컴포넌트에 직접 입력하지 않는다.
 
-네이티브 HTML이 필요한 동작을 제공하면 그대로 사용한다. 네이티브 HTML만으로 구현하기 어려운 위젯은 Radix UI를 사용해 WAI-ARIA 의미, 키보드 탐색, 포커스를 관리한다. JDS는 Radix UI 위에 자체 API, 토큰, 기본 스타일, 문서, 테스트를 제공한다.
+모든 컴포넌트는 외부 UI 라이브러리 없이 네이티브 HTML과 표준 ARIA로 구현한다. 네이티브 요소가 제공하는 의미와 동작을 우선 사용하고, 복합 위젯에 필요한 WAI-ARIA 의미, 키보드 탐색, 포커스 관리는 JDS가 직접 제공한다.
 
 shadcn/ui에서는 조합 가능한 API와 문서 구성을 참고한다. shadcn/ui를 런타임 의존성이나 배포 방식으로 사용하지 않는다.
 
-React와 Radix UI는 peer dependency로 선언해 소비 서비스가 같은 런타임을 중복 설치하지 않게 한다.
+React는 peer dependency로 선언해 소비 서비스가 같은 런타임을 중복 설치하지 않게 한다.
 
 ## 토큰 체계
 
@@ -143,7 +143,13 @@ DTCG *.tokens.json
 - variant와 size는 임의 문자열이 아닌 문서화된 TypeScript 유니온으로 제한한다
 - 필수 접근성 정보는 가능한 범위에서 TypeScript로 강제한다
 - `IconButton`은 접근 가능한 이름을 필수로 받는다
-- 외부 API가 Radix UI의 내부 구현에 직접 의존하지 않게 감싼다
+- 외부 API가 특정 외부 UI 라이브러리에 의존하지 않게 한다
+
+## React 구현 및 성능 기준
+
+모든 React 컴포넌트를 작성, 검토, 리팩터링할 때는 [Vercel React Best Practices](/Users/songjihyeon/.agents/skills/vercel-react-best-practices/SKILL.md)를 함께 적용한다. 특히 데이터 요청의 워터폴 제거, 직접 import를 통한 번들 크기 관리, 서버 데이터 병렬화와 직렬화 최소화, 불필요한 리렌더링 방지를 확인한다. 단순한 표현식에는 불필요한 메모이제이션을 추가하지 않는다.
+
+이 기준은 이 문서의 접근성 및 공개 API 규칙을 대체하지 않으며, 둘을 함께 충족해야 한다.
 
 ## 접근성 기준
 
@@ -161,7 +167,7 @@ JDS는 WCAG 2.2 AA를 최소 기준으로 삼고, 해당하는 WAI-ARIA Authorin
 - 색상만으로 상태와 의미를 전달하지 않는다
 - 텍스트, 아이콘, 컨트롤 경계, 포커스 표시가 해당 명도 대비 기준을 충족해야 한다
 - 상호작용 대상은 WCAG 2.2 AA의 최소 크기인 24 x 24 CSS px을 충족해야 한다
-- `Button`과 `IconButton`의 기본 상호작용 영역은 최소 44 x 44 CSS px로 설정한다
+- `Button`은 `sm` 32px, `md` 36px, `lg` 40px, `xl` 44px 높이를 사용하고, `IconButton`의 기본 상호작용 영역은 최소 44 x 44 CSS px로 설정한다
 - hover에서만 확인할 수 있는 정보나 동작을 만들지 않는다
 - 키보드와 터치 환경에서 같은 기능을 제공한다
 - 브라우저 확대, `prefers-reduced-motion`, forced-colors 모드, 고대비 설정을 존중한다
@@ -212,8 +218,8 @@ npm scope는 승인된 패키지 이름에 맞춰 `@jds`를 사용한다. npm에
 - [웹 콘텐츠 접근성 지침 2.2](https://www.w3.org/TR/WCAG22/)
 - [WAI-ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)
 - [DTCG Format Module 2025.10](https://www.designtokens.org/TR/2025.10/format/)
-- [Radix Primitives 접근성 지침](https://www.radix-ui.com/primitives/docs/overview/accessibility)
 - [shadcn/ui 컴포넌트](https://ui.shadcn.com/docs/components)
 - [Carbon Design System 접근성 검사](https://carbondesignsystem.com/components/button/accessibility/)
 - [GOV.UK Design System 접근성 전략](https://design-system.service.gov.uk/accessibility/accessibility-strategy/)
 - [Storybook 접근성 검사](https://storybook.js.org/docs/writing-tests/accessibility-testing)
+- [Vercel React Best Practices](/Users/songjihyeon/.agents/skills/vercel-react-best-practices/SKILL.md)
