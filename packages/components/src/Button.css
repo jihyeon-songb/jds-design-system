@@ -1,0 +1,38 @@
+.jds-button {
+  align-items: center;
+  background: var(--jds-color-action-primary-background);
+  border: var(--jds-size-border) solid var(--jds-color-action-primary-background);
+  border-radius: var(--jds-radius-control);
+  color: var(--jds-color-action-primary-foreground);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  gap: var(--jds-space-button-gap);
+  height: var(--jds-size-control-button-md-height);
+  justify-content: center;
+  padding-inline: var(--jds-space-button-inline);
+  position: relative;
+  transition: background var(--jds-duration-spinner), transform var(--jds-duration-spinner);
+}
+
+.jds-button[data-size="sm"] { height: var(--jds-size-control-button-sm-height); }
+.jds-button[data-size="lg"] { height: var(--jds-size-control-button-lg-height); }
+.jds-button[data-size="xl"] { height: var(--jds-size-control-button-xl-height); }
+.jds-button[data-variant="secondary"] { background: var(--jds-color-action-secondary-background); border-color: var(--jds-color-action-secondary-background); color: var(--jds-color-action-secondary-foreground); }
+.jds-button[data-variant="outline"] { background: var(--jds-color-action-outline-background); border-color: var(--jds-color-action-outline-border); color: var(--jds-color-action-outline-foreground); }
+.jds-button[data-variant="ghost"] { background: var(--jds-color-action-ghost-background); border-color: var(--jds-color-action-ghost-background); color: var(--jds-color-action-ghost-foreground); }
+.jds-button[data-variant="destructive"] { background: var(--jds-color-action-destructive-background); border-color: var(--jds-color-action-destructive-background); color: var(--jds-color-action-destructive-foreground); }
+.jds-button:hover:not(:disabled) { background: var(--jds-color-action-primary-hover); }
+.jds-button[data-variant="secondary"]:hover:not(:disabled) { background: var(--jds-color-action-secondary-hover); border-color: var(--jds-color-action-secondary-hover); }
+.jds-button[data-variant="outline"]:hover:not(:disabled) { background: var(--jds-color-action-outline-hover); }
+.jds-button[data-variant="ghost"]:hover:not(:disabled) { background: var(--jds-color-action-ghost-hover); border-color: var(--jds-color-action-ghost-hover); }
+.jds-button[data-variant="destructive"]:hover:not(:disabled) { background: var(--jds-color-action-destructive-hover); border-color: var(--jds-color-action-destructive-hover); }
+.jds-button:active:not(:disabled) { transform: translateY(var(--jds-offset-button-active)); }
+.jds-button:disabled { cursor: not-allowed; opacity: var(--jds-opacity-disabled); }
+.jds-button:focus-visible { outline: var(--jds-size-focus) solid var(--jds-color-focus-ring); outline-offset: var(--jds-size-focus); }
+.jds-button [data-slot="spinner"] { animation: jds-button-spin var(--jds-duration-spinner) linear infinite; border: var(--jds-size-border) solid var(--jds-color-action-primary-foreground); border-inline-end-color: var(--jds-color-action-primary-background); border-radius: var(--jds-radius-control); height: var(--jds-size-control-icon); position: absolute; width: var(--jds-size-control-icon); }
+.jds-button[data-state="loading"] [data-slot="label"], .jds-button[data-state="loading"] [data-slot="start-icon"], .jds-button[data-state="loading"] [data-slot="end-icon"] { opacity: var(--jds-opacity-hidden); }
+
+@keyframes jds-button-spin { to { transform: rotate(var(--jds-angle-turn)); } }
+@media (prefers-reduced-motion: reduce) { .jds-button, .jds-button [data-slot="spinner"] { animation: none; transition: none; } }
+@media (forced-colors: active) { .jds-button { forced-color-adjust: auto; } }

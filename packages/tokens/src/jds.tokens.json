@@ -1,0 +1,22 @@
+{
+  "color": {
+    "blue": { "600": { "$value": "#0057d9", "$type": "color" }, "700": { "$value": "#0046ad", "$type": "color" } },
+    "red": { "600": { "$value": "#c9372c", "$type": "color" }, "700": { "$value": "#a52a22", "$type": "color" } },
+    "neutral": { "0": { "$value": "#ffffff", "$type": "color" }, "100": { "$value": "#f1f3f5", "$type": "color" }, "300": { "$value": "#c9ced3", "$type": "color" }, "700": { "$value": "#38434f", "$type": "color" }, "900": { "$value": "#17212b", "$type": "color" } },
+    "action": {
+      "primary": { "background": { "$value": "{color.blue.600}", "$type": "color" }, "foreground": { "$value": "{color.neutral.0}", "$type": "color" }, "hover": { "$value": "{color.blue.700}", "$type": "color" } },
+      "secondary": { "background": { "$value": "{color.neutral.100}", "$type": "color" }, "foreground": { "$value": "{color.neutral.900}", "$type": "color" }, "hover": { "$value": "{color.neutral.300}", "$type": "color" } },
+      "outline": { "background": { "$value": "{color.neutral.0}", "$type": "color" }, "foreground": { "$value": "{color.blue.600}", "$type": "color" }, "border": { "$value": "{color.blue.600}", "$type": "color" }, "hover": { "$value": "{color.neutral.100}", "$type": "color" } },
+      "ghost": { "background": { "$value": "transparent", "$type": "color" }, "foreground": { "$value": "{color.blue.600}", "$type": "color" }, "hover": { "$value": "{color.neutral.100}", "$type": "color" } },
+      "destructive": { "background": { "$value": "{color.red.600}", "$type": "color" }, "foreground": { "$value": "{color.neutral.0}", "$type": "color" }, "hover": { "$value": "{color.red.700}", "$type": "color" } }
+    },
+    "focus": { "ring": { "$value": "{color.blue.600}", "$type": "color" } }
+  },
+  "size": { "control": { "button": { "sm": { "height": { "$value": "32px", "$type": "dimension" } }, "md": { "height": { "$value": "36px", "$type": "dimension" } }, "lg": { "height": { "$value": "40px", "$type": "dimension" } }, "xl": { "height": { "$value": "44px", "$type": "dimension" } } } }, "icon": { "$value": "16px", "$type": "dimension" }, "border": { "$value": "1px", "$type": "dimension" }, "focus": { "$value": "2px", "$type": "dimension" } },
+  "space": { "button": { "inline": { "$value": "12px", "$type": "dimension" }, "gap": { "$value": "8px", "$type": "dimension" } } },
+  "radius": { "control": { "$value": "8px", "$type": "dimension" } },
+  "duration": { "spinner": { "$value": "800ms", "$type": "duration" } },
+  "offset": { "button": { "active": { "$value": "1px", "$type": "dimension" } } },
+  "angle": { "turn": { "$value": "1turn", "$type": "number" } },
+  "opacity": { "disabled": { "$value": "0.5", "$type": "number" }, "hidden": { "$value": "0", "$type": "number" } }
+}
