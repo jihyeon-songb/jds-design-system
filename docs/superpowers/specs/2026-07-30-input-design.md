@@ -25,20 +25,20 @@
 ```ts
 export type InputSize = "sm" | "md" | "lg" | "xl"
 
-export type InputProps = React.ComponentPropsWithoutRef<"input"> & {
+export type InputProps = Omit<React.ComponentPropsWithoutRef<"input">, "size"> & {
   size?: InputSize
   invalid?: boolean
 }
 ```
 
-`Input`은 ref와 적용 가능한 native input 속성을 전달하며 native `<input>` 하나만 렌더링한다. 기본 `size`는 `"md"`다. `value`와 `defaultValue`를 포함한 controlled·uncontrolled 사용은 브라우저와 React의 기본 동작에 맡긴다.
+`Input`은 ref와 적용 가능한 native input 속성을 전달하며 native `<input>` 하나만 렌더링한다. native input의 숫자 `size` 속성은 JDS의 문자열 `size` API와 충돌하므로 제외한다. 기본 `size`는 `"md"`다. `value`와 `defaultValue`를 포함한 controlled·uncontrolled 사용은 브라우저와 React의 기본 동작에 맡긴다.
 
 `type`은 제한하지 않는다. 소비자는 목적에 맞는 native input type과 접근 가능한 이름을 제공한다. Input은 값 변환, 입력 차단, 자동 완성 제어를 추가하지 않는다.
 
 ## 상태와 접근성
 
 - native `disabled`, `readOnly`, `required`, `type` 등의 속성을 그대로 사용한다.
-- `invalid`이면 `aria-invalid="true"`를 설정한다. 오류 메시지 연결은 이후 `FormField`가 담당한다.
+- `invalid`이면 `aria-invalid="true"`를 설정한다. `invalid`가 아니면 소비자가 제공한 `aria-invalid`를 그대로 전달한다. 오류 메시지 연결은 이후 `FormField`가 담당한다.
 - `data-state`는 `disabled`, `readonly`, `invalid`, `idle` 중 하나를 노출한다. disabled를 최우선으로 하고, 그다음 readOnly와 invalid 순서로 결정한다.
 - 소비자가 제공한 `aria-describedby`를 변경하지 않는다.
 - native Input의 키보드 입력, 선택, 포커스 순서를 변경하지 않는다.
