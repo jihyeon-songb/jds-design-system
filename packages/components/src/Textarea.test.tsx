@@ -1,6 +1,6 @@
 import { createRef } from "react"
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
-import { afterEach, describe, expect, it } from "vitest"
+import { afterEach, describe, expect, it, vi } from "vitest"
 import { Textarea } from "./Textarea.js"
 
 afterEach(cleanup)
@@ -27,7 +27,9 @@ describe("Textarea", () => {
     expect(ref.current?.getAttribute("aria-describedby")?.split(" ")).toEqual(
       expect.arrayContaining(["hint-id"])
     )
-    expect(screen.getByText("2 / 10")).toHaveAttribute("data-slot", "counter")
+    const counter = screen.getByText("2 / 10")
+    expect(counter).toHaveAttribute("data-slot", "counter")
+    expect(ref.current?.getAttribute("aria-describedby")?.split(" ")).toContain(counter.id)
   })
 
   it("shows and updates a counter only when maxLength is set for uncontrolled usage", () => {
@@ -41,14 +43,19 @@ describe("Textarea", () => {
   })
 
   it("recalculates the counter from the controlled value and omits it without maxLength", () => {
-    const { rerender } = render(<Textarea aria-label="메모" value="하나" onChange={() => {}} />)
+    const onChange = vi.fn()
+    const { rerender } = render(<Textarea aria-label="메모" value="하나" onChange={onChange} />)
 
     expect(screen.queryByText(/\/\s*\d+/)).not.toBeInTheDocument()
 
-    rerender(<Textarea aria-label="메모" maxLength={10} value="하나" onChange={() => {}} />)
+    rerender(<Textarea aria-label="메모" maxLength={10} value="하나" onChange={onChange} />)
     expect(screen.getByText("2 / 10")).toBeInTheDocument()
 
-    rerender(<Textarea aria-label="메모" maxLength={10} value="하나둘셋넷" onChange={() => {}} />)
+    fireEvent.change(screen.getByRole("textbox", { name: "메모" }), { target: { value: "바뀐 값" } })
+    expect(onChange).toHaveBeenCalledOnce()
+    expect(screen.getByText("2 / 10")).toBeInTheDocument()
+
+    rerender(<Textarea aria-label="메모" maxLength={10} value="하나둘셋넷" onChange={onChange} />)
     expect(screen.getByText("5 / 10")).toBeInTheDocument()
   })
 
@@ -59,7 +66,7 @@ describe("Textarea", () => {
     expect(control).toHaveAttribute("aria-invalid", "true")
     expect(control.closest(".jds-textarea")).toHaveAttribute("data-state", "invalid")
 
-    rerender(<Textarea aria-label="소개" disabled />)
+    rerender(<Textarea aria-label="소개" disabled invalid readOnly />)
     expect(control).toBeDisabled()
     expect(control.closest(".jds-textarea")).toHaveAttribute("data-state", "disabled")
 
