@@ -1,11 +1,15 @@
 import { createRef } from "react"
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, describe, expect, expectTypeOf, it } from "vitest"
-import { Input, type InputProps } from "./Input.js"
+import { Input, type InputProps, type InputSize } from "./Input.js"
 
 afterEach(cleanup)
 
 describe("Input", () => {
+  it("exposes only InputSize strings for size", () => {
+    expectTypeOf<InputProps["size"]>().toEqualTypeOf<InputSize | undefined>()
+  })
+
   it("forwards the ref and native input props", () => {
     const ref = createRef<HTMLInputElement>()
     render(<Input ref={ref} aria-label="이메일" name="email" required type="email" />)
