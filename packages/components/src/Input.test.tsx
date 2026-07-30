@@ -1,7 +1,7 @@
 import { createRef } from "react"
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
-import { afterEach, describe, expect, it } from "vitest"
-import { Input } from "./Input.js"
+import { afterEach, describe, expect, expectTypeOf, it } from "vitest"
+import { Input, type InputProps } from "./Input.js"
 
 afterEach(cleanup)
 
@@ -44,8 +44,21 @@ describe("Input", () => {
     expect(control).toHaveAttribute("data-state", "readonly")
   })
 
-  it.each(["sm", "md", "lg", "xl"] as const)("sets the %s size", (size) => {
-    render(<Input aria-label="이름" size={size} />)
+  it("preserves caller aria-invalid unless invalid is true", () => {
+    const { rerender } = render(<Input aria-invalid="false" aria-label="이름" />)
+    const control = screen.getByRole("textbox", { name: "이름" })
+
+    expect(control).toHaveAttribute("aria-invalid", "false")
+
+    rerender(<Input aria-invalid="false" aria-label="이름" invalid />)
+    expect(control).toHaveAttribute("aria-invalid", "true")
+  })
+
+  it.each(["sm", "md", "lg", "xl"] as const)("accepts and sets the %s string size", (size) => {
+    const props: InputProps = { size }
+    expectTypeOf<{ size?: "sm" | "md" | "lg" | "xl" }>().toMatchTypeOf<InputProps>()
+
+    render(<Input aria-label="이름" {...props} />)
 
     expect(screen.getByRole("textbox", { name: "이름" })).toHaveAttribute("data-size", size)
   })
