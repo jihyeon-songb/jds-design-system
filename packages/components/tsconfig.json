@@ -1,4 +1,4 @@
 {
   "extends": "../../tsconfig.base.json",
-  "include": ["src/Button.tsx", "src/index.ts"]
+  "include": ["src/Button.tsx", "src/Textarea.tsx", "src/index.ts"]
 }
