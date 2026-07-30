@@ -2,6 +2,7 @@
   background: var(--jds-color-field-background);
   border: var(--jds-size-border) solid var(--jds-color-field-border);
   border-radius: var(--jds-radius-control);
+  box-sizing: border-box;
   color: var(--jds-color-field-foreground);
   font: inherit;
   height: var(--jds-size-control-input-md-height);

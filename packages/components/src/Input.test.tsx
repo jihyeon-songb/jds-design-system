@@ -33,9 +33,12 @@ describe("Input", () => {
   })
 
   it("reflects invalid, disabled, and readOnly states in priority order", () => {
-    const { rerender } = render(<Input aria-label="이름" invalid />)
+    const { rerender } = render(<Input aria-label="이름" />)
     const control = screen.getByRole("textbox", { name: "이름" })
 
+    expect(control).toHaveAttribute("data-state", "idle")
+
+    rerender(<Input aria-label="이름" invalid />)
     expect(control).toHaveAttribute("aria-invalid", "true")
     expect(control).toHaveAttribute("data-state", "invalid")
 
