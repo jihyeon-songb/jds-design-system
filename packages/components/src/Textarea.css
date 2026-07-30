@@ -1,0 +1,25 @@
+.jds-textarea {
+  display: grid;
+  gap: var(--jds-space-textarea-counter);
+}
+
+.jds-textarea [data-slot="control"] {
+  background: var(--jds-color-field-background);
+  border: var(--jds-size-border) solid var(--jds-color-field-border);
+  border-radius: var(--jds-radius-control);
+  color: var(--jds-color-field-foreground);
+  font: inherit;
+  min-height: var(--jds-size-control-textarea-md-min-height);
+  padding: var(--jds-space-textarea-block) var(--jds-space-textarea-inline);
+}
+
+.jds-textarea[data-size="sm"] [data-slot="control"] { min-height: var(--jds-size-control-textarea-sm-min-height); }
+.jds-textarea[data-size="lg"] [data-slot="control"] { min-height: var(--jds-size-control-textarea-lg-min-height); }
+.jds-textarea[data-state="invalid"] [data-slot="control"] { border-color: var(--jds-color-field-invalid-border); }
+.jds-textarea [data-slot="control"]:hover:not(:disabled):not([readonly]) { border-color: var(--jds-color-field-hover-border); }
+.jds-textarea[data-state="disabled"] [data-slot="control"] { opacity: var(--jds-opacity-disabled); }
+.jds-textarea[data-state="readonly"] [data-slot="control"] { border-color: var(--jds-color-field-border); }
+.jds-textarea [data-slot="control"]:focus-visible { outline: var(--jds-size-focus) solid var(--jds-color-focus-ring); outline-offset: var(--jds-size-focus); }
+
+@media (prefers-reduced-motion: reduce) { .jds-textarea [data-slot="control"] { transition: none; } }
+@media (forced-colors: active) { .jds-textarea [data-slot="control"] { forced-color-adjust: auto; } }
