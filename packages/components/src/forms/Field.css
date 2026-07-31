@@ -1,0 +1,29 @@
+.jds-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jds-space-field-group);
+}
+
+.jds-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jds-space-field-item);
+}
+
+.jds-field[data-orientation="horizontal"] { flex-direction: row; }
+
+.jds-field-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jds-space-field-content);
+}
+
+.jds-field-description { color: var(--jds-color-field-foreground); }
+.jds-field-error { color: var(--jds-color-field-invalid-border); }
+.jds-field[data-disabled] { opacity: var(--jds-opacity-disabled); }
+
+@media (forced-colors: active) {
+  .jds-field-group,
+  .jds-field,
+  .jds-field-content { forced-color-adjust: auto; }
+}
