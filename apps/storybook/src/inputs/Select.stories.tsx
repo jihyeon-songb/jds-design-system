@@ -1,5 +1,6 @@
 import { useState } from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
+import { expect, userEvent, within } from "storybook/test"
 import {
   Select,
   SelectContent,
@@ -92,6 +93,24 @@ export const Invalid: Story = {
 
 export const Controlled: Story = {
   render: () => <ControlledSelect />,
+}
+
+export const ClosedTypeahead: Story = {
+  tags: ["select-regression"],
+  render: () => <Select>{countries}</Select>,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole("combobox", { name: "국가" })
+
+    trigger.focus()
+    await userEvent.keyboard("ㅇ")
+
+    expect(canvas.getByRole("listbox")).toBeVisible()
+    expect(trigger).toHaveAttribute(
+      "aria-activedescendant",
+      canvas.getByRole("option", { name: "일본" }).id
+    )
+  },
 }
 
 export const LongText: Story = {

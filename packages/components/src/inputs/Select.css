@@ -77,9 +77,14 @@
   cursor: pointer;
 }
 
-.jds-select-item[data-state="active"],
 .jds-select-item[data-state="selected"] {
   background: var(--jds-color-action-secondary-background);
+}
+
+.jds-select-item[data-state="active"] {
+  background: var(--jds-color-action-secondary-background);
+  outline: var(--jds-size-focus) solid var(--jds-color-focus-ring);
+  outline-offset: calc(var(--jds-size-focus) * -1);
 }
 
 .jds-select-item[data-state="disabled"] {
@@ -98,5 +103,11 @@
   .jds-select-trigger,
   .jds-select-content {
     forced-color-adjust: auto;
+  }
+
+  .jds-select-item[data-state="active"] {
+    background: Highlight;
+    color: HighlightText;
+    outline-color: Highlight;
   }
 }

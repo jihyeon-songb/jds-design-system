@@ -14,6 +14,25 @@ import {
 
 afterEach(cleanup)
 
+function stubScrollIntoView() {
+  const descriptor = Object.getOwnPropertyDescriptor(HTMLElement.prototype, "scrollIntoView")
+  const scrollIntoView = vi.fn()
+
+  Object.defineProperty(HTMLElement.prototype, "scrollIntoView", {
+    configurable: true,
+    value: scrollIntoView,
+    writable: true,
+  })
+
+  return {
+    restore() {
+      if (descriptor) Object.defineProperty(HTMLElement.prototype, "scrollIntoView", descriptor)
+      else Reflect.deleteProperty(HTMLElement.prototype, "scrollIntoView")
+    },
+    scrollIntoView,
+  }
+}
+
 const selectParts = (
   <>
     <SelectTrigger aria-label="국가">
@@ -329,6 +348,21 @@ describe("Select", () => {
     )
   })
 
+  it("opens from a closed trigger and activates the matching option with printable keys", async () => {
+    const user = userEvent.setup()
+    render(<Select>{selectParts}</Select>)
+    const trigger = screen.getByRole("combobox")
+
+    trigger.focus()
+    await user.keyboard("ㅇ")
+
+    expect(screen.getByRole("listbox")).toBeVisible()
+    expect(trigger).toHaveAttribute(
+      "aria-activedescendant",
+      screen.getByRole("option", { name: "일본" }).id
+    )
+  })
+
   it("opens and selects the first option with Space", async () => {
     const user = userEvent.setup()
     render(<Select>{selectParts}</Select>)
@@ -475,5 +509,38 @@ describe("Select", () => {
     await user.keyboard("{ArrowDown}")
     expect(screen.getByRole("option", { name: "대한민국" })).toHaveAttribute("data-state", "selected")
     expect(screen.getByRole("option", { name: "미국" })).toHaveAttribute("data-state", "active")
+  })
+
+  it("scrolls the active option into view while navigating a long list", async () => {
+    const user = userEvent.setup()
+    const { restore, scrollIntoView } = stubScrollIntoView()
+
+    render(
+      <Select>
+        <SelectTrigger aria-label="항목"><SelectValue placeholder="선택" /></SelectTrigger>
+        <SelectContent>
+          {Array.from({ length: 12 }, (_, index) => (
+            <SelectItem key={index} value={`${index + 1}`}>
+              항목 {index + 1}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    )
+    const trigger = screen.getByRole("combobox", { name: "항목" })
+
+    try {
+      await user.click(trigger)
+      scrollIntoView.mockClear()
+      await user.keyboard("{ArrowDown}")
+
+      expect(trigger).toHaveAttribute(
+        "aria-activedescendant",
+        screen.getByRole("option", { name: "항목 2" }).id
+      )
+      expect(scrollIntoView).toHaveBeenCalledWith({ block: "nearest" })
+    } finally {
+      restore()
+    }
   })
 })

@@ -155,11 +155,11 @@ export function Select({
     onOpenChangeRef.current = onOpenChange
   }, [onOpenChange])
 
-  function requestOpen(nextOpen: boolean): void {
+  function requestOpen(nextOpen: boolean, activeId?: string): void {
     if (nextOpen && disabled) return
     if (nextOpen) {
       const selectedItem = enabledItems.find((item) => item.value === selectedValue)
-      setActiveItemId(selectedItem?.id ?? enabledItems[0]?.id)
+      setActiveItemId(activeId ?? selectedItem?.id ?? enabledItems[0]?.id)
     } else {
       typeaheadRef.current = { prefix: "", time: 0 }
     }
@@ -193,18 +193,17 @@ export function Select({
     requestOpen(false)
   }
 
-  function typeahead(character: string): void {
+  function typeahead(character: string): SelectItemRecord | undefined {
     const now = Date.now()
     const previousPrefix = now - typeaheadRef.current.time <= 500
       ? typeaheadRef.current.prefix
       : ""
     const prefix = `${previousPrefix}${character}`.toLocaleLowerCase()
     typeaheadRef.current = { prefix, time: now }
-    const match = enabledItems.find((item) => {
+    return enabledItems.find((item) => {
       const text = item.text.toLocaleLowerCase()
       return text.startsWith(prefix) || getHangulInitials(text).startsWith(prefix)
     })
-    if (match) setActiveItemId(match.id)
   }
 
   function onTriggerKeyDown(event: KeyboardEvent<HTMLButtonElement>): void {
@@ -214,12 +213,16 @@ export function Select({
       if (event.key === "ArrowUp") {
         event.preventDefault()
         const selectedItem = enabledItems.find((item) => item.value === selectedValue)
-        setActiveItemId(selectedItem?.id ?? enabledItems[enabledItems.length - 1]?.id)
-        if (open === undefined) setUncontrolledOpen(true)
-        onOpenChangeRef.current?.(true)
+        requestOpen(true, selectedItem?.id ?? enabledItems[enabledItems.length - 1]?.id)
       } else if (event.key === "ArrowDown" || event.key === "Enter" || event.key === " ") {
         event.preventDefault()
         requestOpen(true)
+      } else if (event.key.length === 1 && !event.altKey && !event.ctrlKey && !event.metaKey) {
+        const match = typeahead(event.key)
+        if (match) {
+          event.preventDefault()
+          requestOpen(true, match.id)
+        }
       }
       return
     }
@@ -231,7 +234,8 @@ export function Select({
     else if (event.key === "Enter" || event.key === " ") selectActiveItem()
     else if (event.key === "Escape") requestOpen(false)
     else if (event.key.length === 1 && !event.altKey && !event.ctrlKey && !event.metaKey) {
-      typeahead(event.key)
+      const match = typeahead(event.key)
+      if (match) setActiveItemId(match.id)
     } else {
       return
     }
@@ -264,6 +268,14 @@ export function Select({
     document.addEventListener("pointerdown", onDocumentPointerDown)
     return () => document.removeEventListener("pointerdown", onDocumentPointerDown)
   }, [currentOpen])
+
+  useEffect(() => {
+    if (!currentOpen || !activeItemId) return
+
+    items.find((item) => item.id === activeItemId)?.ref.current?.scrollIntoView?.({
+      block: "nearest",
+    })
+  }, [activeItemId, currentOpen, items])
 
   return (
     <SelectContext.Provider
