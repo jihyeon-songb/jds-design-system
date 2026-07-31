@@ -251,15 +251,21 @@ export function Select({
         triggerRef,
       }}
     >
-      {children}
-      {name ? (
-        <input
-          disabled={disabled}
-          name={name}
-          type="hidden"
-          value={selectedValue ?? ""}
-        />
-      ) : null}
+      <div
+        className="jds-select"
+        data-slot="root"
+        data-state={disabled ? "disabled" : currentOpen ? "open" : invalid ? "invalid" : "idle"}
+      >
+        {children}
+        {name ? (
+          <input
+            disabled={disabled}
+            name={name}
+            type="hidden"
+            value={selectedValue ?? ""}
+          />
+        ) : null}
+      </div>
     </SelectContext.Provider>
   )
 }
@@ -270,6 +276,7 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(f
   {
     "aria-invalid": ariaInvalid,
     children,
+    className,
     disabled,
     onBlur,
     onClick,
@@ -280,6 +287,7 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(f
 ) {
   const context = useSelectContext()
   const isDisabled = context.disabled || disabled
+  const state = isDisabled ? "disabled" : context.open ? "open" : context.invalid ? "invalid" : "idle"
 
   useImperativeHandle(ref, () => context.triggerRef.current as HTMLButtonElement)
 
@@ -293,7 +301,10 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(f
       aria-haspopup="listbox"
       aria-invalid={context.invalid ? true : ariaInvalid}
       aria-required={context.required || undefined}
+      className={["jds-select-trigger", className].filter(Boolean).join(" ")}
       disabled={isDisabled}
+      data-slot="trigger"
+      data-state={state}
       role="combobox"
       type="button"
       onBlur={(event) => {
@@ -310,6 +321,15 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(f
       }}
     >
       {children}
+      <svg
+        aria-hidden="true"
+        className="jds-select-chevron"
+        data-slot="icon"
+        focusable="false"
+        viewBox="0 0 16 16"
+      >
+        <path d="M3 6h10l-5 5z" fill="currentColor" />
+      </svg>
     </button>
   )
 })
@@ -319,18 +339,27 @@ export type SelectValueProps = ComponentPropsWithoutRef<"span"> & {
 }
 
 export const SelectValue = forwardRef<HTMLSpanElement, SelectValueProps>(function SelectValue(
-  { placeholder, ...props },
+  { className, placeholder, ...props },
   ref
 ) {
   const { selectedText } = useSelectContext()
 
-  return <span {...props} ref={ref}>{selectedText ?? placeholder}</span>
+  return (
+    <span
+      {...props}
+      ref={ref}
+      className={["jds-select-value", className].filter(Boolean).join(" ")}
+      data-slot="value"
+    >
+      {selectedText ?? placeholder}
+    </span>
+  )
 })
 
 export type SelectContentProps = ComponentPropsWithoutRef<"div">
 
 export const SelectContent = forwardRef<HTMLDivElement, SelectContentProps>(function SelectContent(
-  { id: suppliedId, ...props },
+  { className, id: suppliedId, ...props },
   ref
 ) {
   const context = useSelectContext()
@@ -343,6 +372,9 @@ export const SelectContent = forwardRef<HTMLDivElement, SelectContentProps>(func
     <div
       {...props}
       ref={context.contentRef}
+      className={["jds-select-content", className].filter(Boolean).join(" ")}
+      data-slot="content"
+      data-state={context.open ? "open" : "closed"}
       hidden={!context.open}
       id={id}
       role={context.open ? "listbox" : undefined}
@@ -353,7 +385,7 @@ export const SelectContent = forwardRef<HTMLDivElement, SelectContentProps>(func
 export type SelectGroupProps = ComponentPropsWithoutRef<"div">
 
 export const SelectGroup = forwardRef<HTMLDivElement, SelectGroupProps>(function SelectGroup(
-  { "aria-label": ariaLabel, "aria-labelledby": ariaLabelledby, ...props },
+  { "aria-label": ariaLabel, "aria-labelledby": ariaLabelledby, className, ...props },
   ref
 ) {
   const defaultLabelId = useId()
@@ -366,6 +398,8 @@ export const SelectGroup = forwardRef<HTMLDivElement, SelectGroupProps>(function
         ref={ref}
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledby ?? (ariaLabel ? undefined : labelId)}
+        className={["jds-select-group", className].filter(Boolean).join(" ")}
+        data-slot="group"
         role="group"
       />
     </SelectGroupContext.Provider>
@@ -375,7 +409,7 @@ export const SelectGroup = forwardRef<HTMLDivElement, SelectGroupProps>(function
 export type SelectLabelProps = ComponentPropsWithoutRef<"div">
 
 export const SelectLabel = forwardRef<HTMLDivElement, SelectLabelProps>(function SelectLabel(
-  { id: suppliedId, ...props },
+  { className, id: suppliedId, ...props },
   ref
 ) {
   const group = useContext(SelectGroupContext)
@@ -384,7 +418,15 @@ export const SelectLabel = forwardRef<HTMLDivElement, SelectLabelProps>(function
 
   useEffect(() => group?.setLabelId(id), [group?.setLabelId, id])
 
-  return <div {...props} ref={ref} id={id} />
+  return (
+    <div
+      {...props}
+      ref={ref}
+      className={["jds-select-label", className].filter(Boolean).join(" ")}
+      data-slot="label"
+      id={id}
+    />
+  )
 })
 
 export type SelectItemProps = Omit<ComponentPropsWithoutRef<"div">, "value"> & {
@@ -395,6 +437,7 @@ export type SelectItemProps = Omit<ComponentPropsWithoutRef<"div">, "value"> & {
 export const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(function SelectItem(
   {
     children,
+    className,
     disabled = false,
     id: suppliedId,
     onClick,
@@ -410,6 +453,8 @@ export const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(function S
   const itemRef = useRef<HTMLDivElement>(null)
   const isDisabled = context.disabled || disabled
   const selected = context.selectedValue === value
+  const active = context.activeItemId === id
+  const state = isDisabled ? "disabled" : active ? "active" : selected ? "selected" : "idle"
 
   useImperativeHandle(ref, () => itemRef.current as HTMLDivElement)
 
@@ -430,6 +475,9 @@ export const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(function S
       ref={itemRef}
       aria-disabled={isDisabled || undefined}
       aria-selected={selected}
+      className={["jds-select-item", className].filter(Boolean).join(" ")}
+      data-slot="item"
+      data-state={state}
       id={id}
       role="option"
       tabIndex={-1}

@@ -1,0 +1,102 @@
+.jds-select {
+  display: inline-block;
+  max-width: 100%;
+  position: relative;
+}
+
+.jds-select-trigger {
+  align-items: center;
+  background: var(--jds-color-field-background);
+  border: var(--jds-size-border) solid var(--jds-color-field-border);
+  border-radius: var(--jds-radius-control);
+  box-sizing: border-box;
+  color: var(--jds-color-field-foreground);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  gap: var(--jds-space-button-gap);
+  justify-content: space-between;
+  max-width: 100%;
+  min-height: var(--jds-size-control-input-md-height);
+  padding-inline: var(--jds-space-input-inline);
+  width: max-content;
+}
+
+.jds-select-trigger:hover:not(:disabled) {
+  border-color: var(--jds-color-field-hover-border);
+}
+
+.jds-select-trigger[data-state="invalid"] {
+  border-color: var(--jds-color-field-invalid-border);
+}
+
+.jds-select-trigger[data-state="disabled"] {
+  cursor: not-allowed;
+  opacity: var(--jds-opacity-disabled);
+}
+
+.jds-select-trigger:focus-visible {
+  outline: var(--jds-size-focus) solid var(--jds-color-focus-ring);
+  outline-offset: var(--jds-size-focus);
+}
+
+.jds-select-value {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.jds-select-chevron {
+  flex: none;
+  height: var(--jds-size-icon);
+  width: var(--jds-size-icon);
+}
+
+.jds-select-content {
+  background: var(--jds-color-field-background);
+  border: var(--jds-size-border) solid var(--jds-color-field-border);
+  border-radius: var(--jds-radius-control);
+  box-sizing: border-box;
+  color: var(--jds-color-field-foreground);
+  inset-block-start: 100%;
+  inset-inline-start: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.jds-select-label,
+.jds-select-item {
+  align-items: center;
+  display: flex;
+  min-height: var(--jds-size-control-input-md-height);
+  padding-inline: var(--jds-space-input-inline);
+}
+
+.jds-select-item {
+  cursor: pointer;
+}
+
+.jds-select-item[data-state="active"],
+.jds-select-item[data-state="selected"] {
+  background: var(--jds-color-action-secondary-background);
+}
+
+.jds-select-item[data-state="disabled"] {
+  cursor: not-allowed;
+  opacity: var(--jds-opacity-disabled);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jds-select-trigger,
+  .jds-select-content {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .jds-select-trigger,
+  .jds-select-content {
+    forced-color-adjust: auto;
+  }
+}

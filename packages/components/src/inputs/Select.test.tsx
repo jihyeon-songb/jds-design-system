@@ -349,4 +349,29 @@ describe("Select", () => {
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument()
     expect(document.querySelector('input[name="country"]')).toBeDisabled()
   })
+
+  it("exposes open and invalid states for token styles", async () => {
+    const user = userEvent.setup()
+    render(<Select invalid>{selectParts}</Select>)
+    const trigger = screen.getByRole("combobox")
+
+    expect(trigger).toHaveAttribute("data-state", "invalid")
+    await user.click(trigger)
+    expect(trigger).toHaveAttribute("data-state", "open")
+  })
+
+  it("exposes active, selected, disabled, and idle item states", async () => {
+    const user = userEvent.setup()
+    render(<Select defaultValue="kr">{selectPartsWithDisabledItem}</Select>)
+    const trigger = screen.getByRole("combobox")
+
+    await user.click(trigger)
+    expect(screen.getByRole("option", { name: "대한민국" })).toHaveAttribute("data-state", "active")
+    expect(screen.getByRole("option", { name: "일본" })).toHaveAttribute("data-state", "disabled")
+    expect(screen.getByRole("option", { name: "미국" })).toHaveAttribute("data-state", "idle")
+
+    await user.keyboard("{ArrowDown}")
+    expect(screen.getByRole("option", { name: "대한민국" })).toHaveAttribute("data-state", "selected")
+    expect(screen.getByRole("option", { name: "미국" })).toHaveAttribute("data-state", "active")
+  })
 })
