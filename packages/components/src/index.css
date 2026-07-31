@@ -1,3 +1,4 @@
-@import "./Button.css";
-@import "./Input.css";
-@import "./Textarea.css";
+@import "./actions/Button.css";
+@import "./inputs/Input.css";
+@import "./inputs/Select.css";
+@import "./inputs/Textarea.css";
