@@ -9,6 +9,7 @@ import {
   useRef,
   useState,
   type ComponentPropsWithoutRef,
+  type KeyboardEvent,
   type ReactNode,
   type RefObject,
 } from "react"
@@ -22,18 +23,40 @@ type SelectItemRecord = {
 }
 
 type SelectContextValue = {
+  activeItemId: string | undefined
+  contentId: string
+  contentRef: RefObject<HTMLDivElement | null>
+  defaultContentId: string
   disabled: boolean
   invalid: boolean
   open: boolean
   required: boolean
   selectedValue: string | undefined
   selectedText: string | undefined
+  onTriggerKeyDown: (event: KeyboardEvent<HTMLButtonElement>) => void
   registerItem: (item: SelectItemRecord) => () => void
   requestOpen: (open: boolean) => void
   requestValue: (value: string) => void
+  setContentId: (id: string) => void
+  triggerRef: RefObject<HTMLButtonElement | null>
 }
 
 const SelectContext = createContext<SelectContextValue | null>(null)
+const SelectGroupContext = createContext<{
+  defaultLabelId: string
+  labelId: string
+  setLabelId: (id: string) => void
+} | null>(null)
+const HANGUL_INITIALS = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ"
+
+function getHangulInitials(text: string): string {
+  return Array.from(text, (character) => {
+    const code = character.charCodeAt(0)
+    return code >= 0xac00 && code <= 0xd7a3
+      ? HANGUL_INITIALS[Math.floor((code - 0xac00) / 588)]
+      : character
+  }).join("")
+}
 
 function useSelectContext(): SelectContextValue {
   const context = useContext(SelectContext)
@@ -70,12 +93,19 @@ export function Select({
   required = false,
   value,
 }: SelectProps) {
+  const generatedContentId = useId()
   const [items, setItems] = useState<SelectItemRecord[]>([])
+  const [activeItemId, setActiveItemId] = useState<string>()
+  const [contentId, setContentId] = useState(generatedContentId)
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen)
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue)
+  const contentRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  const typeaheadRef = useRef({ prefix: "", time: 0 })
   const selectedValue = value ?? uncontrolledValue
   const selectedText = items.find((item) => item.value === selectedValue)?.text
-  const currentOpen = open ?? uncontrolledOpen
+  const currentOpen = !disabled && (open ?? uncontrolledOpen)
+  const enabledItems = items.filter((item) => !item.disabled)
 
   const registerItem = useCallback((item: SelectItemRecord) => {
     setItems((currentItems) => [...currentItems.filter((current) => current.id !== item.id), item])
@@ -83,6 +113,13 @@ export function Select({
   }, [])
 
   function requestOpen(nextOpen: boolean): void {
+    if (nextOpen && disabled) return
+    if (nextOpen) {
+      const selectedItem = enabledItems.find((item) => item.value === selectedValue)
+      setActiveItemId(selectedItem?.id ?? enabledItems[0]?.id)
+    } else {
+      typeaheadRef.current = { prefix: "", time: 0 }
+    }
     if (open === undefined) setUncontrolledOpen(nextOpen)
     onOpenChange?.(nextOpen)
   }
@@ -92,18 +129,118 @@ export function Select({
     onValueChange?.(nextValue)
   }
 
+  function moveActive(direction: 1 | -1): void {
+    const currentIndex = enabledItems.findIndex((item) => item.id === activeItemId)
+    const nextIndex = currentIndex < 0
+      ? direction === 1 ? 0 : enabledItems.length - 1
+      : Math.min(Math.max(currentIndex + direction, 0), enabledItems.length - 1)
+    setActiveItemId(enabledItems[nextIndex]?.id)
+  }
+
+  function moveToBoundary(boundary: "first" | "last"): void {
+    setActiveItemId(
+      boundary === "first" ? enabledItems[0]?.id : enabledItems[enabledItems.length - 1]?.id
+    )
+  }
+
+  function selectActiveItem(): void {
+    const activeItem = enabledItems.find((item) => item.id === activeItemId)
+    if (!activeItem) return
+    requestValue(activeItem.value)
+    requestOpen(false)
+  }
+
+  function typeahead(character: string): void {
+    const now = Date.now()
+    const previousPrefix = now - typeaheadRef.current.time <= 500
+      ? typeaheadRef.current.prefix
+      : ""
+    const prefix = `${previousPrefix}${character}`.toLocaleLowerCase()
+    typeaheadRef.current = { prefix, time: now }
+    const match = enabledItems.find((item) => {
+      const text = item.text.toLocaleLowerCase()
+      return text.startsWith(prefix) || getHangulInitials(text).startsWith(prefix)
+    })
+    if (match) setActiveItemId(match.id)
+  }
+
+  function onTriggerKeyDown(event: KeyboardEvent<HTMLButtonElement>): void {
+    if (disabled) return
+
+    if (!currentOpen) {
+      if (event.key === "ArrowUp") {
+        event.preventDefault()
+        const selectedItem = enabledItems.find((item) => item.value === selectedValue)
+        setActiveItemId(selectedItem?.id ?? enabledItems[enabledItems.length - 1]?.id)
+        if (open === undefined) setUncontrolledOpen(true)
+        onOpenChange?.(true)
+      } else if (event.key === "ArrowDown" || event.key === "Enter" || event.key === " ") {
+        event.preventDefault()
+        requestOpen(true)
+      }
+      return
+    }
+
+    if (event.key === "ArrowDown") moveActive(1)
+    else if (event.key === "ArrowUp") moveActive(-1)
+    else if (event.key === "Home") moveToBoundary("first")
+    else if (event.key === "End") moveToBoundary("last")
+    else if (event.key === "Enter" || event.key === " ") selectActiveItem()
+    else if (event.key === "Escape") requestOpen(false)
+    else if (event.key.length === 1 && !event.altKey && !event.ctrlKey && !event.metaKey) {
+      typeahead(event.key)
+    } else {
+      return
+    }
+    event.preventDefault()
+  }
+
+  useEffect(() => {
+    if (!currentOpen) {
+      setActiveItemId(undefined)
+      return
+    }
+    const selectedItem = enabledItems.find((item) => item.value === selectedValue)
+    setActiveItemId((currentId) =>
+      enabledItems.some((item) => item.id === currentId)
+        ? currentId
+        : selectedItem?.id ?? enabledItems[0]?.id
+    )
+  }, [currentOpen, items, selectedValue])
+
+  useEffect(() => {
+    if (!currentOpen) return
+
+    function onDocumentPointerDown(event: PointerEvent): void {
+      const target = event.target as Node
+      if (!triggerRef.current?.contains(target) && !contentRef.current?.contains(target)) {
+        requestOpen(false)
+      }
+    }
+
+    document.addEventListener("pointerdown", onDocumentPointerDown)
+    return () => document.removeEventListener("pointerdown", onDocumentPointerDown)
+  }, [currentOpen])
+
   return (
     <SelectContext.Provider
       value={{
+        activeItemId,
+        contentId,
+        contentRef,
+        defaultContentId: generatedContentId,
         disabled,
         invalid,
         open: currentOpen,
         required,
         selectedValue,
         selectedText,
+        onTriggerKeyDown,
         registerItem,
         requestOpen,
         requestValue,
+        setContentId,
+        triggerRef,
       }}
     >
       {children}
@@ -122,16 +259,28 @@ export function Select({
 export type SelectTriggerProps = Omit<ComponentPropsWithoutRef<"button">, "type">
 
 export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(function SelectTrigger(
-  { "aria-invalid": ariaInvalid, children, disabled, onClick, ...props },
+  {
+    "aria-invalid": ariaInvalid,
+    children,
+    disabled,
+    onBlur,
+    onClick,
+    onKeyDown,
+    ...props
+  },
   ref
 ) {
   const context = useSelectContext()
   const isDisabled = context.disabled || disabled
 
+  useImperativeHandle(ref, () => context.triggerRef.current as HTMLButtonElement)
+
   return (
     <button
       {...props}
-      ref={ref}
+      ref={context.triggerRef}
+      aria-activedescendant={context.open ? context.activeItemId : undefined}
+      aria-controls={context.contentId}
       aria-expanded={context.open}
       aria-haspopup="listbox"
       aria-invalid={context.invalid ? true : ariaInvalid}
@@ -139,9 +288,17 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(f
       disabled={isDisabled}
       role="combobox"
       type="button"
+      onBlur={(event) => {
+        onBlur?.(event)
+        if (!event.defaultPrevented && context.open) context.requestOpen(false)
+      }}
       onClick={(event) => {
         onClick?.(event)
         if (!event.defaultPrevented) context.requestOpen(!context.open)
+      }}
+      onKeyDown={(event) => {
+        onKeyDown?.(event)
+        if (!event.defaultPrevented) context.onTriggerKeyDown(event)
       }}
     >
       {children}
@@ -165,24 +322,61 @@ export const SelectValue = forwardRef<HTMLSpanElement, SelectValueProps>(functio
 export type SelectContentProps = ComponentPropsWithoutRef<"div">
 
 export const SelectContent = forwardRef<HTMLDivElement, SelectContentProps>(function SelectContent(
-  props,
+  { id: suppliedId, ...props },
   ref
 ) {
-  const { open } = useSelectContext()
+  const context = useSelectContext()
+  const id = suppliedId ?? context.defaultContentId
 
-  return <div {...props} ref={ref} hidden={!open} role="listbox" />
+  useImperativeHandle(ref, () => context.contentRef.current as HTMLDivElement)
+  useEffect(() => context.setContentId(id), [context.setContentId, id])
+
+  return (
+    <div
+      {...props}
+      ref={context.contentRef}
+      hidden={!context.open}
+      id={id}
+      role={context.open ? "listbox" : undefined}
+    />
+  )
 })
 
 export type SelectGroupProps = ComponentPropsWithoutRef<"div">
 
-export const SelectGroup = forwardRef<HTMLDivElement, SelectGroupProps>(function SelectGroup(props, ref) {
-  return <div {...props} ref={ref} role="group" />
+export const SelectGroup = forwardRef<HTMLDivElement, SelectGroupProps>(function SelectGroup(
+  { "aria-label": ariaLabel, "aria-labelledby": ariaLabelledby, ...props },
+  ref
+) {
+  const defaultLabelId = useId()
+  const [labelId, setLabelId] = useState(defaultLabelId)
+
+  return (
+    <SelectGroupContext.Provider value={{ defaultLabelId, labelId, setLabelId }}>
+      <div
+        {...props}
+        ref={ref}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledby ?? (ariaLabel ? undefined : labelId)}
+        role="group"
+      />
+    </SelectGroupContext.Provider>
+  )
 })
 
 export type SelectLabelProps = ComponentPropsWithoutRef<"div">
 
-export const SelectLabel = forwardRef<HTMLDivElement, SelectLabelProps>(function SelectLabel(props, ref) {
-  return <div {...props} ref={ref} />
+export const SelectLabel = forwardRef<HTMLDivElement, SelectLabelProps>(function SelectLabel(
+  { id: suppliedId, ...props },
+  ref
+) {
+  const group = useContext(SelectGroupContext)
+  const generatedId = useId()
+  const id = suppliedId ?? group?.defaultLabelId ?? generatedId
+
+  useEffect(() => group?.setLabelId(id), [group?.setLabelId, id])
+
+  return <div {...props} ref={ref} id={id} />
 })
 
 export type SelectItemProps = Omit<ComponentPropsWithoutRef<"div">, "value"> & {
@@ -191,7 +385,15 @@ export type SelectItemProps = Omit<ComponentPropsWithoutRef<"div">, "value"> & {
 }
 
 export const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(function SelectItem(
-  { children, disabled = false, id: suppliedId, onClick, value, ...props },
+  {
+    children,
+    disabled = false,
+    id: suppliedId,
+    onClick,
+    onPointerDown,
+    value,
+    ...props
+  },
   ref
 ) {
   const context = useSelectContext()
@@ -223,6 +425,10 @@ export const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(function S
       id={id}
       role="option"
       tabIndex={-1}
+      onPointerDown={(event) => {
+        onPointerDown?.(event)
+        if (!event.defaultPrevented && !isDisabled) event.preventDefault()
+      }}
       onClick={(event) => {
         onClick?.(event)
         if (event.defaultPrevented || isDisabled) return
