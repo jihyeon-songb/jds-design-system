@@ -1,0 +1,35 @@
+.jds-checkbox {
+  accent-color: var(--jds-color-action-primary-background);
+  block-size: var(--jds-size-control-checkbox-size);
+  box-sizing: content-box;
+  inline-size: var(--jds-size-control-checkbox-size);
+  margin: 0;
+  padding: var(--jds-space-checkbox-target);
+  vertical-align: middle;
+}
+
+label:has(> .jds-checkbox) {
+  align-items: center;
+  display: inline-flex;
+  gap: var(--jds-space-checkbox-target);
+}
+
+.jds-checkbox[data-state="invalid"] {
+  outline: var(--jds-size-border) solid var(--jds-color-field-invalid-border);
+  outline-offset: var(--jds-size-border);
+}
+
+.jds-checkbox[data-state="disabled"] {
+  opacity: var(--jds-opacity-disabled);
+}
+
+.jds-checkbox:focus-visible {
+  outline: var(--jds-size-focus) solid var(--jds-color-focus-ring);
+  outline-offset: var(--jds-size-focus);
+}
+
+@media (forced-colors: active) {
+  .jds-checkbox {
+    forced-color-adjust: auto;
+  }
+}

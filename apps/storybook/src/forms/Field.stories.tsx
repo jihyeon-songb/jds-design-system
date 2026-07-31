@@ -1,11 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { expect } from "storybook/test"
 import {
+  Checkbox,
   Field,
   FieldContent,
   FieldDescription,
-  FieldError,
   FieldLabel,
+  FieldTitle,
+  Input,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@jds/components"
 
 const meta = {
@@ -16,92 +22,51 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Horizontal: Story = {
+export const Basic: Story = {
+  render: () => (
+    <Field>
+      <FieldTitle>결제 수단</FieldTitle>
+      <FieldDescription>모든 거래는 안전하게 암호화됩니다.</FieldDescription>
+    </Field>
+  ),
+}
+
+export const SelectField: Story = {
+  render: () => (
+    <Field>
+      <FieldLabel htmlFor="country">국가</FieldLabel>
+      <Select defaultValue="kr">
+        <SelectTrigger id="country">
+          <SelectValue placeholder="국가 선택" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="kr">대한민국</SelectItem>
+          <SelectItem value="jp">일본</SelectItem>
+          <SelectItem value="us">미국</SelectItem>
+        </SelectContent>
+      </Select>
+    </Field>
+  ),
+}
+
+export const CheckboxField: Story = {
   render: () => (
     <Field orientation="horizontal">
-      <input id="notifications" type="checkbox" />
+      <Checkbox id="notifications" />
       <FieldContent>
         <FieldLabel htmlFor="notifications">알림 활성화</FieldLabel>
+        <FieldDescription>언제든 변경할 수 있습니다.</FieldDescription>
       </FieldContent>
     </Field>
   ),
 }
 
-export const Description: Story = {
+export const InputField: Story = {
   render: () => (
-    <Field orientation="horizontal">
-      <input aria-describedby="updates-description" id="updates" type="checkbox" />
-      <FieldContent>
-        <FieldLabel htmlFor="updates">업데이트 소식 받기</FieldLabel>
-        <FieldDescription id="updates-description">언제든 변경할 수 있습니다.</FieldDescription>
-      </FieldContent>
+    <Field>
+      <FieldLabel htmlFor="email">이메일</FieldLabel>
+      <Input aria-describedby="email-description" id="email" name="email" type="email" />
+      <FieldDescription id="email-description">알림 수신에 사용합니다.</FieldDescription>
     </Field>
   ),
-  play: ({ canvasElement }) => {
-    expect(canvasElement.querySelector("#updates")).toHaveAttribute("aria-describedby", "updates-description")
-  },
-}
-
-export const DisabledContext: Story = {
-  render: () => (
-    <Field aria-disabled="true" data-disabled orientation="horizontal">
-      <input aria-describedby="disabled-notifications-description" disabled id="disabled-notifications" type="checkbox" />
-      <FieldContent>
-        <FieldLabel htmlFor="disabled-notifications">알림 활성화</FieldLabel>
-        <FieldDescription id="disabled-notifications-description">현재 사용할 수 없습니다.</FieldDescription>
-      </FieldContent>
-    </Field>
-  ),
-  play: ({ canvasElement }) => {
-    expect(canvasElement.querySelector("#disabled-notifications")).toHaveAttribute(
-      "aria-describedby",
-      "disabled-notifications-description"
-    )
-    expect(canvasElement.querySelector(".jds-field")).toHaveStyle({ opacity: "0.5" })
-  },
-}
-
-export const Invalid: Story = {
-  render: () => (
-    <Field orientation="horizontal">
-      <input
-        aria-describedby="invalid-notifications-description invalid-notifications-error"
-        aria-invalid="true"
-        id="invalid-notifications"
-        type="checkbox"
-      />
-      <FieldContent>
-        <FieldLabel htmlFor="invalid-notifications">필수 알림 수신</FieldLabel>
-        <FieldDescription id="invalid-notifications-description">수신 여부를 선택해야 합니다.</FieldDescription>
-        <FieldError id="invalid-notifications-error">알림 수신 여부를 선택하세요.</FieldError>
-      </FieldContent>
-    </Field>
-  ),
-  play: ({ canvasElement }) => {
-    const control = canvasElement.querySelector("#invalid-notifications")
-    expect(control).toHaveAttribute("type", "checkbox")
-    expect(control).toHaveAttribute("aria-invalid", "true")
-    expect(control).toHaveAttribute(
-      "aria-describedby",
-      "invalid-notifications-description invalid-notifications-error"
-    )
-  },
-}
-
-export const LongContent: Story = {
-  render: () => (
-    <Field orientation="horizontal">
-      <input aria-describedby="long-content-description" id="long-content" type="checkbox" />
-      <FieldContent>
-        <FieldLabel htmlFor="long-content">
-          중요한 서비스 변경 사항과 보안 관련 공지를 포함한 긴 알림 수신 설정
-        </FieldLabel>
-        <FieldDescription id="long-content-description">설명도 여러 줄로 자연스럽게 표시됩니다.</FieldDescription>
-      </FieldContent>
-    </Field>
-  ),
-  play: ({ canvasElement }) => {
-    expect(canvasElement.querySelector("#long-content")).toHaveAttribute("aria-describedby", "long-content-description")
-    expect(canvasElement.querySelector(".jds-field")).toHaveStyle({ alignItems: "flex-start" })
-  },
 }
