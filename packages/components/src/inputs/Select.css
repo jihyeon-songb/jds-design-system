@@ -22,7 +22,7 @@
   width: max-content;
 }
 
-.jds-select-trigger:hover:not(:disabled) {
+.jds-select-trigger:hover:not(:disabled):not([data-state="invalid"]) {
   border-color: var(--jds-color-field-hover-border);
 }
 
