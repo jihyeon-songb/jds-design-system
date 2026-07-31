@@ -2,10 +2,9 @@
 
 ## 목적
 
-`Checkbox`를 포함한 입력 control의 배치, label, 설명, 오류 메시지를 control 자체와
-분리한다. `Field` 계열은 조합 가능한 구조와 접근성 연결을 제공하고, `Checkbox`,
-`Input`, `Textarea`, `Select`, 이후 `RadioGroup`, `Switch`는 각자의 native·복합 위젯
-동작만 책임진다.
+`Checkbox` 같은 control-first 조합의 배치, label, 설명, 오류 메시지를 control 자체와
+분리한다. `Field` 계열은 조합 가능한 구조와 접근성 연결을 제공하고, 각 control은
+자신의 native·복합 위젯 동작을 책임진다.
 
 ## 구성과 책임
 
@@ -68,30 +67,20 @@ label wrapping 중 하나를 제공해야 한다.
 명시적으로 넣는다. `FieldError`는 control에 `aria-invalid="true"`를 강제하지 않는다.
 invalid는 control의 책임이다.
 
-```tsx
-<Field>
-  <Input aria-describedby="email-description email-error" aria-invalid="true" id="email" />
-  <FieldContent>
-    <FieldLabel htmlFor="email">이메일</FieldLabel>
-    <FieldDescription id="email-description">알림 수신에 사용합니다.</FieldDescription>
-    <FieldError id="email-error">올바른 이메일 주소를 입력하세요.</FieldError>
-  </FieldContent>
-</Field>
-```
-
 이 명시적 연결은 간단한 native 조합 API를 유지하고 여러 control을 가진 Field에도 안전하다.
-자동 연결은 실제 사용성이 부족하다고 확인될 때 `FieldControl` 같은 별도 API로 검토한다.
+label이 control보다 앞에 와야 하는 Input과 Textarea는 이 control-first 구성으로 문서화하지
+않는다. 해당 조합이 필요해질 때만 label → control → description/error 순서를 보장하는 별도
+FormField API를 검토한다.
 
 ## 스타일과 토큰
 
-각 컴포넌트는 semantic token만 사용한다. 첫 구현은 기존 `space.input.inline`,
-`space.textarea.counter`, `opacity.disabled`, `color.field.foreground`,
-`color.field.invalid-border`를 재사용하고, 실제 부족한 간격만 새 semantic token으로
-추가한다. Field는 horizontal일 때 checkbox와 content를 가로로, vertical일 때 세로로
-배치한다. focus, checked, disabled의 시각 상태는 control CSS가 담당한다.
+각 컴포넌트는 semantic token만 사용한다. 첫 구현은 기존 `opacity.disabled`,
+`color.field.foreground`, `color.field.invalid-border`를 재사용한다. Field는 horizontal일
+때 checkbox와 content를 가로 시작선에 맞춰 배치하고, vertical일 때 세로로 배치한다.
+focus와 checked의 시각 상태는 control CSS가 담당한다.
 
-`data-disabled`는 소비자가 Field에 전달해 문맥 스타일에 사용할 수 있지만, Field는 control의
-disabled 속성을 자동으로 바꾸지 않는다. 향후 control 상태를 자동 상속해야 할 실제 요구가
+`data-disabled`는 Field 문맥 전체에 `opacity.disabled`를 적용하지만, Field는 control의
+`disabled` 속성을 자동으로 바꾸지 않는다. 향후 control 상태를 자동 상속해야 할 실제 요구가
 생길 때만 Context 도입을 검토한다.
 
 ## 검증
@@ -101,8 +90,7 @@ disabled 속성을 자동으로 바꾸지 않는다. 향후 control 상태를 �
 - `htmlFor`/`id`로 연결된 label의 접근 가능한 이름
 - 소비자가 지정한 `aria-describedby`와 Description/Error ID의 명시적 연결
 - FieldError가 control의 `aria-invalid`를 덮어쓰지 않음
-- horizontal Checkbox, 설명 포함 Checkbox, disabled 문맥, 긴 텍스트, Input과 Textarea
-  조합 Story 및 axe 검사
+- horizontal Checkbox, 설명 포함 Checkbox, disabled 문맥, 긴 텍스트 Story 및 axe 검사
 
 각 구현 뒤 `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm lint`,
 `pnpm --filter @jds/storybook build`를 실행한다. 키보드, 브라우저 확대, forced-colors에서
@@ -114,6 +102,7 @@ label 클릭과 설명·오류 읽기를 수동 확인한다.
 - Field 내부 control 자동 탐색 또는 여러 control의 자동 ARIA 연결
 - RadioGroup/Select 전용 label 동작
 - validation 실행, 오류 상태 계산, 폼 제출 처리
+- Input과 Textarea의 label-first 배치를 위한 FormField API
 
 이 범위는 조합 API를 작고 예측 가능하게 유지한다. validation과 control 상태는 소비자 또는
 각 control이 관리한다.
