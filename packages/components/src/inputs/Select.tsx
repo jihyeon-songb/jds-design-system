@@ -1,6 +1,8 @@
 import {
+  Children,
   createContext,
   forwardRef,
+  isValidElement,
   useCallback,
   useContext,
   useEffect,
@@ -10,6 +12,7 @@ import {
   useState,
   type ComponentPropsWithoutRef,
   type KeyboardEvent,
+  type ReactElement,
   type ReactNode,
   type RefObject,
 } from "react"
@@ -24,9 +27,8 @@ type SelectItemRecord = {
 
 type SelectContextValue = {
   activeItemId: string | undefined
-  contentId: string
+  contentId: string | undefined
   contentRef: RefObject<HTMLDivElement | null>
-  defaultContentId: string
   disabled: boolean
   invalid: boolean
   open: boolean
@@ -37,15 +39,12 @@ type SelectContextValue = {
   registerItem: (item: SelectItemRecord) => () => void
   requestOpen: (open: boolean) => void
   requestValue: (value: string) => void
-  setContentId: (id: string) => void
   triggerRef: RefObject<HTMLButtonElement | null>
 }
 
 const SelectContext = createContext<SelectContextValue | null>(null)
 const SelectGroupContext = createContext<{
-  defaultLabelId: string
-  labelId: string
-  setLabelId: (id: string) => void
+  labelId: string | undefined
 } | null>(null)
 const HANGUL_INITIALS = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ"
 
@@ -64,6 +63,31 @@ function useSelectContext(): SelectContextValue {
   if (!context) throw new Error("Select compound components must be used within Select")
 
   return context
+}
+
+type SelectChildProps = {
+  children?: ReactNode
+  id?: string
+  value?: string
+}
+
+function getTextContent(children: ReactNode): string {
+  return Children.toArray(children).map((child) => {
+    if (typeof child === "string" || typeof child === "number") return String(child)
+    return isValidElement<SelectChildProps>(child) ? getTextContent(child.props.children) : ""
+  }).join("")
+}
+
+function findChild(
+  children: ReactNode,
+  matches: (child: ReactElement<SelectChildProps>) => boolean
+): ReactElement<SelectChildProps> | undefined {
+  for (const child of Children.toArray(children)) {
+    if (!isValidElement<SelectChildProps>(child)) continue
+    if (matches(child)) return child
+    const nested = findChild(child.props.children, matches)
+    if (nested) return nested
+  }
 }
 
 export type SelectProps = {
@@ -96,14 +120,21 @@ export function Select({
   const generatedContentId = useId()
   const [items, setItems] = useState<SelectItemRecord[]>([])
   const [activeItemId, setActiveItemId] = useState<string>()
-  const [contentId, setContentId] = useState(generatedContentId)
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen)
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue)
   const contentRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const typeaheadRef = useRef({ prefix: "", time: 0 })
+  const onOpenChangeRef = useRef(onOpenChange)
   const selectedValue = value ?? uncontrolledValue
+  const content = findChild(children, (child) => child.type === SelectContent)
+  const selectedItem = findChild(
+    children,
+    (child) => child.type === SelectItem && child.props.value === selectedValue
+  )
+  const contentId = content ? content.props.id ?? generatedContentId : undefined
   const selectedText = items.find((item) => item.value === selectedValue)?.text
+    ?? (selectedItem ? getTextContent(selectedItem.props.children) : undefined)
   const currentOpen = !disabled && (open ?? uncontrolledOpen)
   const enabledItems = items.filter((item) => !item.disabled).sort((first, second) => {
     const firstNode = first.ref.current
@@ -120,6 +151,10 @@ export function Select({
     return () => setItems((currentItems) => currentItems.filter((current) => current.id !== item.id))
   }, [])
 
+  useEffect(() => {
+    onOpenChangeRef.current = onOpenChange
+  }, [onOpenChange])
+
   function requestOpen(nextOpen: boolean): void {
     if (nextOpen && disabled) return
     if (nextOpen) {
@@ -129,7 +164,7 @@ export function Select({
       typeaheadRef.current = { prefix: "", time: 0 }
     }
     if (open === undefined) setUncontrolledOpen(nextOpen)
-    onOpenChange?.(nextOpen)
+    onOpenChangeRef.current?.(nextOpen)
   }
 
   function requestValue(nextValue: string): void {
@@ -181,7 +216,7 @@ export function Select({
         const selectedItem = enabledItems.find((item) => item.value === selectedValue)
         setActiveItemId(selectedItem?.id ?? enabledItems[enabledItems.length - 1]?.id)
         if (open === undefined) setUncontrolledOpen(true)
-        onOpenChange?.(true)
+        onOpenChangeRef.current?.(true)
       } else if (event.key === "ArrowDown" || event.key === "Enter" || event.key === " ") {
         event.preventDefault()
         requestOpen(true)
@@ -236,7 +271,6 @@ export function Select({
         activeItemId,
         contentId,
         contentRef,
-        defaultContentId: generatedContentId,
         disabled,
         invalid,
         open: currentOpen,
@@ -247,7 +281,6 @@ export function Select({
         registerItem,
         requestOpen,
         requestValue,
-        setContentId,
         triggerRef,
       }}
     >
@@ -363,10 +396,9 @@ export const SelectContent = forwardRef<HTMLDivElement, SelectContentProps>(func
   ref
 ) {
   const context = useSelectContext()
-  const id = suppliedId ?? context.defaultContentId
+  const id = suppliedId ?? context.contentId
 
   useImperativeHandle(ref, () => context.contentRef.current as HTMLDivElement)
-  useEffect(() => context.setContentId(id), [context.setContentId, id])
 
   return (
     <div
@@ -389,10 +421,11 @@ export const SelectGroup = forwardRef<HTMLDivElement, SelectGroupProps>(function
   ref
 ) {
   const defaultLabelId = useId()
-  const [labelId, setLabelId] = useState(defaultLabelId)
+  const label = findChild(props.children, (child) => child.type === SelectLabel)
+  const labelId = label ? label.props.id ?? defaultLabelId : undefined
 
   return (
-    <SelectGroupContext.Provider value={{ defaultLabelId, labelId, setLabelId }}>
+    <SelectGroupContext.Provider value={{ labelId }}>
       <div
         {...props}
         ref={ref}
@@ -414,9 +447,7 @@ export const SelectLabel = forwardRef<HTMLDivElement, SelectLabelProps>(function
 ) {
   const group = useContext(SelectGroupContext)
   const generatedId = useId()
-  const id = suppliedId ?? group?.defaultLabelId ?? generatedId
-
-  useEffect(() => group?.setLabelId(id), [group?.setLabelId, id])
+  const id = suppliedId ?? group?.labelId ?? generatedId
 
   return (
     <div
@@ -483,7 +514,7 @@ export const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(function S
       tabIndex={-1}
       onPointerDown={(event) => {
         onPointerDown?.(event)
-        if (!event.defaultPrevented && !isDisabled) event.preventDefault()
+        if (!event.defaultPrevented) event.preventDefault()
       }}
       onClick={(event) => {
         onClick?.(event)

@@ -1,5 +1,6 @@
 import { cleanup, render, screen } from "@testing-library/react"
 import { userEvent } from "@testing-library/user-event"
+import { renderToString } from "react-dom/server"
 import { afterEach, describe, expect, it, vi } from "vitest"
 import {
   Select,
@@ -89,6 +90,18 @@ describe("Select", () => {
     expect(screen.getByRole("combobox", { name: "국가" })).toHaveTextContent("대한민국")
     expect(document.querySelector('input[type="hidden"]')).toHaveAttribute("name", "country")
     expect(document.querySelector('input[type="hidden"]')).toHaveValue("kr")
+  })
+
+  it("renders the selected item text in server markup", () => {
+    const html = renderToString(
+      <Select defaultValue="kr">
+        <SelectTrigger aria-label="국가"><SelectValue placeholder="선택" /></SelectTrigger>
+        <SelectContent><SelectItem value="kr">대한민국</SelectItem></SelectContent>
+      </Select>
+    )
+    const document = new DOMParser().parseFromString(html, "text/html")
+
+    expect(document.querySelector('[data-slot="value"]')?.textContent).toBe("대한민국")
   })
 
   it("does not render a hidden input without name", () => {
@@ -204,6 +217,50 @@ describe("Select", () => {
     expect(screen.getByText("아시아")).toHaveAttribute("id", "asia-label")
   })
 
+  it("renders supplied ARIA associations in server markup", () => {
+    const html = renderToString(
+      <Select defaultOpen>
+        <SelectTrigger aria-label="국가"><SelectValue /></SelectTrigger>
+        <SelectContent id="country-list">
+          <SelectGroup>
+            <SelectLabel id="asia-label">아시아</SelectLabel>
+            <SelectItem value="kr">대한민국</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    )
+    const document = new DOMParser().parseFromString(html, "text/html")
+
+    expect(document.querySelector('[data-slot="trigger"]')?.getAttribute("aria-controls"))
+      .toBe("country-list")
+    expect(document.querySelector('[data-slot="group"]')?.getAttribute("aria-labelledby"))
+      .toBe("asia-label")
+  })
+
+  it("omits ARIA relationships without matching server markup targets", () => {
+    const html = renderToString(
+      <Select defaultOpen>
+        <SelectTrigger aria-label="국가"><SelectValue /></SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem value="kr">대한민국</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    )
+    const document = new DOMParser().parseFromString(html, "text/html")
+
+    expect(document.querySelector('[data-slot="group"]')?.hasAttribute("aria-labelledby"))
+      .toBe(false)
+
+    const triggerOnlyHtml = renderToString(
+      <Select><SelectTrigger aria-label="국가"><SelectValue /></SelectTrigger></Select>
+    )
+    const triggerOnlyDocument = new DOMParser().parseFromString(triggerOnlyHtml, "text/html")
+    expect(triggerOnlyDocument.querySelector('[data-slot="trigger"]')
+      ?.hasAttribute("aria-controls")).toBe(false)
+  })
+
   it("uses boundaries without wrapping and opens ArrowUp on the last option", async () => {
     const user = userEvent.setup()
     render(<Select>{selectPartsWithDisabledItem}</Select>)
@@ -317,6 +374,32 @@ describe("Select", () => {
     expect(screen.getByRole("listbox")).toBeInTheDocument()
   })
 
+  it("uses the latest open change listener for an outside pointerdown", async () => {
+    const user = userEvent.setup()
+    const firstOnOpenChange = vi.fn()
+    const latestOnOpenChange = vi.fn()
+    const { rerender } = render(
+      <div>
+        <Select defaultOpen onOpenChange={firstOnOpenChange}>{selectParts}</Select>
+        <button type="button">바깥</button>
+      </div>
+    )
+
+    rerender(
+      <div>
+        <Select defaultOpen onOpenChange={latestOnOpenChange}>{selectParts}</Select>
+        <button type="button">바깥</button>
+      </div>
+    )
+    await user.pointer({
+      target: screen.getByRole("button", { name: "바깥" }),
+      keys: "[MouseLeft>]",
+    })
+
+    expect(firstOnOpenChange).not.toHaveBeenCalled()
+    expect(latestOnOpenChange).toHaveBeenCalledWith(false)
+  })
+
   it("selects by pointer without moving focus and closes on outside pointerdown", async () => {
     const user = userEvent.setup()
     render(
@@ -338,6 +421,25 @@ describe("Select", () => {
       keys: "[MouseLeft>]",
     })
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument()
+  })
+
+  it("keeps the list open and trigger focused when a disabled option is clicked", async () => {
+    const user = userEvent.setup()
+    const onValueChange = vi.fn()
+    render(
+      <Select defaultValue="kr" onValueChange={onValueChange}>
+        {selectPartsWithDisabledItem}
+      </Select>
+    )
+    const trigger = screen.getByRole("combobox")
+
+    await user.click(trigger)
+    await user.click(screen.getByRole("option", { name: "일본" }))
+
+    expect(screen.getByRole("listbox")).toBeVisible()
+    expect(trigger).toHaveTextContent("대한민국")
+    expect(trigger).toHaveFocus()
+    expect(onValueChange).not.toHaveBeenCalled()
   })
 
   it("does not open or submit a value while disabled", async () => {
