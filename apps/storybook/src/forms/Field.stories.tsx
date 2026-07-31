@@ -6,8 +6,6 @@ import {
   FieldDescription,
   FieldError,
   FieldLabel,
-  Input,
-  Textarea,
 } from "@jds/components"
 
 const meta = {
@@ -65,7 +63,7 @@ export const DisabledContext: Story = {
 export const Invalid: Story = {
   render: () => (
     <Field>
-      <Input aria-describedby="email-description email-error" aria-invalid="true" id="email" />
+      <input aria-describedby="email-description email-error" aria-invalid="true" id="email" />
       <FieldContent>
         <FieldLabel htmlFor="email">이메일</FieldLabel>
         <FieldDescription id="email-description">알림 수신에 사용합니다.</FieldDescription>
@@ -89,31 +87,5 @@ export const LongContent: Story = {
   ),
   play: ({ canvasElement }) => {
     expect(canvasElement.querySelector("#long-content")).toHaveAttribute("aria-describedby", "long-content-description")
-  },
-}
-
-export const InputField: Story = {
-  render: () => (
-    <Field>
-      <Input id="name" />
-      <FieldContent>
-        <FieldLabel htmlFor="name">이름</FieldLabel>
-      </FieldContent>
-    </Field>
-  ),
-}
-
-export const TextareaField: Story = {
-  render: () => (
-    <Field>
-      <Textarea aria-describedby="message-description" id="message" />
-      <FieldContent>
-        <FieldLabel htmlFor="message">메시지</FieldLabel>
-        <FieldDescription id="message-description">문의 내용을 자세히 입력하세요.</FieldDescription>
-      </FieldContent>
-    </Field>
-  ),
-  play: ({ canvasElement }) => {
-    expect(canvasElement.querySelector("#message")).toHaveAttribute("aria-describedby", "message-description")
   },
 }

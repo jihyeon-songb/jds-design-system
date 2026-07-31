@@ -59,7 +59,7 @@ describe("Field", () => {
     render(<Field ref={ref} data-disabled data-testid="field" />)
 
     expect(ref.current).toBe(screen.getByTestId("field"))
-    expect(ref.current).toHaveAttribute("data-disabled", "true")
+    expect(screen.getByTestId("field")).toHaveAttribute("data-disabled", "true")
     expect(ref.current).toHaveAttribute("data-orientation", "vertical")
   })
 

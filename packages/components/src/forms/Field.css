@@ -10,7 +10,12 @@
   gap: var(--jds-space-field-item);
 }
 
-.jds-field[data-orientation="horizontal"] { flex-direction: row; }
+.jds-field[data-orientation="horizontal"] {
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.jds-field[data-disabled] { opacity: var(--jds-opacity-disabled); }
 
 .jds-field-content {
   display: flex;
