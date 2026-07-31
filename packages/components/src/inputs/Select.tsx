@@ -105,7 +105,15 @@ export function Select({
   const selectedValue = value ?? uncontrolledValue
   const selectedText = items.find((item) => item.value === selectedValue)?.text
   const currentOpen = !disabled && (open ?? uncontrolledOpen)
-  const enabledItems = items.filter((item) => !item.disabled)
+  const enabledItems = items.filter((item) => !item.disabled).sort((first, second) => {
+    const firstNode = first.ref.current
+    const secondNode = second.ref.current
+    if (!firstNode || !secondNode) return 0
+    const position = firstNode.compareDocumentPosition(secondNode)
+    if (position & Node.DOCUMENT_POSITION_FOLLOWING) return -1
+    if (position & Node.DOCUMENT_POSITION_PRECEDING) return 1
+    return 0
+  })
 
   const registerItem = useCallback((item: SelectItemRecord) => {
     setItems((currentItems) => [...currentItems.filter((current) => current.id !== item.id), item])

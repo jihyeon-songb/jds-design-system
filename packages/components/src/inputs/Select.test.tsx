@@ -225,6 +225,39 @@ describe("Select", () => {
     expect(trigger).toHaveAttribute("aria-activedescendant", lastOption.id)
   })
 
+  it("keeps DOM navigation order after an item registration updates", async () => {
+    const user = userEvent.setup()
+    const { rerender } = render(
+      <Select>
+        <SelectTrigger aria-label="항목"><SelectValue /></SelectTrigger>
+        <SelectContent>
+          <SelectItem value="a">A</SelectItem>
+          <SelectItem value="b">B</SelectItem>
+          <SelectItem value="c">C</SelectItem>
+        </SelectContent>
+      </Select>
+    )
+
+    rerender(
+      <Select>
+        <SelectTrigger aria-label="항목"><SelectValue /></SelectTrigger>
+        <SelectContent>
+          <SelectItem value="a">A</SelectItem>
+          <SelectItem value="b">B updated</SelectItem>
+          <SelectItem value="c">C</SelectItem>
+        </SelectContent>
+      </Select>
+    )
+    const trigger = screen.getByRole("combobox")
+    await user.click(trigger)
+    await user.keyboard("{ArrowDown}")
+
+    expect(trigger).toHaveAttribute(
+      "aria-activedescendant",
+      screen.getByRole("option", { name: "B updated" }).id
+    )
+  })
+
   it("moves to the first matching option with typeahead", async () => {
     const user = userEvent.setup()
     render(<Select>{selectParts}</Select>)
