@@ -63,6 +63,23 @@ describe("Select", () => {
     expect(document.querySelector('input[type="hidden"]')).toHaveValue("kr")
   })
 
+  it("does not render a hidden input without name", () => {
+    render(<Select>{selectParts}</Select>)
+
+    expect(document.querySelector('input[type="hidden"]')).not.toBeInTheDocument()
+  })
+
+  it("omits a disabled Select from form data", () => {
+    render(
+      <form aria-label="국가 양식">
+        <Select name="country" defaultValue="kr" disabled>{selectParts}</Select>
+      </form>
+    )
+
+    const form = screen.getByRole<HTMLFormElement>("form", { name: "국가 양식" })
+    expect(new FormData(form).has("country")).toBe(false)
+  })
+
   it("updates an uncontrolled value after selection", async () => {
     const user = userEvent.setup()
     render(<Select name="country">{selectParts}</Select>)

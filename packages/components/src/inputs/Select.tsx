@@ -111,8 +111,6 @@ export function Select({
         <input
           disabled={disabled}
           name={name}
-          readOnly
-          required={required}
           type="hidden"
           value={selectedValue ?? ""}
         />
