@@ -44,7 +44,7 @@ export const Description: Story = {
 
 export const DisabledContext: Story = {
   render: () => (
-    <Field data-disabled orientation="horizontal">
+    <Field aria-disabled="true" data-disabled orientation="horizontal">
       <input aria-describedby="disabled-notifications-description" disabled id="disabled-notifications" type="checkbox" />
       <FieldContent>
         <FieldLabel htmlFor="disabled-notifications">알림 활성화</FieldLabel>
@@ -57,20 +57,35 @@ export const DisabledContext: Story = {
       "aria-describedby",
       "disabled-notifications-description"
     )
+    expect(canvasElement.querySelector(".jds-field")).toHaveStyle({ opacity: "0.5" })
   },
 }
 
 export const Invalid: Story = {
   render: () => (
-    <Field>
-      <input aria-describedby="email-description email-error" aria-invalid="true" id="email" />
+    <Field orientation="horizontal">
+      <input
+        aria-describedby="invalid-notifications-description invalid-notifications-error"
+        aria-invalid="true"
+        id="invalid-notifications"
+        type="checkbox"
+      />
       <FieldContent>
-        <FieldLabel htmlFor="email">이메일</FieldLabel>
-        <FieldDescription id="email-description">알림 수신에 사용합니다.</FieldDescription>
-        <FieldError id="email-error">올바른 이메일 주소를 입력하세요.</FieldError>
+        <FieldLabel htmlFor="invalid-notifications">필수 알림 수신</FieldLabel>
+        <FieldDescription id="invalid-notifications-description">수신 여부를 선택해야 합니다.</FieldDescription>
+        <FieldError id="invalid-notifications-error">알림 수신 여부를 선택하세요.</FieldError>
       </FieldContent>
     </Field>
   ),
+  play: ({ canvasElement }) => {
+    const control = canvasElement.querySelector("#invalid-notifications")
+    expect(control).toHaveAttribute("type", "checkbox")
+    expect(control).toHaveAttribute("aria-invalid", "true")
+    expect(control).toHaveAttribute(
+      "aria-describedby",
+      "invalid-notifications-description invalid-notifications-error"
+    )
+  },
 }
 
 export const LongContent: Story = {
@@ -87,5 +102,6 @@ export const LongContent: Story = {
   ),
   play: ({ canvasElement }) => {
     expect(canvasElement.querySelector("#long-content")).toHaveAttribute("aria-describedby", "long-content-description")
+    expect(canvasElement.querySelector(".jds-field")).toHaveStyle({ alignItems: "flex-start" })
   },
 }
