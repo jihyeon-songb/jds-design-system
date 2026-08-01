@@ -20,6 +20,12 @@ export {
 export { Checkbox, type CheckboxProps } from "./inputs/Checkbox.js"
 export { Input, type InputProps, type InputSize } from "./inputs/Input.js"
 export {
+  RadioGroup,
+  RadioGroupItem,
+  type RadioGroupItemProps,
+  type RadioGroupProps,
+} from "./inputs/RadioGroup.js"
+export {
   Select,
   SelectContent,
   SelectGroup,

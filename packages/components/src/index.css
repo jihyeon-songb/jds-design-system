@@ -2,5 +2,6 @@
 @import "./forms/Field.css";
 @import "./inputs/Checkbox.css";
 @import "./inputs/Input.css";
+@import "./inputs/RadioGroup.css";
 @import "./inputs/Select.css";
 @import "./inputs/Textarea.css";
