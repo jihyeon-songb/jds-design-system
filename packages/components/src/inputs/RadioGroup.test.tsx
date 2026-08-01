@@ -29,6 +29,18 @@ function ConditionalDeliveryGroup({ showStandard }: { showStandard: boolean }) {
 }
 
 describe("RadioGroup", () => {
+  it("renders the root CSS class while preserving consumer className", () => {
+    render(
+      <RadioGroup aria-label="배송 방식" name="delivery" className="custom-group" orientation="horizontal">
+        <RadioGroupItem aria-label="일반 배송" value="standard" />
+      </RadioGroup>
+    )
+
+    const group = screen.getByRole("radiogroup", { name: "배송 방식" })
+    expect(group).toHaveClass("jds-radio-group", "custom-group")
+    expect(group).toHaveAttribute("data-orientation", "horizontal")
+  })
+
   it("renders fixed native radios and forwards ref and form props", () => {
     const ref = createRef<HTMLInputElement>()
     render(<RadioGroup aria-label="배송 방식" name="delivery" required><RadioGroupItem ref={ref} id="standard" value="standard" form="checkout" /></RadioGroup>)

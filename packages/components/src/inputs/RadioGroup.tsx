@@ -47,6 +47,7 @@ export type RadioGroupItemProps = Omit<
 export function RadioGroup({
   "aria-invalid": ariaInvalid,
   children,
+  className,
   defaultValue,
   disabled = false,
   invalid = false,
@@ -92,6 +93,7 @@ export function RadioGroup({
         {...props}
         role="radiogroup"
         aria-invalid={invalid ? true : ariaInvalid}
+        className={["jds-radio-group", className].filter(Boolean).join(" ")}
         data-orientation={orientation}
         data-state={disabled ? "disabled" : invalid ? "invalid" : "enabled"}
       >
