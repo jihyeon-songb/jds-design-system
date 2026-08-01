@@ -27,9 +27,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       data-size={size}
     >
       {startIcon ? <span aria-hidden="true" data-slot="start-icon">{startIcon}</span> : null}
+      {loading ? <span aria-hidden="true" data-slot="spinner" /> : null}
       <span data-slot="label">{children}</span>
       {endIcon ? <span aria-hidden="true" data-slot="end-icon">{endIcon}</span> : null}
-      {loading ? <span aria-hidden="true" data-slot="spinner" /> : null}
     </button>
   )
 })

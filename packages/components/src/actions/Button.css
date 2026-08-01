@@ -30,8 +30,8 @@
 .jds-button:active:not(:disabled) { transform: translateY(var(--jds-offset-button-active)); }
 .jds-button:disabled { cursor: not-allowed; opacity: var(--jds-opacity-disabled); }
 .jds-button:focus-visible { outline: var(--jds-size-focus) solid var(--jds-color-focus-ring); outline-offset: var(--jds-size-focus); }
-.jds-button [data-slot="spinner"] { animation: jds-button-spin var(--jds-duration-spinner) linear infinite; border: var(--jds-size-border) solid var(--jds-color-action-primary-foreground); border-inline-end-color: var(--jds-color-action-primary-background); border-radius: var(--jds-radius-control); height: var(--jds-size-control-icon); position: absolute; width: var(--jds-size-control-icon); }
-.jds-button[data-state="loading"] [data-slot="label"], .jds-button[data-state="loading"] [data-slot="start-icon"], .jds-button[data-state="loading"] [data-slot="end-icon"] { opacity: var(--jds-opacity-hidden); }
+.jds-button [data-slot="spinner"] { animation: jds-button-spin var(--jds-duration-spinner) linear infinite; border: var(--jds-size-border) solid currentColor; border-inline-end-color: transparent; border-radius: var(--jds-radius-control); height: calc(var(--jds-size-icon) - var(--jds-size-border) * 2); width: calc(var(--jds-size-icon) - var(--jds-size-border) * 2); }
+.jds-button[data-state="loading"] [data-slot="start-icon"], .jds-button[data-state="loading"] [data-slot="end-icon"] { opacity: var(--jds-opacity-hidden); }
 
 @keyframes jds-button-spin { to { transform: rotate(var(--jds-angle-turn)); } }
 @media (prefers-reduced-motion: reduce) { .jds-button, .jds-button [data-slot="spinner"] { animation: none; transition: none; } }
