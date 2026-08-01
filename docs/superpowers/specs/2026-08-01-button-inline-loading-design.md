@@ -10,8 +10,9 @@
 
 - `loading`일 때 spinner를 레이블 앞에 인라인으로 렌더링한다.
 - 레이블은 보이는 상태를 유지하고 start/end 아이콘만 숨긴다.
-- 기존 `disabled`, `aria-busy`, 접근 가능한 이름, 버튼 폭, reduced motion,
-  forced-colors 동작을 유지한다.
+- 기존 `disabled`, `aria-busy`, 접근 가능한 이름, reduced motion, forced-colors
+  동작을 유지한다.
+- 인라인 spinner는 버튼 콘텐츠 폭에 포함되며 loading 상태의 버튼 폭은 이를 반영한다.
 - 새 공개 prop, 토큰, 의존성은 추가하지 않는다.
 
 ## 구현
