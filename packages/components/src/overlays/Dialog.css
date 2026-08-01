@@ -1,0 +1,35 @@
+.jds-dialog-content {
+  background: var(--jds-color-field-background);
+  border: var(--jds-size-border) solid var(--jds-color-field-border);
+  border-radius: var(--jds-radius-control);
+  box-sizing: border-box;
+  color: var(--jds-color-field-foreground);
+  max-block-size: calc(100dvb - var(--jds-space-field-group));
+  overflow: auto;
+  padding: var(--jds-space-field-item);
+}
+
+.jds-dialog-content::backdrop {
+  background: var(--jds-color-field-foreground);
+  opacity: var(--jds-opacity-disabled);
+}
+
+.jds-dialog-content:focus-visible {
+  outline: var(--jds-size-focus) solid var(--jds-color-focus-ring);
+  outline-offset: var(--jds-size-focus);
+}
+
+.jds-dialog-title { margin: 0; }
+
+.jds-dialog-description {
+  margin: var(--jds-space-field-item) 0 0;
+}
+
+.jds-dialog-close:focus-visible {
+  outline: var(--jds-size-focus) solid var(--jds-color-focus-ring);
+  outline-offset: var(--jds-size-focus);
+}
+
+@media (forced-colors: active) {
+  .jds-dialog-content { forced-color-adjust: auto; }
+}
