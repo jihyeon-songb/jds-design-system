@@ -1,6 +1,7 @@
 import { createRef } from "react"
 import { cleanup, render, screen } from "@testing-library/react"
-import { afterEach, describe, expect, it } from "vitest"
+import { userEvent } from "@testing-library/user-event"
+import { afterEach, describe, expect, it, vi } from "vitest"
 import { Alert } from "./Alert.js"
 
 afterEach(cleanup)
@@ -34,5 +35,49 @@ describe("Alert", () => {
     render(<Alert open={false}>제어된 닫힘</Alert>)
 
     expect(screen.queryByText("제어된 닫힘")).not.toBeInTheDocument()
+  })
+
+  it("closes an uncontrolled dismissible alert and reports the state change", async () => {
+    const user = userEvent.setup()
+    const onOpenChange = vi.fn()
+    render(<Alert closeLabel="알림 닫기" dismissible onOpenChange={onOpenChange}>저장했습니다.</Alert>)
+
+    await user.click(screen.getByRole("button", { name: "알림 닫기" }))
+    expect(onOpenChange).toHaveBeenCalledWith(false)
+    expect(screen.queryByRole("status")).not.toBeInTheDocument()
+  })
+
+  it("requests close but leaves controlled visibility to its owner", async () => {
+    const user = userEvent.setup()
+    const onOpenChange = vi.fn()
+    render(<Alert closeLabel="알림 닫기" dismissible onOpenChange={onOpenChange} open>저장했습니다.</Alert>)
+
+    await user.click(screen.getByRole("button", { name: "알림 닫기" }))
+    expect(onOpenChange).toHaveBeenCalledWith(false)
+    expect(screen.getByRole("status")).toBeInTheDocument()
+  })
+
+  it("requests close from the focused button with Enter and Space", async () => {
+    const user = userEvent.setup()
+    const onOpenChange = vi.fn()
+    render(<Alert closeLabel="알림 닫기" dismissible onOpenChange={onOpenChange} open>저장했습니다.</Alert>)
+
+    await user.tab()
+    await user.keyboard("{Enter}")
+    await user.keyboard(" ")
+
+    expect(onOpenChange).toHaveBeenCalledTimes(2)
+    expect(onOpenChange).toHaveBeenNthCalledWith(1, false)
+    expect(onOpenChange).toHaveBeenNthCalledWith(2, false)
+  })
+
+  it("renders again when its controlled open value changes back to true", () => {
+    const { rerender } = render(<Alert open>저장했습니다.</Alert>)
+
+    rerender(<Alert open={false}>저장했습니다.</Alert>)
+    expect(screen.queryByRole("status")).not.toBeInTheDocument()
+
+    rerender(<Alert open>저장했습니다.</Alert>)
+    expect(screen.getByRole("status")).toBeInTheDocument()
   })
 })
