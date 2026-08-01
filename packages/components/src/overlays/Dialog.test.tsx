@@ -9,6 +9,8 @@ import {
   DialogClose as PublicDialogClose,
   DialogContent as PublicDialogContent,
   DialogDescription as PublicDialogDescription,
+  DialogFooter as PublicDialogFooter,
+  DialogHeader as PublicDialogHeader,
   DialogTitle as PublicDialogTitle,
   DialogTrigger as PublicDialogTrigger,
   type DialogProps as PublicDialogProps,
@@ -18,6 +20,8 @@ import {
   DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
+  DialogHeader,
   DialogTitle,
   DialogTrigger,
   type DialogProps,
@@ -50,7 +54,26 @@ describe("Dialog", () => {
     expect(PublicDialogTitle).toBe(DialogTitle)
     expect(PublicDialogDescription).toBe(DialogDescription)
     expect(PublicDialogClose).toBe(DialogClose)
+    expect(PublicDialogHeader).toBe(DialogHeader)
+    expect(PublicDialogFooter).toBe(DialogFooter)
     expectTypeOf<PublicDialogProps>().toEqualTypeOf<DialogProps>()
+  })
+
+  it("header와 footer에 참조 모달 레이아웃 class를 제공한다", () => {
+    render(
+      <Dialog defaultOpen>
+        <DialogContent aria-label="프로필 편집">
+          <DialogHeader className="consumer-header"><DialogTitle>프로필 편집</DialogTitle></DialogHeader>
+          <DialogFooter className="consumer-footer"><DialogClose aria-label="취소" variant="ghost">취소</DialogClose></DialogFooter>
+        </DialogContent>
+      </Dialog>
+    )
+
+    expect(screen.getByText("프로필 편집").parentElement).toHaveClass("jds-dialog-header", "consumer-header")
+    expect(screen.getByRole("button", { name: "취소" }).parentElement).toHaveClass(
+      "jds-dialog-footer", "consumer-footer"
+    )
+    expect(screen.getByRole("button", { name: "취소" })).toHaveAttribute("data-variant", "ghost")
   })
 
   it("Dialog CSS class와 consumer className을 함께 전달한다", () => {
@@ -68,7 +91,9 @@ describe("Dialog", () => {
     expect(ref.current).toHaveClass("jds-dialog-content", "consumer-content")
     expect(screen.getByText("제목")).toHaveClass("jds-dialog-title", "consumer-title")
     expect(screen.getByText("설명")).toHaveClass("jds-dialog-description", "consumer-description")
-    expect(screen.getByText("×")).toHaveClass("jds-dialog-close", "consumer-close")
+    expect(screen.getByText("×").parentElement).toHaveClass(
+      "jds-button", "jds-dialog-close", "consumer-close"
+    )
   })
 
   it("uncontrolled Trigger와 Close가 modal state를 바꾼다", async () => {
@@ -81,6 +106,8 @@ describe("Dialog", () => {
     )
 
     await user.click(screen.getByRole("button", { name: "열기" }))
+    expect(screen.getByRole("button", { name: "열기" })).toHaveClass("jds-button")
+    expect(screen.getByRole("button", { name: "열기" })).toHaveAttribute("data-variant", "outline")
     expect(screen.getByRole("dialog")).toHaveAttribute("data-state", "open")
     expect(showModal).toHaveBeenCalledOnce()
 

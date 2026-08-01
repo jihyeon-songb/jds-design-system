@@ -7,11 +7,11 @@
   cursor: pointer;
   display: inline-flex;
   font: inherit;
-  height: var(--jds-size-control-button-xl-height);
+  height: var(--jds-size-control-button-md-height);
   justify-content: center;
   position: relative;
   transition: background var(--jds-duration-spinner), transform var(--jds-duration-spinner);
-  width: var(--jds-size-control-button-xl-height);
+  width: var(--jds-size-control-button-md-height);
 }
 
 .jds-icon-button[data-variant="secondary"] { background: var(--jds-color-action-secondary-background); border-color: var(--jds-color-action-secondary-background); color: var(--jds-color-action-secondary-foreground); }
