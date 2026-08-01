@@ -25,6 +25,13 @@ describe("buildTokens", () => {
     expect(result.css).toContain("--jds-color-action-outline-border: #c9ced3;")
   })
 
+  it("publishes the 14px component typography token", () => {
+    const source = JSON.parse(readFileSync(new URL("../src/jds.tokens.json", import.meta.url), "utf8"))
+    const result = buildTokens(source)
+
+    expect(result.css).toContain("--jds-typography-body-font-size: 14px;")
+  })
+
   it("rejects unknown token aliases", () => {
     expect(() => buildTokens({ color: { action: { $value: "{color.missing}", $type: "color" } } }))
       .toThrow("Unknown token reference: color.missing")
