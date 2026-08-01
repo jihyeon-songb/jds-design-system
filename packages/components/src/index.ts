@@ -4,6 +4,19 @@ export { Alert, type AlertProps, type AlertVariant } from "./feedback/Alert.js"
 export { Avatar, type AvatarProps, type AvatarSize } from "./feedback/Avatar.js"
 export { Badge, type BadgeProps, type BadgeVariant } from "./feedback/Badge.js"
 export {
+  Accordion,
+  AccordionContent,
+  AccordionHeader,
+  AccordionItem,
+  AccordionTrigger,
+  type AccordionContentProps,
+  type AccordionHeaderProps,
+  type AccordionItemProps,
+  type AccordionProps,
+  type AccordionTriggerProps,
+  type AccordionType,
+} from "./navigation/Accordion.js"
+export {
   Field,
   FieldContent,
   FieldDescription,

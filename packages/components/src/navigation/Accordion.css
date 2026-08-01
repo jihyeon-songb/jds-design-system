@@ -1,0 +1,52 @@
+.jds-accordion {
+  border-block: var(--jds-size-border) solid var(--jds-color-field-border);
+}
+
+.jds-accordion-item + .jds-accordion-item {
+  border-block-start: var(--jds-size-border) solid var(--jds-color-field-border);
+}
+
+.jds-accordion-header {
+  margin: 0;
+}
+
+.jds-accordion-trigger {
+  align-items: center;
+  background: var(--jds-color-field-background);
+  border: 0;
+  color: var(--jds-color-field-foreground);
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  justify-content: space-between;
+  min-block-size: var(--jds-size-alert-close);
+  padding: var(--jds-space-button-inline);
+  text-align: start;
+  width: 100%;
+}
+
+.jds-accordion-trigger[data-state="open"] {
+  border-block-end: var(--jds-size-border) solid var(--jds-color-field-border);
+}
+
+.jds-accordion-trigger:not(:disabled):hover {
+  background: var(--jds-color-action-ghost-hover);
+}
+
+.jds-accordion-trigger:disabled {
+  cursor: not-allowed;
+  opacity: var(--jds-opacity-disabled);
+}
+
+.jds-accordion-trigger:focus-visible {
+  outline: var(--jds-size-focus) solid var(--jds-color-focus-ring);
+  outline-offset: calc(var(--jds-size-focus) * -1);
+}
+
+.jds-accordion-content {
+  padding: var(--jds-space-field-item) var(--jds-space-button-inline);
+}
+
+@media (forced-colors: active) {
+  .jds-accordion-trigger { forced-color-adjust: auto; }
+}

@@ -1,12 +1,22 @@
-import { cleanup, render, screen } from "@testing-library/react"
+import { createRef } from "react"
+import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { userEvent } from "@testing-library/user-event"
-import { afterEach, describe, expect, it } from "vitest"
+import { afterEach, describe, expect, expectTypeOf, it, vi } from "vitest"
+import {
+  Accordion as PublicAccordion,
+  AccordionContent as PublicAccordionContent,
+  AccordionHeader as PublicAccordionHeader,
+  AccordionItem as PublicAccordionItem,
+  AccordionTrigger as PublicAccordionTrigger,
+  type AccordionProps as PublicAccordionProps,
+} from "../index.js"
 import {
   Accordion,
   AccordionContent,
   AccordionHeader,
   AccordionItem,
   AccordionTrigger,
+  type AccordionProps,
 } from "./Accordion.js"
 
 afterEach(cleanup)
@@ -62,5 +72,99 @@ describe("Accordion", () => {
     await user.click(screen.getByRole("button", { name: "returns" }))
 
     expect(screen.getByRole("button", { name: "returns" })).toHaveAttribute("aria-expanded", "false")
+  })
+
+  it("controlled single은 요청만 알리고 owner가 바꾸기 전에는 상태를 유지한다", async () => {
+    const user = userEvent.setup()
+    const onValueChange = vi.fn()
+    const { rerender } = render(
+      <Accordion onValueChange={onValueChange} type="single" value="shipping">
+        <Item value="shipping">배송 안내</Item>
+        <Item value="returns">반품 안내</Item>
+      </Accordion>
+    )
+
+    await user.click(screen.getByRole("button", { name: "returns" }))
+
+    expect(onValueChange).toHaveBeenLastCalledWith("returns")
+    expect(screen.getByRole("button", { name: "shipping" })).toHaveAttribute("aria-expanded", "true")
+
+    rerender(
+      <Accordion onValueChange={onValueChange} type="single" value="returns">
+        <Item value="shipping">배송 안내</Item>
+        <Item value="returns">반품 안내</Item>
+      </Accordion>
+    )
+
+    expect(screen.getByRole("button", { name: "returns" })).toHaveAttribute("aria-expanded", "true")
+  })
+
+  it("open인 disabled Item을 보존하고 상태 변경 요청을 막는다", async () => {
+    const user = userEvent.setup()
+    const onValueChange = vi.fn()
+    render(
+      <Accordion defaultValue="shipping" onValueChange={onValueChange} type="single">
+        <Item disabled value="shipping">배송 안내</Item>
+      </Accordion>
+    )
+
+    const trigger = screen.getByRole("button", { name: "shipping" })
+    expect(trigger).toBeDisabled()
+    expect(trigger).toHaveAttribute("aria-expanded", "true")
+    expect(trigger.closest("div")).toHaveAttribute("data-state", "disabled")
+
+    await user.click(trigger)
+
+    expect(onValueChange).not.toHaveBeenCalled()
+  })
+
+  it("요청한 heading과 native button 기본 동작을 사용한다", () => {
+    const headerRef = createRef<HTMLHeadingElement>()
+    render(
+      <Accordion headingLevel={2} type="single">
+        <AccordionItem value="shipping">
+          <AccordionHeader ref={headerRef}><AccordionTrigger>배송</AccordionTrigger></AccordionHeader>
+          <AccordionContent>배송 안내</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    )
+
+    const trigger = screen.getByRole("button", { name: "배송" })
+    expect(headerRef.current?.tagName).toBe("H2")
+    expect(trigger).toHaveAttribute("type", "button")
+    expect(fireEvent.keyDown(trigger, { key: "Tab" })).toBe(true)
+  })
+
+  it("preventDefault를 존중한다", async () => {
+    const user = userEvent.setup()
+    const onValueChange = vi.fn()
+    render(
+      <Accordion defaultValue="shipping" onValueChange={onValueChange} type="single">
+        <AccordionItem value="shipping">
+          <AccordionHeader><AccordionTrigger onClick={(event) => event.preventDefault()}>배송</AccordionTrigger></AccordionHeader>
+          <AccordionContent>배송 안내</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    )
+
+    await user.click(screen.getByRole("button", { name: "배송" }))
+
+    expect(screen.getByRole("button", { name: "배송" })).toHaveAttribute("aria-expanded", "true")
+    expect(onValueChange).not.toHaveBeenCalled()
+  })
+
+  it("public API를 export하고 잘못된 compound 위치에는 오류를 낸다", () => {
+    expect(PublicAccordion).toBe(Accordion)
+    expect(PublicAccordionItem).toBe(AccordionItem)
+    expect(PublicAccordionHeader).toBe(AccordionHeader)
+    expect(PublicAccordionTrigger).toBe(AccordionTrigger)
+    expect(PublicAccordionContent).toBe(AccordionContent)
+    expectTypeOf<PublicAccordionProps>().toEqualTypeOf<AccordionProps>()
+    expect(() => render(<AccordionItem value="shipping">배송</AccordionItem>)).toThrow(
+      "Accordion compound components must be used within Accordion"
+    )
+    expect(() => render(<Accordion type="single"><AccordionTrigger>배송</AccordionTrigger></Accordion>)).toThrow(
+      "Accordion item components must be used within AccordionItem"
+    )
   })
 })
