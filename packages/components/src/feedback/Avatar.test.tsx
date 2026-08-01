@@ -1,11 +1,19 @@
 import { createRef } from "react"
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, describe, expect, it } from "vitest"
+import { Avatar as PublicAvatar, type AvatarProps as PublicAvatarProps } from "../index.js"
 import { Avatar } from "./Avatar.js"
 
 afterEach(cleanup)
 
 describe("Avatar", () => {
+  it("exports Avatar from the package entry", () => {
+    const props: PublicAvatarProps = { name: "김지현" }
+    render(<PublicAvatar {...props} />)
+
+    expect(screen.getByRole("img", { name: "김지현" })).toHaveClass("jds-avatar")
+  })
+
   it("uses md by default and forwards span props and its ref", () => {
     const ref = createRef<HTMLSpanElement>()
     render(<Avatar aria-label="작성자" className="consumer-avatar" id="author" ref={ref} />)
