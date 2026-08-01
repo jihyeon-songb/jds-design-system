@@ -18,10 +18,27 @@ describe("Avatar", () => {
     const ref = createRef<HTMLSpanElement>()
     render(<Avatar aria-label="작성자" className="consumer-avatar" id="author" ref={ref} />)
 
-    expect(ref.current).toBe(screen.getByLabelText("작성자"))
+    expect(ref.current).toBe(screen.getByRole("img", { name: "작성자" }))
     expect(ref.current).toHaveAttribute("id", "author")
     expect(ref.current).toHaveClass("jds-avatar", "consumer-avatar")
     expect(ref.current).toHaveAttribute("data-size", "md")
+  })
+
+  it("uses a consumer aria-label for a named fallback", () => {
+    render(<Avatar aria-label="프로필" name="김지현" />)
+
+    expect(screen.getByRole("img", { name: "프로필" })).toHaveTextContent("김")
+  })
+
+  it("uses consumer aria-labelledby for a named fallback", () => {
+    render(
+      <>
+        <span id="profile-label">프로필</span>
+        <Avatar aria-labelledby="profile-label" name="김지현" />
+      </>
+    )
+
+    expect(screen.getByRole("img", { name: "프로필" })).toHaveTextContent("김")
   })
 
   it("renders an image with explicit alt text", () => {

@@ -16,6 +16,8 @@ export const Avatar = forwardRef<HTMLSpanElement, AvatarProps>(function Avatar(
   const [failedSrc, setFailedSrc] = useState<string>()
   const showImage = Boolean(src) && src !== failedSrc
   const fallback = name ? Array.from(name)[0] : undefined
+  const hasConsumerName = props["aria-label"] !== undefined || props["aria-labelledby"] !== undefined
+  const useImageRole = props.role === undefined && (hasConsumerName || (!showImage && fallback))
 
   return (
     <span
@@ -23,13 +25,7 @@ export const Avatar = forwardRef<HTMLSpanElement, AvatarProps>(function Avatar(
       ref={ref}
       className={["jds-avatar", className].filter(Boolean).join(" ")}
       data-size={size}
-      {...(!showImage &&
-      fallback &&
-      props.role === undefined &&
-      props["aria-labelledby"] === undefined &&
-      props["aria-label"] === undefined
-        ? { role: "img", "aria-label": name }
-        : {})}
+      {...(useImageRole ? { role: "img", ...(!hasConsumerName ? { "aria-label": name } : {}) } : {})}
     >
       {showImage ? <img alt={alt ?? name ?? ""} onError={() => setFailedSrc(src)} src={src} /> : null}
       {!showImage && fallback ? <span aria-hidden="true">{fallback}</span> : null}

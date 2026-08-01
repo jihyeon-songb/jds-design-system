@@ -4,6 +4,14 @@ import { Avatar } from "@jds/components"
 const meta = {
   title: "Feedback/Avatar",
   component: Avatar,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Avatar는 사람이나 계정 등의 엔터티를 나타내는 비상호작용 표현 요소입니다. 상호작용이 필요하면 Button 또는 링크로 감싸세요.",
+      },
+    },
+  },
 } satisfies Meta<typeof Avatar>
 
 export default meta
@@ -19,7 +27,7 @@ export const Image: Story = {
 
 export const NameFallback: Story = { args: { name: "김지현" } }
 export const ImageErrorFallback: Story = { args: { name: "김지현", src: "/avatar-does-not-exist.png" } }
-export const Empty: Story = { args: { "aria-label": "알 수 없는 사용자" } }
+export const Empty: Story = { args: {} }
 
 export const Sizes: Story = {
   render: () => (
