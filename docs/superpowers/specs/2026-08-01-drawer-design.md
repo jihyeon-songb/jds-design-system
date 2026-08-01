@@ -35,7 +35,7 @@ export type DrawerContentProps = DialogContentProps & {
 }
 ```
 
-`side`는 `data-side`로 노출한다. accessible name은 `DrawerTitle` 또는 `aria-label`로
+`side`는 물리적 viewport edge를 뜻하며 `data-side`로 노출한다. accessible name은 `DrawerTitle` 또는 `aria-label`로
 제공해야 하며, `DrawerClose`는 `aria-label`을 필수로 받는다.
 
 ## 구현
