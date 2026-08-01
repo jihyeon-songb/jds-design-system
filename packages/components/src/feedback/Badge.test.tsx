@@ -2,10 +2,18 @@ import { createRef } from "react"
 import { cleanup, render, screen } from "@testing-library/react"
 import { afterEach, describe, expect, it } from "vitest"
 import { Badge } from "./Badge.js"
+import { Badge as PublicBadge, type BadgeProps as PublicBadgeProps } from "../index.js"
 
 afterEach(cleanup)
 
 describe("Badge", () => {
+  it("exports Badge from the package entry", () => {
+    const props: PublicBadgeProps = { children: "초안" }
+    render(<PublicBadge {...props} />)
+
+    expect(screen.getByText("초안")).toHaveClass("jds-badge")
+  })
+
   it("uses neutral by default and forwards span props and its ref", () => {
     const ref = createRef<HTMLSpanElement>()
     render(<Badge aria-label="문서 상태" className="consumer-badge" id="document-state" ref={ref}>초안</Badge>)
