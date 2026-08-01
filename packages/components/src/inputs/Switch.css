@@ -1,0 +1,108 @@
+.jds-switch {
+  --jds-switch-track-inline: var(--jds-size-control-switch-md-track-inline);
+  --jds-switch-track-block: var(--jds-size-control-switch-md-track-block);
+  --jds-switch-target-block: var(--jds-size-control-switch-md-target-block);
+  --jds-switch-thumb-size: var(--jds-size-control-switch-md-thumb-size);
+  --jds-switch-thumb-travel: var(--jds-size-control-switch-md-thumb-travel);
+
+  appearance: none;
+  background: var(--jds-color-action-ghost-background);
+  block-size: var(--jds-switch-target-block);
+  border: none;
+  box-sizing: border-box;
+  inline-size: var(--jds-switch-track-inline);
+  margin: 0;
+  padding: 0;
+  position: relative;
+  vertical-align: middle;
+}
+
+.jds-switch[data-size="sm"] {
+  --jds-switch-track-inline: var(--jds-size-control-switch-sm-track-inline);
+  --jds-switch-track-block: var(--jds-size-control-switch-sm-track-block);
+  --jds-switch-target-block: var(--jds-size-control-switch-sm-target-block);
+  --jds-switch-thumb-size: var(--jds-size-control-switch-sm-thumb-size);
+  --jds-switch-thumb-travel: var(--jds-size-control-switch-sm-thumb-travel);
+}
+
+.jds-switch[data-size="lg"] {
+  --jds-switch-track-inline: var(--jds-size-control-switch-lg-track-inline);
+  --jds-switch-track-block: var(--jds-size-control-switch-lg-track-block);
+  --jds-switch-target-block: var(--jds-size-control-switch-lg-target-block);
+  --jds-switch-thumb-size: var(--jds-size-control-switch-lg-thumb-size);
+  --jds-switch-thumb-travel: var(--jds-size-control-switch-lg-thumb-travel);
+}
+
+.jds-switch[data-size="xl"] {
+  --jds-switch-track-inline: var(--jds-size-control-switch-xl-track-inline);
+  --jds-switch-track-block: var(--jds-size-control-switch-xl-track-block);
+  --jds-switch-target-block: var(--jds-size-control-switch-xl-target-block);
+  --jds-switch-thumb-size: var(--jds-size-control-switch-xl-thumb-size);
+  --jds-switch-thumb-travel: var(--jds-size-control-switch-xl-thumb-travel);
+}
+
+.jds-switch::before,
+.jds-switch::after {
+  content: "";
+  position: absolute;
+}
+
+.jds-switch::before {
+  background: var(--jds-color-field-border);
+  block-size: var(--jds-switch-track-block);
+  border-radius: var(--jds-radius-control);
+  inline-size: var(--jds-switch-track-inline);
+  inset-block-start: var(--jds-space-switch-target);
+  inset-inline-start: 0;
+}
+
+.jds-switch::after {
+  background: var(--jds-color-action-primary-foreground);
+  block-size: var(--jds-switch-thumb-size);
+  border-radius: var(--jds-radius-control);
+  inline-size: var(--jds-switch-thumb-size);
+  inset-block-start: calc(var(--jds-space-switch-target) + var(--jds-space-switch-thumb-inset));
+  inset-inline-start: var(--jds-space-switch-thumb-inset);
+}
+
+.jds-switch:hover:not(:disabled)::before {
+  background: var(--jds-color-field-hover-border);
+}
+
+.jds-switch:checked::before {
+  background: var(--jds-color-action-primary-background);
+}
+
+.jds-switch:checked:hover:not(:disabled)::before {
+  background: var(--jds-color-action-primary-hover);
+}
+
+.jds-switch:checked::after {
+  inset-inline-start: calc(var(--jds-space-switch-thumb-inset) + var(--jds-switch-thumb-travel));
+}
+
+.jds-switch[data-state="invalid"]::before {
+  outline: var(--jds-size-border) solid var(--jds-color-field-invalid-border);
+  outline-offset: var(--jds-size-border);
+}
+
+.jds-switch[data-state="disabled"] {
+  opacity: var(--jds-opacity-disabled);
+}
+
+.jds-switch:focus-visible {
+  outline: var(--jds-size-focus) solid var(--jds-color-focus-ring);
+  outline-offset: var(--jds-size-focus);
+}
+
+label:has(> .jds-switch) {
+  align-items: center;
+  display: inline-flex;
+  gap: var(--jds-space-switch-target);
+}
+
+@media (forced-colors: active) {
+  .jds-switch {
+    forced-color-adjust: auto;
+  }
+}
