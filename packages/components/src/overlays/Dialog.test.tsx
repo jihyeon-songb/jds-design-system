@@ -221,6 +221,19 @@ describe("Dialog", () => {
     expect(screen.getByRole("button", { name: "다음" })).toHaveFocus()
   })
 
+  it("hidden input을 건너뛰고 다음 focusable 요소로 이동한다", () => {
+    render(
+      <Dialog defaultOpen>
+        <DialogContent aria-label="확인">
+          <input type="hidden" />
+          <button type="button">다음</button>
+        </DialogContent>
+      </Dialog>
+    )
+
+    expect(screen.getByRole("button", { name: "다음" })).toHaveFocus()
+  })
+
   it("focusable 자손이 없을 때 Content의 visible focus style을 제공한다", () => {
     const styles = readFileSync(resolve(process.cwd(), "packages/components/src/overlays/Dialog.css"), "utf8")
 
