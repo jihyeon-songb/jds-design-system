@@ -10,7 +10,7 @@ export type IconButtonProps = Omit<ComponentPropsWithoutRef<"button">, "aria-lab
 }
 
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(function IconButton(
-  { "aria-label": ariaLabel, children, className, disabled, loading = false, variant = "primary", ...props },
+  { "aria-label": ariaLabel, children, className, disabled, loading = false, variant = "outline", ...props },
   ref
 ) {
   return (

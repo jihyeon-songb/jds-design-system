@@ -10,7 +10,8 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Primary: Story = {}
+export const Default: Story = {}
+export const Primary: Story = { args: { variant: "primary" } }
 export const Variants: Story = {
   render: () => <div><Button variant="primary">저장</Button><Button variant="secondary">미리 보기</Button><Button variant="outline">취소</Button><Button variant="ghost">나중에</Button><Button variant="destructive">삭제</Button></div>
 }

@@ -15,7 +15,7 @@ describe("IconButton", () => {
     expect(screen.getByRole("button", { name: "알림 닫기" })).toBe(ref.current)
     expect(ref.current).toHaveAttribute("name", "dismiss")
     expect(ref.current).toHaveAttribute("type", "submit")
-    expect(ref.current).toHaveAttribute("data-variant", "primary")
+    expect(ref.current).toHaveAttribute("data-variant", "outline")
     expect(screen.getByTestId("icon").parentElement).toHaveAttribute("aria-hidden", "true")
   })
 
