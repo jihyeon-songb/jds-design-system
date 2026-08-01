@@ -84,3 +84,18 @@ export {
   type DialogTitleProps,
   type DialogTriggerProps,
 } from "./overlays/Dialog.js"
+export {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerTitle,
+  DrawerTrigger,
+  type DrawerCloseProps,
+  type DrawerContentProps,
+  type DrawerDescriptionProps,
+  type DrawerProps,
+  type DrawerSide,
+  type DrawerTitleProps,
+  type DrawerTriggerProps,
+} from "./overlays/Drawer.js"

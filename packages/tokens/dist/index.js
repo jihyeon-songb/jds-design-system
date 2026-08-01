@@ -97,6 +97,8 @@ export const tokens = {
   "size.control.switch.xl.thumb-size": "24px",
   "size.control.switch.xl.thumb-travel": "16px",
   "size.control.alert-close": "24px",
+  "size.drawer.inline": "360px",
+  "size.drawer.block": "320px",
   "size.icon": "16px",
   "size.border": "1px",
   "size.focus": "2px",

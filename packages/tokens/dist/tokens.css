@@ -97,6 +97,8 @@
   --jds-size-control-switch-xl-thumb-size: 24px;
   --jds-size-control-switch-xl-thumb-travel: 16px;
   --jds-size-control-alert-close: 24px;
+  --jds-size-drawer-inline: 360px;
+  --jds-size-drawer-block: 320px;
   --jds-size-icon: 16px;
   --jds-size-border: 1px;
   --jds-size-focus: 2px;
