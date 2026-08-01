@@ -45,7 +45,7 @@ export type RadioGroupProps = Omit<React.ComponentPropsWithoutRef<"div">, "onCha
 
 export type RadioGroupItemProps = Omit<
   React.ComponentPropsWithoutRef<"input">,
-  "checked" | "defaultChecked" | "name" | "onChange" | "type" | "value"
+  "checked" | "defaultChecked" | "name" | "required" | "type" | "value"
 > & {
   value: string
 }
@@ -59,7 +59,7 @@ controlled이고, 없으면 `defaultValue`에서 시작하는 internal value를 
 `RadioGroupItem`은 반드시 Group 안에서만 쓰며, `type="radio"`인 input 하나를
 렌더링한다. `value`는 필수다. Group이 `name`, `checked`, `required`와 Group 수준
 `disabled`를 관리하므로 Item 소비자는 이를 전달할 수 없다. `id`, `disabled`,
-`aria-describedby`, `form` 등 나머지 적용 가능한 native input 속성은 전달한다.
+`onChange`, `aria-describedby`, `form` 등 나머지 적용 가능한 native input 속성은 전달한다.
 개별 `disabled`는 Group이 활성 상태여도 해당 Item만 비활성화한다.
 
 Item의 접근 가능한 이름은 `Label` 또는 `FieldLabel`의 `htmlFor`로 제공한다.
