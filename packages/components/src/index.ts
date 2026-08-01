@@ -19,6 +19,7 @@ export {
 } from "./forms/Field.js"
 export { Checkbox, type CheckboxProps } from "./inputs/Checkbox.js"
 export { Input, type InputProps, type InputSize } from "./inputs/Input.js"
+export { Switch, type SwitchProps, type SwitchSize } from "./inputs/Switch.js"
 export {
   RadioGroup,
   RadioGroupItem,
