@@ -50,19 +50,23 @@
 .jds-switch::before {
   background: var(--jds-color-field-border);
   block-size: var(--jds-switch-track-block);
-  border-radius: var(--jds-radius-control);
+  border: none;
+  border-radius: calc(var(--jds-switch-track-block) / 2);
+  box-sizing: border-box;
   inline-size: var(--jds-switch-track-inline);
   inset-block-start: var(--jds-space-switch-target);
   inset-inline-start: 0;
+  transition: background var(--jds-duration-spinner);
 }
 
 .jds-switch::after {
   background: var(--jds-color-action-primary-foreground);
   block-size: var(--jds-switch-thumb-size);
-  border-radius: var(--jds-radius-control);
+  border-radius: calc(var(--jds-switch-thumb-size) / 2);
   inline-size: var(--jds-switch-thumb-size);
   inset-block-start: calc(var(--jds-space-switch-target) + var(--jds-space-switch-thumb-inset));
   inset-inline-start: var(--jds-space-switch-thumb-inset);
+  transition: inset-inline-start var(--jds-duration-spinner);
 }
 
 .jds-switch:hover:not(:disabled)::before {
@@ -99,6 +103,13 @@ label:has(> .jds-switch) {
   align-items: center;
   display: inline-flex;
   gap: var(--jds-space-switch-target);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jds-switch::before,
+  .jds-switch::after {
+    transition: none;
+  }
 }
 
 @media (forced-colors: active) {
