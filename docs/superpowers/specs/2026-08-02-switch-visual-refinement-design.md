@@ -8,8 +8,8 @@
 ## 변경
 
 - track과 thumb는 각 크기에 맞는 완전한 pill 형태로 유지한다.
-- off track에는 `color.field.border`의 1px 테두리를 적용하고, thumb는 field background를
-  사용한다. 따라서 흰 배경에서도 두 요소가 또렷하게 분리된다.
+- off track은 `color.field.border`를 채우는 경계선 없는 연한 회색 면으로 두고, thumb는
+  field background를 사용한다. 레퍼런스처럼 부드럽고 단순한 대비를 유지한다.
 - checked, hover, disabled, invalid, focus-visible 색상과 우선순위는 기존 semantic token을
   유지한다.
 - track 배경과 thumb 위치는 기존 `duration.spinner` 토큰으로 전환하고,
