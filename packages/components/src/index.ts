@@ -1,5 +1,6 @@
 export { Button, type ButtonProps, type ButtonSize, type ButtonVariant } from "./actions/Button.js"
 export { IconButton, type IconButtonProps, type IconButtonVariant } from "./actions/IconButton.js"
+export { Alert, type AlertProps, type AlertVariant } from "./feedback/Alert.js"
 export {
   Field,
   FieldContent,

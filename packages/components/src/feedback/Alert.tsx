@@ -17,6 +17,7 @@ export type AlertProps =
 export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   {
     children,
+    className,
     closeLabel,
     defaultOpen = true,
     dismissible,
@@ -41,6 +42,7 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
     <div
       {...props}
       ref={ref}
+      className={["jds-alert", className].filter(Boolean).join(" ")}
       data-state="open"
       data-variant={variant}
       role={variant === "error" ? "alert" : "status"}
