@@ -2,16 +2,24 @@ import { createRef } from "react"
 import { cleanup, render, screen } from "@testing-library/react"
 import { userEvent } from "@testing-library/user-event"
 import { afterEach, describe, expect, it, vi } from "vitest"
+import { Alert as PublicAlert, type AlertProps as PublicAlertProps } from "../index.js"
 import { Alert } from "./Alert.js"
 
 afterEach(cleanup)
 
 describe("Alert", () => {
+  it("exports Alert from the package entry", () => {
+    const props: PublicAlertProps = { children: "저장했습니다." }
+    expect(PublicAlert).toBe(Alert)
+    expect(props.variant).toBeUndefined()
+  })
+
   it("uses the default info status semantics and forwards div props", () => {
     const ref = createRef<HTMLDivElement>()
-    render(<Alert ref={ref} id="save-result">저장했습니다.</Alert>)
+    render(<Alert className="consumer-alert" ref={ref} id="save-result">저장했습니다.</Alert>)
 
     expect(ref.current).toHaveAttribute("id", "save-result")
+    expect(ref.current).toHaveClass("jds-alert", "consumer-alert")
     expect(ref.current).toHaveAttribute("role", "status")
     expect(ref.current).toHaveAttribute("data-variant", "info")
     expect(ref.current).toHaveAttribute("data-state", "open")
