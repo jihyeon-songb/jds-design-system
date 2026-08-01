@@ -59,6 +59,7 @@ type AccordionItemContextValue = {
 
 const AccordionContext = createContext<AccordionContextValue | null>(null)
 const AccordionItemContext = createContext<AccordionItemContextValue | null>(null)
+const AccordionHeaderContext = createContext(false)
 
 function useAccordionContext(): AccordionContextValue {
   const context = useContext(AccordionContext)
@@ -70,6 +71,12 @@ function useAccordionItemContext(): AccordionItemContextValue {
   const context = useContext(AccordionItemContext)
   if (!context) throw new Error("Accordion item components must be used within AccordionItem")
   return context
+}
+
+function useAccordionHeaderContext(): void {
+  if (!useContext(AccordionHeaderContext)) {
+    throw new Error("Accordion triggers must be used within AccordionHeader")
+  }
 }
 
 export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(function Accordion(
@@ -128,12 +135,12 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(func
 ) {
   const context = useAccordionContext()
   const open = context.isOpen(value)
-  const encodedValue = encodeURIComponent(value)
+  const itemId = useId()
   const itemContext = {
-    contentId: `${context.idPrefix}-content-${encodedValue}`,
+    contentId: `${context.idPrefix}-content-${itemId}`,
     disabled,
     open,
-    triggerId: `${context.idPrefix}-trigger-${encodedValue}`,
+    triggerId: `${context.idPrefix}-trigger-${itemId}`,
     value,
   }
 
@@ -152,14 +159,18 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(func
 })
 
 export const AccordionHeader = forwardRef<HTMLHeadingElement, AccordionHeaderProps>(function AccordionHeader(
-  { className, ...props },
+  { children, className, ...props },
   ref
 ) {
   const { headingLevel } = useAccordionContext()
   useAccordionItemContext()
   const Heading = `h${headingLevel}` as "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
 
-  return <Heading {...props} ref={ref} className={["jds-accordion-header", className].filter(Boolean).join(" ")} />
+  return (
+    <Heading {...props} ref={ref} className={["jds-accordion-header", className].filter(Boolean).join(" ")}>
+      <AccordionHeaderContext.Provider value>{children}</AccordionHeaderContext.Provider>
+    </Heading>
+  )
 })
 
 export const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(function AccordionTrigger(
@@ -168,6 +179,7 @@ export const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerPr
 ) {
   const context = useAccordionContext()
   const item = useAccordionItemContext()
+  useAccordionHeaderContext()
   const state = item.disabled ? "disabled" : item.open ? "open" : "closed"
 
   return (

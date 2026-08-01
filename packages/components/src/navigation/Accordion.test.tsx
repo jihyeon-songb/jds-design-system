@@ -167,4 +167,29 @@ describe("Accordion", () => {
       "Accordion item components must be used within AccordionItem"
     )
   })
+
+  it("중복 Item value에도 고유한 ARIA ID를 만든다", () => {
+    render(
+      <Accordion defaultValue="shipping" type="single">
+        <Item value="shipping">첫 배송 안내</Item>
+        <Item value="shipping">두 번째 배송 안내</Item>
+      </Accordion>
+    )
+
+    const [firstTrigger, secondTrigger] = screen.getAllByRole("button", { name: "shipping" })
+    const firstContent = screen.getByText("첫 배송 안내")
+    const secondContent = screen.getByText("두 번째 배송 안내")
+    expect(firstTrigger.id).not.toBe(secondTrigger.id)
+    expect(firstContent.id).not.toBe(secondContent.id)
+    expect(firstTrigger).toHaveAttribute("aria-controls", firstContent.id)
+    expect(secondTrigger).toHaveAttribute("aria-controls", secondContent.id)
+  })
+
+  it("Trigger는 AccordionHeader 안에서만 렌더링한다", () => {
+    expect(() => render(
+      <Accordion type="single">
+        <AccordionItem value="shipping"><AccordionTrigger>배송</AccordionTrigger></AccordionItem>
+      </Accordion>
+    )).toThrow("Accordion triggers must be used within AccordionHeader")
+  })
 })

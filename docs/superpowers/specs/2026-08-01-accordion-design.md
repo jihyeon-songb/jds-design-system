@@ -123,8 +123,9 @@ heading level을 Item에 전달한다. `AccordionItem`은 별도 Context로 자�
 disabled, open 상태와 Trigger·Content ID를 Header·Trigger·Content에 전달한다. 이 두
 Context는 하나의 compound widget을 조합하는 데만 쓴다.
 
-`useId` prefix와 `encodeURIComponent(value)`로 Trigger와 Content ID를 생성한다.
-소비자는 직접 ID를 관리하지 않아도 `aria-controls`와 `aria-labelledby` 관계를 얻는다.
+Root와 각 Item의 `useId`를 조합해 Trigger와 Content ID를 생성한다. 소비자는 직접 ID를
+관리하지 않아도 `aria-controls`와 `aria-labelledby` 관계를 얻으며, 잘못 중복한 value도
+ARIA ID 충돌을 만들지 않는다.
 `AccordionHeader`는 동적으로 선택한 `<h1>`부터 `<h6>` 중 하나이며, 그 안에는
 AccordionTrigger button 하나만 둔다.
 
