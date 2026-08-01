@@ -155,6 +155,19 @@ describe("Dialog", () => {
     expect(screen.getByRole("dialog")).toHaveFocus()
   })
 
+  it("disabled autofocus 대신 다음 enabled focusable 요소로 이동한다", () => {
+    render(
+      <Dialog defaultOpen>
+        <DialogContent aria-label="확인">
+          <button disabled ref={(element) => element?.setAttribute("autofocus", "")} type="button">자동</button>
+          <button type="button">다음</button>
+        </DialogContent>
+      </Dialog>
+    )
+
+    expect(screen.getByRole("button", { name: "다음" })).toHaveFocus()
+  })
+
   it("disabled 또는 제거된 Trigger에는 focus를 복귀하지 않는다", async () => {
     const user = userEvent.setup()
     const { rerender } = render(
