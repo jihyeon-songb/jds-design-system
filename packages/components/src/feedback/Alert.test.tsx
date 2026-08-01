@@ -23,4 +23,16 @@ describe("Alert", () => {
     rerender(<Alert variant="error">저장 실패</Alert>)
     expect(screen.getByRole("alert")).toHaveAttribute("data-variant", "error")
   })
+
+  it("does not render when defaultOpen is false", () => {
+    render(<Alert defaultOpen={false}>기본으로 닫힘</Alert>)
+
+    expect(screen.queryByText("기본으로 닫힘")).not.toBeInTheDocument()
+  })
+
+  it("does not render when controlled open is false", () => {
+    render(<Alert open={false}>제어된 닫힘</Alert>)
+
+    expect(screen.queryByText("제어된 닫힘")).not.toBeInTheDocument()
+  })
 })
