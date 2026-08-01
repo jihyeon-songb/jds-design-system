@@ -13,6 +13,7 @@ describe("Button", () => {
     expect(button).toBeDisabled()
     expect(button).toHaveAttribute("aria-busy", "true")
     expect(button).toHaveAttribute("data-state", "loading")
+    expect(button.querySelector('[data-slot="spinner"]')?.compareDocumentPosition(screen.getByText("Save changes"))).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
   })
 
   it("forwards the ref and native button props", () => {
