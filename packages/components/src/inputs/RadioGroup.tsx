@@ -110,18 +110,19 @@ export const RadioGroupItem = forwardRef<HTMLInputElement, RadioGroupItemProps>(
   const checked = context.selectedValue === value
   const itemDisabled = context.disabled || disabled
   const state = itemDisabled ? "disabled" : context.invalid ? "invalid" : checked ? "checked" : "unchecked"
+  const onFormReset = useCallback((): void => context.resetUncontrolled(), [context.resetUncontrolled])
 
   const setRef = useCallback(
     (node: HTMLInputElement | null): void => {
-      formRef.current?.removeEventListener("reset", context.resetUncontrolled)
+      formRef.current?.removeEventListener("reset", onFormReset)
 
       if (typeof forwardedRef === "function") forwardedRef(node)
       else if (forwardedRef) forwardedRef.current = node
 
       formRef.current = node?.form ?? null
-      formRef.current?.addEventListener("reset", context.resetUncontrolled)
+      formRef.current?.addEventListener("reset", onFormReset)
     },
-    [context.resetUncontrolled, forwardedRef]
+    [forwardedRef, onFormReset]
   )
 
   return (
