@@ -17,6 +17,7 @@ export {
   type FieldTitleProps,
   type LabelProps,
 } from "./forms/Field.js"
+export { Checkbox, type CheckboxProps } from "./inputs/Checkbox.js"
 export { Input, type InputProps, type InputSize } from "./inputs/Input.js"
 export {
   RadioGroup,
