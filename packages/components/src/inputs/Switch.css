@@ -50,13 +50,13 @@
 .jds-switch::before {
   background: var(--jds-color-field-border);
   block-size: var(--jds-switch-track-block);
-  border: var(--jds-size-border) solid var(--jds-color-field-border);
+  border: none;
   border-radius: calc(var(--jds-switch-track-block) / 2);
   box-sizing: border-box;
   inline-size: var(--jds-switch-track-inline);
   inset-block-start: var(--jds-space-switch-target);
   inset-inline-start: 0;
-  transition: background var(--jds-duration-spinner), border-color var(--jds-duration-spinner);
+  transition: background var(--jds-duration-spinner);
 }
 
 .jds-switch::after {
@@ -75,12 +75,10 @@
 
 .jds-switch:checked::before {
   background: var(--jds-color-action-primary-background);
-  border-color: var(--jds-color-action-primary-background);
 }
 
 .jds-switch:checked:hover:not(:disabled)::before {
   background: var(--jds-color-action-primary-hover);
-  border-color: var(--jds-color-action-primary-hover);
 }
 
 .jds-switch:checked::after {
