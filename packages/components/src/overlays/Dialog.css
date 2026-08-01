@@ -14,6 +14,11 @@
   opacity: var(--jds-opacity-disabled);
 }
 
+.jds-dialog-content:focus-visible {
+  outline: var(--jds-size-focus) solid var(--jds-color-focus-ring);
+  outline-offset: var(--jds-size-focus);
+}
+
 .jds-dialog-title { margin: 0; }
 
 .jds-dialog-description {

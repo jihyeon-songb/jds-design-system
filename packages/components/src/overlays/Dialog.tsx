@@ -76,8 +76,13 @@ function assignRef<T>(ref: ForwardedRef<T>, value: T | null): void {
 
 function focusDialogContent(dialog: HTMLDialogElement): void {
   const focusable = Array.from(dialog.querySelectorAll<HTMLElement>(
-    'a[href], area[href], button, input, select, textarea, [contenteditable], [tabindex]:not([tabindex="-1"])'
-  )).filter((element) => !element.matches(":disabled"))
+    "a[href], area[href], button, input, select, textarea, [contenteditable], [tabindex]"
+  )).filter((element) =>
+    !element.matches(":disabled") &&
+    element.getAttribute("contenteditable")?.toLowerCase() !== "false" &&
+    !element.closest("[hidden], [inert]") &&
+    (element.getAttribute("tabindex") === null || element.tabIndex >= 0)
+  )
   const target = focusable.find((element) => element.hasAttribute("autofocus")) ?? focusable[0] ?? dialog
   target.focus()
 }
