@@ -1,8 +1,19 @@
 import { createRef } from "react"
 import { cleanup, render, screen } from "@testing-library/react"
 import { userEvent } from "@testing-library/user-event"
-import { afterEach, describe, expect, it, vi } from "vitest"
-import { RadioGroup, RadioGroupItem } from "./RadioGroup.js"
+import { afterEach, describe, expect, expectTypeOf, it, vi } from "vitest"
+import {
+  RadioGroup as PublicRadioGroup,
+  RadioGroupItem as PublicRadioGroupItem,
+  type RadioGroupItemProps as PublicRadioGroupItemProps,
+  type RadioGroupProps as PublicRadioGroupProps,
+} from "../index.js"
+import {
+  RadioGroup,
+  RadioGroupItem,
+  type RadioGroupItemProps,
+  type RadioGroupProps,
+} from "./RadioGroup.js"
 
 afterEach(cleanup)
 
@@ -29,6 +40,13 @@ function ConditionalDeliveryGroup({ showStandard }: { showStandard: boolean }) {
 }
 
 describe("RadioGroup", () => {
+  it("exports the public components and props types", () => {
+    expect(PublicRadioGroup).toBe(RadioGroup)
+    expect(PublicRadioGroupItem).toBe(RadioGroupItem)
+    expectTypeOf<PublicRadioGroupProps>().toEqualTypeOf<RadioGroupProps>()
+    expectTypeOf<PublicRadioGroupItemProps>().toEqualTypeOf<RadioGroupItemProps>()
+  })
+
   it("renders the root CSS class while preserving consumer className", () => {
     render(
       <RadioGroup aria-label="배송 방식" name="delivery" className="custom-group" orientation="horizontal">
