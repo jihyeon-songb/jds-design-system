@@ -136,7 +136,7 @@ export const DialogTrigger = forwardRef<HTMLButtonElement, DialogTriggerProps>(f
 })
 
 export const DialogContent = forwardRef<HTMLDialogElement, DialogContentProps>(function DialogContent(
-  { onClick, onEscapeKeyDown, onInteractOutside, tabIndex, ...props },
+  { className, onClick, onEscapeKeyDown, onInteractOutside, tabIndex, ...props },
   ref
 ) {
   const { contentRef, descriptionId, open, requestOpen, titleId, triggerRef } = useDialogContext()
@@ -187,6 +187,7 @@ export const DialogContent = forwardRef<HTMLDialogElement, DialogContentProps>(f
       }}
       aria-labelledby={titleId}
       aria-describedby={descriptionId}
+      className={["jds-dialog-content", className].filter(Boolean).join(" ")}
       data-state={open ? "open" : "closed"}
       tabIndex={tabIndex ?? -1}
       onClick={(event) => {
@@ -199,7 +200,10 @@ export const DialogContent = forwardRef<HTMLDialogElement, DialogContentProps>(f
   )
 })
 
-export const DialogTitle = forwardRef<HTMLHeadingElement, DialogTitleProps>(function DialogTitle(props, ref) {
+export const DialogTitle = forwardRef<HTMLHeadingElement, DialogTitleProps>(function DialogTitle(
+  { className, ...props },
+  ref
+) {
   const id = useId()
   const { setTitleId } = useDialogContext()
 
@@ -208,11 +212,11 @@ export const DialogTitle = forwardRef<HTMLHeadingElement, DialogTitleProps>(func
     return () => setTitleId((currentId) => currentId === id ? undefined : currentId)
   }, [id, setTitleId])
 
-  return <h2 {...props} ref={ref} id={id} />
+  return <h2 {...props} ref={ref} className={["jds-dialog-title", className].filter(Boolean).join(" ")} id={id} />
 })
 
 export const DialogDescription = forwardRef<HTMLParagraphElement, DialogDescriptionProps>(function DialogDescription(
-  props,
+  { className, ...props },
   ref
 ) {
   const id = useId()
@@ -223,11 +227,11 @@ export const DialogDescription = forwardRef<HTMLParagraphElement, DialogDescript
     return () => setDescriptionId((currentId) => currentId === id ? undefined : currentId)
   }, [id, setDescriptionId])
 
-  return <p {...props} ref={ref} id={id} />
+  return <p {...props} ref={ref} className={["jds-dialog-description", className].filter(Boolean).join(" ")} id={id} />
 })
 
 export const DialogClose = forwardRef<HTMLButtonElement, DialogCloseProps>(function DialogClose(
-  { onClick, ...props },
+  { className, onClick, ...props },
   ref
 ) {
   const { requestOpen } = useDialogContext()
@@ -237,6 +241,7 @@ export const DialogClose = forwardRef<HTMLButtonElement, DialogCloseProps>(funct
       {...props}
       ref={ref}
       type="button"
+      className={["jds-dialog-close", className].filter(Boolean).join(" ")}
       onClick={(event) => {
         onClick?.(event)
         if (!event.defaultPrevented) requestOpen(false)

@@ -1,7 +1,16 @@
 import { createRef } from "react"
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { userEvent } from "@testing-library/user-event"
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { afterEach, beforeEach, describe, expect, expectTypeOf, it, vi } from "vitest"
+import {
+  Dialog as PublicDialog,
+  DialogClose as PublicDialogClose,
+  DialogContent as PublicDialogContent,
+  DialogDescription as PublicDialogDescription,
+  DialogTitle as PublicDialogTitle,
+  DialogTrigger as PublicDialogTrigger,
+  type DialogProps as PublicDialogProps,
+} from "../index.js"
 import {
   Dialog,
   DialogClose,
@@ -9,6 +18,7 @@ import {
   DialogDescription,
   DialogTitle,
   DialogTrigger,
+  type DialogProps,
 } from "./Dialog.js"
 
 const showModal = vi.fn(function (this: HTMLDialogElement) { this.setAttribute("open", "") })
@@ -31,6 +41,34 @@ afterEach(() => {
 })
 
 describe("Dialog", () => {
+  it("package entry에서 Dialog API를 export한다", () => {
+    expect(PublicDialog).toBe(Dialog)
+    expect(PublicDialogTrigger).toBe(DialogTrigger)
+    expect(PublicDialogContent).toBe(DialogContent)
+    expect(PublicDialogTitle).toBe(DialogTitle)
+    expect(PublicDialogDescription).toBe(DialogDescription)
+    expect(PublicDialogClose).toBe(DialogClose)
+    expectTypeOf<PublicDialogProps>().toEqualTypeOf<DialogProps>()
+  })
+
+  it("Dialog CSS class와 consumer className을 함께 전달한다", () => {
+    const ref = createRef<HTMLDialogElement>()
+    render(
+      <Dialog>
+        <DialogContent aria-label="확인" className="consumer-content" ref={ref}>
+          <DialogTitle className="consumer-title">제목</DialogTitle>
+          <DialogDescription className="consumer-description">설명</DialogDescription>
+          <DialogClose aria-label="닫기" className="consumer-close">×</DialogClose>
+        </DialogContent>
+      </Dialog>
+    )
+
+    expect(ref.current).toHaveClass("jds-dialog-content", "consumer-content")
+    expect(screen.getByText("제목")).toHaveClass("jds-dialog-title", "consumer-title")
+    expect(screen.getByText("설명")).toHaveClass("jds-dialog-description", "consumer-description")
+    expect(screen.getByText("×")).toHaveClass("jds-dialog-close", "consumer-close")
+  })
+
   it("uncontrolled Trigger와 Close가 modal state를 바꾼다", async () => {
     const user = userEvent.setup()
     render(

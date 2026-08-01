@@ -70,3 +70,17 @@ export {
   type TabsProps,
   type TabsTriggerProps,
 } from "./navigation/Tabs.js"
+export {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+  type DialogCloseProps,
+  type DialogContentProps,
+  type DialogDescriptionProps,
+  type DialogProps,
+  type DialogTitleProps,
+  type DialogTriggerProps,
+} from "./overlays/Dialog.js"
