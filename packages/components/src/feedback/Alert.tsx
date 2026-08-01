@@ -17,10 +17,10 @@ export type AlertProps =
 export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   {
     children,
-    closeLabel: _closeLabel,
+    closeLabel,
     defaultOpen = true,
-    dismissible: _dismissible,
-    onOpenChange: _onOpenChange,
+    dismissible,
+    onOpenChange,
     open,
     title,
     variant = "info",
@@ -28,8 +28,12 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   },
   ref
 ) {
-  const [uncontrolledOpen] = useState(defaultOpen)
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen)
   const isOpen = open ?? uncontrolledOpen
+  const close = () => {
+    onOpenChange?.(false)
+    if (open === undefined) setUncontrolledOpen(false)
+  }
 
   if (!isOpen) return null
 
@@ -43,6 +47,7 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
     >
       {title != null ? <div data-slot="title">{title}</div> : null}
       <div data-slot="description">{children}</div>
+      {dismissible ? <button aria-label={closeLabel} data-slot="close" onClick={close} type="button">×</button> : null}
     </div>
   )
 })
