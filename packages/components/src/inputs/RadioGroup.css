@@ -18,6 +18,10 @@
   vertical-align: middle;
 }
 
+.jds-radio-group-item:not(:disabled):hover {
+  accent-color: var(--jds-color-action-primary-hover);
+}
+
 .jds-radio-group-item[data-state="invalid"] {
   outline: var(--jds-size-border) solid var(--jds-color-field-invalid-border);
   outline-offset: var(--jds-size-border);
