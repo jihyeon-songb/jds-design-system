@@ -1,0 +1,45 @@
+.jds-tabs-list {
+  border-block-end: var(--jds-size-border) solid var(--jds-color-action-primary-background);
+  display: flex;
+  gap: var(--jds-space-button-gap);
+}
+
+.jds-tabs-trigger {
+  background: transparent;
+  border: 0;
+  border-block-end: var(--jds-size-border) solid transparent;
+  color: var(--jds-color-action-ghost-foreground);
+  cursor: pointer;
+  margin-block-end: calc(var(--jds-size-border) * -1);
+  min-block-size: 24px;
+  min-inline-size: 24px;
+  padding: var(--jds-space-button-inline);
+}
+
+.jds-tabs-trigger:not(:disabled):hover {
+  background: var(--jds-color-action-ghost-hover);
+}
+
+.jds-tabs-trigger[data-state="active"] {
+  background: var(--jds-color-action-primary-background);
+  border-block-end-color: var(--jds-color-action-primary-background);
+  color: var(--jds-color-action-primary-foreground);
+}
+
+.jds-tabs-trigger[data-state="disabled"] {
+  cursor: not-allowed;
+  opacity: var(--jds-opacity-disabled);
+}
+
+.jds-tabs-trigger:focus-visible {
+  outline: var(--jds-size-focus) solid var(--jds-color-focus-ring);
+  outline-offset: var(--jds-size-focus);
+}
+
+.jds-tabs-content {
+  padding: var(--jds-space-button-inline);
+}
+
+@media (forced-colors: active) {
+  .jds-tabs-trigger { forced-color-adjust: auto; }
+}

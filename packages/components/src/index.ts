@@ -47,3 +47,13 @@ export {
   type SelectValueProps,
 } from "./inputs/Select.js"
 export { Textarea, type TextareaProps, type TextareaSize } from "./inputs/Textarea.js"
+export {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+  type TabsContentProps,
+  type TabsListProps,
+  type TabsProps,
+  type TabsTriggerProps,
+} from "./navigation/Tabs.js"
