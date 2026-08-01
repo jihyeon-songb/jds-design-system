@@ -10,4 +10,5 @@
 @import "./inputs/Select.css";
 @import "./inputs/Switch.css";
 @import "./inputs/Textarea.css";
+@import "./navigation/Accordion.css";
 @import "./navigation/Tabs.css";
