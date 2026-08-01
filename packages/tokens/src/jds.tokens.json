@@ -10,7 +10,7 @@
     "action": {
       "primary": { "background": { "$value": "{color.blue.600}", "$type": "color" }, "foreground": { "$value": "{color.neutral.0}", "$type": "color" }, "hover": { "$value": "{color.blue.700}", "$type": "color" } },
       "secondary": { "background": { "$value": "{color.neutral.100}", "$type": "color" }, "foreground": { "$value": "{color.neutral.900}", "$type": "color" }, "hover": { "$value": "{color.neutral.300}", "$type": "color" } },
-      "outline": { "background": { "$value": "{color.neutral.0}", "$type": "color" }, "foreground": { "$value": "{color.blue.600}", "$type": "color" }, "border": { "$value": "{color.blue.600}", "$type": "color" }, "hover": { "$value": "{color.neutral.100}", "$type": "color" } },
+      "outline": { "background": { "$value": "{color.neutral.0}", "$type": "color" }, "foreground": { "$value": "{color.neutral.900}", "$type": "color" }, "border": { "$value": "{color.neutral.300}", "$type": "color" }, "hover": { "$value": "{color.neutral.100}", "$type": "color" } },
       "ghost": { "background": { "$value": "transparent", "$type": "color" }, "foreground": { "$value": "{color.blue.600}", "$type": "color" }, "hover": { "$value": "{color.neutral.100}", "$type": "color" } },
       "destructive": { "background": { "$value": "{color.red.600}", "$type": "color" }, "foreground": { "$value": "{color.neutral.0}", "$type": "color" }, "hover": { "$value": "{color.red.700}", "$type": "color" } }
     },
