@@ -1,0 +1,28 @@
+.jds-avatar {
+  align-items: center;
+  background: var(--jds-color-avatar-background);
+  block-size: var(--jds-size-avatar-md);
+  border-radius: var(--jds-radius-avatar);
+  color: var(--jds-color-avatar-foreground);
+  display: inline-flex;
+  flex: none;
+  inline-size: var(--jds-size-avatar-md);
+  justify-content: center;
+  overflow: hidden;
+}
+
+.jds-avatar[data-size="sm"] { block-size: var(--jds-size-avatar-sm); inline-size: var(--jds-size-avatar-sm); }
+.jds-avatar[data-size="lg"] { block-size: var(--jds-size-avatar-lg); inline-size: var(--jds-size-avatar-lg); }
+.jds-avatar[data-size="xl"] { block-size: var(--jds-size-avatar-xl); inline-size: var(--jds-size-avatar-xl); }
+
+.jds-avatar > img {
+  block-size: 100%;
+  inline-size: 100%;
+  object-fit: cover;
+}
+
+.jds-avatar > span { font: inherit; }
+
+@media (forced-colors: active) {
+  .jds-avatar { forced-color-adjust: auto; }
+}

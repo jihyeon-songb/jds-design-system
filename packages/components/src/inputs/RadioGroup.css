@@ -1,0 +1,41 @@
+.jds-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jds-space-field-item);
+}
+
+.jds-radio-group[data-orientation="horizontal"] {
+  flex-direction: row;
+}
+
+.jds-radio-group-item {
+  accent-color: var(--jds-color-action-primary-background);
+  block-size: var(--jds-size-control-radio-size);
+  box-sizing: content-box;
+  inline-size: var(--jds-size-control-radio-size);
+  margin: 0;
+  padding: var(--jds-space-radio-target);
+  vertical-align: middle;
+}
+
+.jds-radio-group-item:not(:disabled):hover {
+  accent-color: var(--jds-color-action-primary-hover);
+}
+
+.jds-radio-group-item[data-state="invalid"] {
+  outline: var(--jds-size-border) solid var(--jds-color-field-invalid-border);
+  outline-offset: var(--jds-size-border);
+}
+
+.jds-radio-group-item[data-state="disabled"] {
+  opacity: var(--jds-opacity-disabled);
+}
+
+.jds-radio-group-item:focus-visible {
+  outline: var(--jds-size-focus) solid var(--jds-color-focus-ring);
+  outline-offset: var(--jds-size-focus);
+}
+
+@media (forced-colors: active) {
+  .jds-radio-group-item { forced-color-adjust: auto; }
+}

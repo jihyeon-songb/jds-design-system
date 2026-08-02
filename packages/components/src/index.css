@@ -1,4 +1,21 @@
 @import "./actions/Button.css";
+@import "./feedback/Alert.css";
+@import "./feedback/Avatar.css";
+@import "./feedback/Badge.css";
+@import "./actions/IconButton.css";
+@import "./forms/Field.css";
+@import "./inputs/Checkbox.css";
 @import "./inputs/Input.css";
+@import "./inputs/RadioGroup.css";
 @import "./inputs/Select.css";
+@import "./inputs/Switch.css";
 @import "./inputs/Textarea.css";
+@import "./navigation/Accordion.css";
+@import "./navigation/Tabs.css";
+@import "./overlays/Dialog.css";
+@import "./overlays/Drawer.css";
+
+[class^="jds-"],
+[class*=" jds-"] {
+  font-size: var(--jds-typography-body-font-size);
+}
