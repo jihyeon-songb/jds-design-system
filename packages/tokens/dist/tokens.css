@@ -17,8 +17,8 @@
   --jds-color-action-secondary-foreground: #17212b;
   --jds-color-action-secondary-hover: #c9ced3;
   --jds-color-action-outline-background: #ffffff;
-  --jds-color-action-outline-foreground: #0057d9;
-  --jds-color-action-outline-border: #0057d9;
+  --jds-color-action-outline-foreground: #17212b;
+  --jds-color-action-outline-border: #c9ced3;
   --jds-color-action-outline-hover: #f1f3f5;
   --jds-color-action-ghost-background: transparent;
   --jds-color-action-ghost-foreground: #0057d9;
@@ -59,6 +59,7 @@
   --jds-color-field-border: #c9ced3;
   --jds-color-field-hover-border: #38434f;
   --jds-color-field-invalid-border: #c9372c;
+  --jds-typography-body-font-size: 14px;
   --jds-size-avatar-sm: 32px;
   --jds-size-avatar-md: 36px;
   --jds-size-avatar-lg: 40px;

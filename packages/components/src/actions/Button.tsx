@@ -12,7 +12,7 @@ export type ButtonProps = ComponentPropsWithoutRef<"button"> & {
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { variant = "primary", size = "md", loading = false, startIcon, endIcon, children, disabled, className, ...props },
+  { variant = "outline", size = "md", loading = false, startIcon, endIcon, children, disabled, className, ...props },
   ref
 ) {
   return (

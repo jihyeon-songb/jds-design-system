@@ -22,6 +22,7 @@ describe("Button", () => {
 
     expect(ref.current).toHaveAttribute("name", "save")
     expect(ref.current).toHaveAttribute("type", "submit")
+    expect(ref.current).toHaveAttribute("data-variant", "outline")
   })
 
   it("does not invoke click handlers while loading", () => {
