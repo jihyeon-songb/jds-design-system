@@ -14,6 +14,7 @@ import {
   type RefObject,
   type SetStateAction,
 } from "react"
+import { Button, type ButtonProps } from "../actions/Button.js"
 
 type DialogUncontrolledProps = {
   defaultOpen?: boolean
@@ -46,7 +47,9 @@ export type DialogContentProps = Omit<
 
 export type DialogTitleProps = ComponentPropsWithoutRef<"h2">
 export type DialogDescriptionProps = ComponentPropsWithoutRef<"p">
-export type DialogCloseProps = Omit<ComponentPropsWithoutRef<"button">, "type"> & {
+export type DialogHeaderProps = ComponentPropsWithoutRef<"div">
+export type DialogFooterProps = ComponentPropsWithoutRef<"div">
+export type DialogCloseProps = Omit<ButtonProps, "type"> & {
   "aria-label": string
 }
 
@@ -123,13 +126,14 @@ export const DialogTrigger = forwardRef<HTMLButtonElement, DialogTriggerProps>(f
   const { open, requestOpen, triggerRef } = useDialogContext()
 
   return (
-    <button
+    <Button
       {...props}
       ref={(element) => {
         triggerRef.current = element
         assignRef(ref, element)
       }}
       type="button"
+      variant="outline"
       aria-haspopup="dialog"
       aria-expanded={open}
       onClick={(event) => {
@@ -235,17 +239,32 @@ export const DialogDescription = forwardRef<HTMLParagraphElement, DialogDescript
   return <p {...props} ref={ref} className={["jds-dialog-description", className].filter(Boolean).join(" ")} id={id} />
 })
 
+export const DialogHeader = forwardRef<HTMLDivElement, DialogHeaderProps>(function DialogHeader(
+  { className, ...props },
+  ref
+) {
+  return <div {...props} ref={ref} className={["jds-dialog-header", className].filter(Boolean).join(" ")} />
+})
+
+export const DialogFooter = forwardRef<HTMLDivElement, DialogFooterProps>(function DialogFooter(
+  { className, ...props },
+  ref
+) {
+  return <div {...props} ref={ref} className={["jds-dialog-footer", className].filter(Boolean).join(" ")} />
+})
+
 export const DialogClose = forwardRef<HTMLButtonElement, DialogCloseProps>(function DialogClose(
-  { className, onClick, ...props },
+  { className, onClick, variant = "outline", ...props },
   ref
 ) {
   const { requestOpen } = useDialogContext()
 
   return (
-    <button
+    <Button
       {...props}
       ref={ref}
       type="button"
+      variant={variant}
       className={["jds-dialog-close", className].filter(Boolean).join(" ")}
       onClick={(event) => {
         onClick?.(event)

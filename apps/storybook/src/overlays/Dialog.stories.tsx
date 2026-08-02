@@ -7,8 +7,12 @@ import {
   DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
+  DialogHeader,
   DialogTitle,
   DialogTrigger,
+  Field,
+  Input,
 } from "@jds/components"
 
 const meta = {
@@ -35,9 +39,23 @@ function ControlledDialog() {
     <Dialog onOpenChange={setOpen} open={open}>
       <DialogTrigger>편집 열기</DialogTrigger>
       <DialogContent>
-        <DialogTitle>프로필을 편집할까요?</DialogTitle>
-        <DialogDescription>변경 사항을 저장하기 전에 내용을 확인하세요.</DialogDescription>
-        <DialogClose aria-label="취소">취소</DialogClose>
+        <DialogHeader>
+          <DialogTitle>프로필 편집</DialogTitle>
+          <DialogDescription>여기에서 프로필 정보를 수정할 수 있습니다. 변경을 마치면 저장을 눌러주세요.</DialogDescription>
+          <DialogClose aria-label="닫기" variant="ghost">×</DialogClose>
+        </DialogHeader>
+        <Field>
+          <label htmlFor="profile-name">이름</label>
+          <Input defaultValue="김지수" id="profile-name" />
+        </Field>
+        <Field>
+          <label htmlFor="profile-username">사용자 이름</label>
+          <Input defaultValue="@jisoo" id="profile-username" />
+        </Field>
+        <DialogFooter>
+          <DialogClose aria-label="취소">취소</DialogClose>
+          <Button>변경사항 저장</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   )
@@ -48,9 +66,14 @@ export const Default: Story = {
     <Dialog>
       <DialogTrigger>계정 삭제</DialogTrigger>
       <DialogContent>
-        <DialogTitle>계정을 삭제할까요?</DialogTitle>
-        <DialogDescription>삭제한 계정은 복구할 수 없습니다.</DialogDescription>
-        <DialogClose aria-label="취소">취소</DialogClose>
+        <DialogHeader>
+          <DialogTitle>계정을 삭제할까요?</DialogTitle>
+          <DialogDescription>삭제한 계정은 복구할 수 없습니다.</DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose aria-label="취소">취소</DialogClose>
+          <Button variant="destructive">계정 삭제</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   ),
@@ -69,11 +92,9 @@ export const LongContent: Story = {
     <Dialog defaultOpen>
       <DialogTrigger>이용 약관 보기</DialogTrigger>
       <DialogContent>
-        <DialogTitle>이용 약관</DialogTitle>
-        <DialogDescription>
-          서비스를 이용하면 관련 법령과 운영 정책을 준수하는 데 동의하게 됩니다. 서비스는 안정적인 제공을 위해 필요한 경우 사전 안내 후 약관을 변경할 수 있으며, 변경된 약관은 공지한 날부터 적용됩니다. 중요한 변경 사항은 별도로 안내합니다.
-        </DialogDescription>
-        <DialogClose aria-label="닫기">닫기</DialogClose>
+        <DialogHeader><DialogTitle>이용 약관</DialogTitle></DialogHeader>
+        <DialogDescription>서비스를 이용하면 관련 법령과 운영 정책을 준수하는 데 동의하게 됩니다. 서비스는 안정적인 제공을 위해 필요한 경우 사전 안내 후 약관을 변경할 수 있으며, 변경된 약관은 공지한 날부터 적용됩니다. 중요한 변경 사항은 별도로 안내합니다.</DialogDescription>
+        <DialogFooter><DialogClose aria-label="닫기">닫기</DialogClose></DialogFooter>
       </DialogContent>
     </Dialog>
   ),
@@ -85,7 +106,7 @@ export const AriaLabelOnly: Story = {
       <DialogTrigger>알림 설정 열기</DialogTrigger>
       <DialogContent aria-label="알림 설정">
         <p>새 알림을 받을 방법을 선택하세요.</p>
-        <DialogClose aria-label="닫기">닫기</DialogClose>
+        <DialogFooter><DialogClose aria-label="닫기">닫기</DialogClose></DialogFooter>
       </DialogContent>
     </Dialog>
   ),
@@ -99,9 +120,8 @@ export const PreventOutsideClose: Story = {
         onEscapeKeyDown={(event) => event.preventDefault()}
         onInteractOutside={(event) => event.preventDefault()}
       >
-        <DialogTitle>결제를 완료할까요?</DialogTitle>
-        <DialogDescription>계속하려면 취소 또는 결제 완료를 선택하세요.</DialogDescription>
-        <DialogClose aria-label="취소">취소</DialogClose>
+        <DialogHeader><DialogTitle>결제를 완료할까요?</DialogTitle><DialogDescription>계속하려면 취소 또는 결제 완료를 선택하세요.</DialogDescription></DialogHeader>
+        <DialogFooter><DialogClose aria-label="취소">취소</DialogClose></DialogFooter>
       </DialogContent>
     </Dialog>
   ),
@@ -112,10 +132,9 @@ export const Autofocus: Story = {
     <Dialog defaultOpen>
       <DialogTrigger>비밀번호 변경 열기</DialogTrigger>
       <DialogContent>
-        <DialogTitle>비밀번호를 변경할까요?</DialogTitle>
-        <DialogDescription>새 비밀번호를 입력하세요.</DialogDescription>
+        <DialogHeader><DialogTitle>비밀번호를 변경할까요?</DialogTitle><DialogDescription>새 비밀번호를 입력하세요.</DialogDescription></DialogHeader>
         <input aria-label="새 비밀번호" autoFocus type="password" />
-        <DialogClose aria-label="취소">취소</DialogClose>
+        <DialogFooter><DialogClose aria-label="취소">취소</DialogClose></DialogFooter>
       </DialogContent>
     </Dialog>
   ),
@@ -126,10 +145,8 @@ export const DestructiveConfirmation: Story = {
     <Dialog>
       <DialogTrigger>프로젝트 삭제</DialogTrigger>
       <DialogContent>
-        <DialogTitle>프로젝트를 삭제할까요?</DialogTitle>
-        <DialogDescription>삭제한 프로젝트와 데이터는 복구할 수 없습니다.</DialogDescription>
-        <DialogClose aria-label="취소">취소</DialogClose>
-        <Button variant="destructive">프로젝트 삭제</Button>
+        <DialogHeader><DialogTitle>프로젝트를 삭제할까요?</DialogTitle><DialogDescription>삭제한 프로젝트와 데이터는 복구할 수 없습니다.</DialogDescription></DialogHeader>
+        <DialogFooter><DialogClose aria-label="취소">취소</DialogClose><Button variant="destructive">프로젝트 삭제</Button></DialogFooter>
       </DialogContent>
     </Dialog>
   ),

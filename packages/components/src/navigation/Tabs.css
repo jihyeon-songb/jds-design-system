@@ -1,29 +1,29 @@
 .jds-tabs-list {
-  border-block-end: var(--jds-size-border) solid var(--jds-color-action-primary-background);
+  border-block-end: var(--jds-size-border) solid var(--jds-color-field-border);
   display: flex;
   gap: var(--jds-space-button-gap);
 }
 
 .jds-tabs-trigger {
-  background: transparent;
+  background: var(--jds-color-action-ghost-background);
   border: 0;
-  border-block-end: var(--jds-size-border) solid transparent;
+  border-block-end: var(--jds-size-border) solid var(--jds-color-action-ghost-background);
   color: var(--jds-color-action-ghost-foreground);
   cursor: pointer;
   margin-block-end: calc(var(--jds-size-border) * -1);
-  min-block-size: 24px;
-  min-inline-size: 24px;
-  padding: var(--jds-space-button-inline);
+  min-block-size: var(--jds-size-alert-close);
+  min-inline-size: var(--jds-size-alert-close);
+  padding-block: var(--jds-space-field-content);
+  padding-inline: var(--jds-space-button-inline);
 }
 
-.jds-tabs-trigger:not(:disabled):hover {
+.jds-tabs-trigger[data-state="inactive"]:not(:disabled):hover {
   background: var(--jds-color-action-ghost-hover);
 }
 
 .jds-tabs-trigger[data-state="active"] {
-  background: var(--jds-color-action-primary-background);
   border-block-end-color: var(--jds-color-action-primary-background);
-  color: var(--jds-color-action-primary-foreground);
+  color: var(--jds-color-action-primary-background);
 }
 
 .jds-tabs-trigger[data-state="disabled"] {
@@ -37,7 +37,8 @@
 }
 
 .jds-tabs-content {
-  padding: var(--jds-space-button-inline);
+  padding-block: var(--jds-space-field-item);
+  padding-inline: var(--jds-space-button-inline);
 }
 
 @media (forced-colors: active) {

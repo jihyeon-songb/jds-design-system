@@ -4,9 +4,14 @@
   border-radius: var(--jds-radius-control);
   box-sizing: border-box;
   color: var(--jds-color-field-foreground);
-  max-block-size: calc(100dvb - var(--jds-space-field-group));
+  display: flex;
+  flex-direction: column;
+  gap: var(--jds-space-field-group);
+  max-block-size: calc(100dvb - var(--jds-space-field-group) * 2);
+  max-inline-size: calc(100dvi - var(--jds-space-field-group) * 2);
   overflow: auto;
-  padding: var(--jds-space-field-item);
+  padding: var(--jds-space-field-group);
+  position: relative;
 }
 
 .jds-dialog-content::backdrop {
@@ -19,10 +24,32 @@
   outline-offset: var(--jds-size-focus);
 }
 
+.jds-dialog-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jds-space-field-item);
+}
+
+.jds-dialog-header > .jds-dialog-close {
+  inset-block-start: var(--jds-space-field-group);
+  inset-inline-end: var(--jds-space-field-group);
+  position: absolute;
+}
+
 .jds-dialog-title { margin: 0; }
 
 .jds-dialog-description {
-  margin: var(--jds-space-field-item) 0 0;
+  margin: 0;
+}
+
+.jds-dialog-footer {
+  align-items: center;
+  border-block-start: var(--jds-size-border) solid var(--jds-color-field-border);
+  display: flex;
+  gap: var(--jds-space-button-gap);
+  justify-content: flex-end;
+  margin: 0 calc(var(--jds-space-field-group) * -1) calc(var(--jds-space-field-group) * -1);
+  padding: var(--jds-space-field-group);
 }
 
 .jds-dialog-close:focus-visible {
