@@ -3,7 +3,7 @@
   "private": true,
   "packageManager": "pnpm@10.0.0",
   "scripts": {
-    "typecheck": "pnpm --filter @jds/tokens build && pnpm --filter @jds/components build && pnpm -r typecheck",
+    "typecheck": "pnpm --filter @jdsb/tokens build && pnpm --filter @jdsb/components build && pnpm -r typecheck",
     "test": "vitest run",
     "build": "pnpm -r --if-present build",
     "lint": "pnpm -r --if-present lint"
