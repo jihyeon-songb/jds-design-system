@@ -1,5 +1,5 @@
 {
-  "name": "@jds/components",
+  "name": "@jdsb/components",
   "version": "0.0.0",
   "type": "module",
   "exports": {
@@ -12,7 +12,7 @@
     "react-dom": "^18.0.0 || ^19.0.0"
   },
   "dependencies": {
-    "@jds/tokens": "workspace:*"
+    "@jdsb/tokens": "workspace:*"
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",

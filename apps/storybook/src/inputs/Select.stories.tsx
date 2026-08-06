@@ -9,7 +9,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@jds/components"
+} from "@jdsb/components"
 
 const countries = (
   <>
