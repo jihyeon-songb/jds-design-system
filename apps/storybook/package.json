@@ -10,8 +10,8 @@
     "lint": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@jds/components": "workspace:*",
-    "@jds/tokens": "workspace:*"
+    "@jdsb/components": "workspace:*",
+    "@jdsb/tokens": "workspace:*"
   },
   "devDependencies": {
     "@storybook/test-runner": "^0.24.4",
