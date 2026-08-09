@@ -1,5 +1,5 @@
 import { createRef } from "react"
-import { cleanup, render, screen } from "@testing-library/react"
+import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { userEvent } from "@testing-library/user-event"
 import { afterEach, describe, expect, it, vi } from "vitest"
 import { Pagination } from "./Pagination.js"
@@ -27,5 +27,44 @@ describe("Pagination", () => {
     await user.click(screen.getByRole("button", { name: "다음 페이지" }))
     expect(changed).toHaveBeenLastCalledWith(2)
     expect(screen.getByRole("button", { name: "1 페이지, 현재 페이지" })).toBeInTheDocument()
+  })
+
+  it("renders the fixed seven-page window at beginning, middle, and end boundaries", () => {
+    const cases = [
+      { defaultPage: 4, pages: [1, 2, 3, 4, 5, 10], ellipses: 1 },
+      { defaultPage: 5, pages: [1, 4, 5, 6, 10], ellipses: 2 },
+      { defaultPage: 7, pages: [1, 6, 7, 8, 9, 10], ellipses: 1 },
+    ]
+
+    for (const { defaultPage, pages, ellipses } of cases) {
+      const { container, unmount } = render(
+        <Pagination aria-label="검색 결과" defaultPage={defaultPage} totalPages={10} />
+      )
+      expect(screen.getAllByRole("button", { name: /페이지/ }).filter((button) =>
+        button.classList.contains("jdsb-pagination-page")
+      ).map((button) => Number(button.textContent))).toEqual(pages)
+      expect(container.querySelectorAll('span[aria-hidden="true"]')).toHaveLength(ellipses)
+      unmount()
+    }
+  })
+
+  it("keeps ellipses inert", () => {
+    const changed = vi.fn()
+    const { container } = render(
+      <Pagination aria-label="검색 결과" defaultPage={5} totalPages={10} onPageChange={changed} />
+    )
+
+    for (const ellipsis of container.querySelectorAll('span[aria-hidden="true"]')) fireEvent.click(ellipsis)
+
+    expect(changed).not.toHaveBeenCalled()
+    expect(screen.getByRole("button", { name: "5 페이지, 현재 페이지" })).toBeInTheDocument()
+  })
+
+  it.each([
+    ["totalPages", <Pagination aria-label="검색 결과" defaultPage={1} totalPages={0} />],
+    ["page", <Pagination aria-label="검색 결과" page={4} totalPages={3} />],
+    ["defaultPage", <Pagination aria-label="검색 결과" defaultPage={0} totalPages={3} />],
+  ])("rejects an invalid %s", (_, element) => {
+    expect(() => render(element)).toThrow(RangeError)
   })
 })

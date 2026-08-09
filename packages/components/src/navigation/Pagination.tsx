@@ -27,6 +27,7 @@ function assertPage(value: number, name: string, totalPages?: number): void {
 }
 
 function getVisiblePages(page: number, totalPages: number): Array<number | "ellipsis"> {
+  // 첫·끝 페이지와 현재 페이지 주변을 포함한 최대 7칸 window를 유지한다.
   if (totalPages <= 7) return Array.from({ length: totalPages }, (_, index) => index + 1)
   if (page <= 4) return [1, 2, 3, 4, 5, "ellipsis", totalPages]
   if (page >= totalPages - 3) return [1, "ellipsis", totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages]
