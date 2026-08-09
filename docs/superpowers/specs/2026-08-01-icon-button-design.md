@@ -1,8 +1,8 @@
-# JDS IconButton 설계
+# JDSB IconButton 설계
 
 ## 목적
 
-`@jds/components`에 아이콘만 표시하는 토큰 기반 `IconButton`을 추가한다.
+`@jdsb/components`에 아이콘만 표시하는 토큰 기반 `IconButton`을 추가한다.
 별도 컴포넌트로 제공해 아이콘 전용 제어의 접근 가능한 이름과 최소 44 × 44 CSS px
 조작 영역을 API와 스타일에서 보장한다.
 
@@ -45,7 +45,7 @@ export type IconButtonProps = Omit<React.ComponentPropsWithoutRef<"button">, "ar
 `IconButton`은 native `<button>` 하나를 렌더링한다. `variant`의 기본값은
 `"primary"`이고, `loading`의 기본값은 `false`다. `aria-label`은 빈 문자열이 아닌
 동작을 설명하는 문자열을 소비자가 전달해야 한다. 아이콘은 children으로 전달하고,
-JDS는 아이콘을 `aria-hidden="true"` wrapper로 감싸 이름 계산에 영향을 주지 않게 한다.
+JDSB는 아이콘을 `aria-hidden="true"` wrapper로 감싸 이름 계산에 영향을 주지 않게 한다.
 
 `loading`이면 native `disabled`, `aria-busy="true"`, `data-state="loading"`을
 적용한다. 그 외에는 disabled이면 `data-state="disabled"`, 아니면
@@ -95,7 +95,7 @@ Storybook은 기본, 모든 variant, disabled, loading, 긴 `aria-label` 예시�
 - disabled state, 모든 variant attribute, 아이콘 wrapper의 `aria-hidden`
 
 구현 후 `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm lint`,
-`pnpm --filter @jds/storybook build`를 실행한다. Storybook에서 Tab/Shift+Tab, Enter,
+`pnpm --filter @jdsb/storybook build`를 실행한다. Storybook에서 Tab/Shift+Tab, Enter,
 Space, disabled, loading, 200% zoom, forced-colors를 수동 확인하고, 스크린리더로
 `aria-label`, busy, disabled 상태 안내를 확인한다.
 

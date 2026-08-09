@@ -22,6 +22,7 @@ type SelectItemRecord = {
   text: string
   disabled: boolean
   id: string
+  // useRef()로 직접 만든 변수: RefObject<T | null>
   ref: RefObject<HTMLDivElement | null>
 }
 
@@ -72,6 +73,12 @@ type SelectChildProps = {
 }
 
 function getTextContent(children: ReactNode): string {
+  /*
+  Children.toArray
+  - children에 뭐가 들어오든 상관없이 안전하게 순회 가능한 배열을 보장함
+  - null, undefined, boolean 값 제거
+  - 각 엘리먼트에 안정적인 key 자동 부여
+   */
   return Children.toArray(children).map((child) => {
     if (typeof child === "string" || typeof child === "number") return String(child)
     return isValidElement<SelectChildProps>(child) ? getTextContent(child.props.children) : ""
@@ -117,13 +124,18 @@ export function Select({
   required = false,
   value,
 }: SelectProps) {
+  // SelectContent에 id를 안 줬을 때 쓸 fallback ID
   const generatedContentId = useId()
   const [items, setItems] = useState<SelectItemRecord[]>([])
   const [activeItemId, setActiveItemId] = useState<string>()
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen)
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue)
+
+  // 	바깥 클릭 감지, imperative focus 등에 쓰이는 실제 DOM 참조
   const contentRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
+
+  // 문자 키 연타 검색용 버퍼
   const typeaheadRef = useRef({ prefix: "", time: 0 })
   const onOpenChangeRef = useRef(onOpenChange)
   const selectedValue = value ?? uncontrolledValue
@@ -132,10 +144,14 @@ export function Select({
     children,
     (child) => child.type === SelectItem && child.props.value === selectedValue
   )
+
+  // aria-controls(트리거)와 id(콘텐츠)를 일치시키기 위한 ID. 사용자가 명시적으로 id를 준 경우 존중하고, 아니면 생성된 id 사용
   const contentId = content ? content.props.id ?? generatedContentId : undefined
   const selectedText = items.find((item) => item.value === selectedValue)?.text
     ?? (selectedItem ? getTextContent(selectedItem.props.children) : undefined)
   const currentOpen = !disabled && (open ?? uncontrolledOpen)
+
+  // 비활성 아이템 제거 후 실제 DOM 순서로 정렬
   const enabledItems = items.filter((item) => !item.disabled).sort((first, second) => {
     const firstNode = first.ref.current
     const secondNode = second.ref.current
@@ -146,11 +162,13 @@ export function Select({
     return 0
   })
 
+  // SelectItem이 useEffect에서 이 함수를 호출해 자신을 등록하고, cleanup 시 반환된 함수로 스스로를 제거
   const registerItem = useCallback((item: SelectItemRecord) => {
     setItems((currentItems) => [...currentItems.filter((current) => current.id !== item.id), item])
     return () => setItems((currentItems) => currentItems.filter((current) => current.id !== item.id))
   }, [])
 
+  // 컴포넌트가 다시 렌더링 될때 함수 참조를 비교해서 리렌더 없이 최신값 갱신
   useEffect(() => {
     onOpenChangeRef.current = onOpenChange
   }, [onOpenChange])
@@ -206,6 +224,12 @@ export function Select({
     })
   }
 
+  /*
+   트리거 버튼에서 발생하는 모든 키보드 이벤트를 처리하는 중앙 라우터
+
+   왜 preventDefault()가 필요한가
+   브라우저 기본 동작도 같이 실행되면 페이지가 스크롤되거나 이중으로 이벤트가 발생하는 등 예기치 않은 동작이 생기므로, 우리가 처리한 키에 한해 명시적으로 막아주는 것
+   */
   function onTriggerKeyDown(event: KeyboardEvent<HTMLButtonElement>): void {
     if (disabled) return
 
@@ -242,6 +266,7 @@ export function Select({
     event.preventDefault()
   }
 
+  // activeItemId(키보드 강조 항목)가 항상 "지금 존재하는 유효한 아이템"을 가리키도록 보정
   useEffect(() => {
     if (!currentOpen) {
       setActiveItemId(undefined)
@@ -255,6 +280,7 @@ export function Select({
     )
   }, [currentOpen, items, selectedValue])
 
+  // 바깥클릭감지 effect
   useEffect(() => {
     if (!currentOpen) return
 
@@ -269,6 +295,7 @@ export function Select({
     return () => document.removeEventListener("pointerdown", onDocumentPointerDown)
   }, [currentOpen])
 
+  // 키보드로 활성 아이템이 바뀔 때마다 그 아이템이 화면(스크롤 영역) 안에 보이도록 자동 스크롤
   useEffect(() => {
     if (!currentOpen || !activeItemId) return
 
@@ -297,7 +324,7 @@ export function Select({
       }}
     >
       <div
-        className="jds-select"
+        className="jdsb-select"
         data-slot="root"
         data-state={disabled ? "disabled" : currentOpen ? "open" : invalid ? "invalid" : "idle"}
       >
@@ -334,6 +361,8 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(f
   const isDisabled = context.disabled || disabled
   const state = isDisabled ? "disabled" : context.open ? "open" : context.invalid ? "invalid" : "idle"
 
+  // 두 개의 ref를 하나로 통일
+  // 부모의 ref와 context.triggerRef가 같은 DOM 노드를 가리킴
   useImperativeHandle(ref, () => context.triggerRef.current as HTMLButtonElement)
 
   return (
@@ -342,11 +371,11 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(f
       ref={context.triggerRef}
       aria-activedescendant={context.open ? context.activeItemId : undefined}
       aria-controls={context.contentId}
-      aria-expanded={context.open}
-      aria-haspopup="listbox"
+      aria-expanded={context.open} // 팝업(부가 UI)을 연다는 것과, 그 팝업의 종류가 무엇인지
+      aria-haspopup="listbox" // 지금 펼쳐져 있는지 접혀 있는지 실시간으로 알려주는 boolean 값
       aria-invalid={context.invalid ? true : ariaInvalid}
       aria-required={context.required || undefined}
-      className={["jds-select-trigger", className].filter(Boolean).join(" ")}
+      className={["jdsb-select-trigger", className].filter(Boolean).join(" ")}
       disabled={isDisabled}
       data-slot="trigger"
       data-state={state}
@@ -368,7 +397,7 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(f
       {children}
       <svg
         aria-hidden="true"
-        className="jds-select-chevron"
+        className="jdsb-select-chevron"
         data-slot="icon"
         focusable="false"
         viewBox="0 0 16 16"
@@ -393,7 +422,7 @@ export const SelectValue = forwardRef<HTMLSpanElement, SelectValueProps>(functio
     <span
       {...props}
       ref={ref}
-      className={["jds-select-value", className].filter(Boolean).join(" ")}
+      className={["jdsb-select-value", className].filter(Boolean).join(" ")}
       data-slot="value"
     >
       {selectedText ?? placeholder}
@@ -416,7 +445,7 @@ export const SelectContent = forwardRef<HTMLDivElement, SelectContentProps>(func
     <div
       {...props}
       ref={context.contentRef}
-      className={["jds-select-content", className].filter(Boolean).join(" ")}
+      className={["jdsb-select-content", className].filter(Boolean).join(" ")}
       data-slot="content"
       data-state={context.open ? "open" : "closed"}
       hidden={!context.open}
@@ -443,7 +472,7 @@ export const SelectGroup = forwardRef<HTMLDivElement, SelectGroupProps>(function
         ref={ref}
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledby ?? (ariaLabel ? undefined : labelId)}
-        className={["jds-select-group", className].filter(Boolean).join(" ")}
+        className={["jdsb-select-group", className].filter(Boolean).join(" ")}
         data-slot="group"
         role="group"
       />
@@ -465,7 +494,7 @@ export const SelectLabel = forwardRef<HTMLDivElement, SelectLabelProps>(function
     <div
       {...props}
       ref={ref}
-      className={["jds-select-label", className].filter(Boolean).join(" ")}
+      className={["jdsb-select-label", className].filter(Boolean).join(" ")}
       data-slot="label"
       id={id}
     />
@@ -501,6 +530,7 @@ export const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(function S
 
   useImperativeHandle(ref, () => itemRef.current as HTMLDivElement)
 
+  // 각 SelectItem이 마운트/업데이트될 때마다 자신의 메타데이터를 부모 Select의 items 배열에 등록하는 역할
   useEffect(
     () => context.registerItem({
       value,
@@ -518,11 +548,14 @@ export const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(function S
       ref={itemRef}
       aria-disabled={isDisabled || undefined}
       aria-selected={selected}
-      className={["jds-select-item", className].filter(Boolean).join(" ")}
+      className={["jdsb-select-item", className].filter(Boolean).join(" ")}
       data-slot="item"
       data-state={state}
       id={id}
       role="option"
+      /*
+      포커스는 트리거에 고정, 옵션 이동은 방향키 + aria-activedescendant로 시각/접근성 표현만
+       */
       tabIndex={-1}
       onPointerDown={(event) => {
         onPointerDown?.(event)

@@ -11,7 +11,7 @@ describe("Avatar", () => {
     const props: PublicAvatarProps = { name: "김지현" }
     render(<PublicAvatar {...props} />)
 
-    expect(screen.getByRole("img", { name: "김지현" })).toHaveClass("jds-avatar")
+    expect(screen.getByRole("img", { name: "김지현" })).toHaveClass("jdsb-avatar")
   })
 
   it("uses md by default and forwards span props and its ref", () => {
@@ -20,7 +20,7 @@ describe("Avatar", () => {
 
     expect(ref.current).toBe(screen.getByRole("img", { name: "작성자" }))
     expect(ref.current).toHaveAttribute("id", "author")
-    expect(ref.current).toHaveClass("jds-avatar", "consumer-avatar")
+    expect(ref.current).toHaveClass("jdsb-avatar", "consumer-avatar")
     expect(ref.current).toHaveAttribute("data-size", "md")
   })
 

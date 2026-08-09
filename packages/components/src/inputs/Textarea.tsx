@@ -41,7 +41,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
   }
 
   return (
-    <div className="jds-textarea" data-size={size} data-state={state}>
+    <div className="jdsb-textarea" data-size={size} data-state={state}>
       <textarea
         {...props}
         ref={ref}
@@ -51,6 +51,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
         value={value}
         readOnly={readOnly}
         maxLength={maxLength}
+        // 엘리먼트에 대한 추가 설명/도움말
         aria-describedby={describedBy}
         aria-invalid={invalid || undefined}
         data-slot="control"

@@ -1,8 +1,8 @@
-# JDS Avatar 설계
+# JDSB Avatar 설계
 
 ## 목적
 
-`@jds/components`에 사람·계정 등 엔터티를 짧게 식별하는 token 기반의 비상호작용
+`@jdsb/components`에 사람·계정 등 엔터티를 짧게 식별하는 token 기반의 비상호작용
 `Avatar`를 추가한다. 이미지가 있을 때는 이미지를, 이미지가 없거나 로드에 실패할 때는
 이름의 첫 글자를 표시해 네트워크 오류에도 식별 정보를 유지한다.
 
@@ -75,7 +75,7 @@ export type AvatarProps = Omit<React.ComponentPropsWithoutRef<"span">, "children
 ## 토큰과 스타일
 
 기존 primitive 및 semantic token을 참조하는 다음 token을
-`packages/tokens/src/jds.tokens.json`에 추가한다.
+`packages/tokens/src/jdsb.tokens.json`에 추가한다.
 
 - `color.avatar.background` → `color.action.secondary.background`
 - `color.avatar.foreground` → `color.action.secondary.foreground`
@@ -111,7 +111,7 @@ Storybook은 다음 Story를 제공한다.
 - 네 가지 size 렌더링
 
 구현 후 `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm lint`,
-`pnpm --filter @jds/storybook build`를 실행한다. Storybook에서 이미지 실패 fallback,
+`pnpm --filter @jdsb/storybook build`를 실행한다. Storybook에서 이미지 실패 fallback,
 200% 확대, forced-colors를 수동 확인한다.
 
 ## 성공 기준

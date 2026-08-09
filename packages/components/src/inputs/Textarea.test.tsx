@@ -64,14 +64,14 @@ describe("Textarea", () => {
 
     const control = screen.getByRole("textbox", { name: "소개" })
     expect(control).toHaveAttribute("aria-invalid", "true")
-    expect(control.closest(".jds-textarea")).toHaveAttribute("data-state", "invalid")
+    expect(control.closest(".jdsb-textarea")).toHaveAttribute("data-state", "invalid")
 
     rerender(<Textarea aria-label="소개" disabled invalid readOnly />)
     expect(control).toBeDisabled()
-    expect(control.closest(".jds-textarea")).toHaveAttribute("data-state", "disabled")
+    expect(control.closest(".jdsb-textarea")).toHaveAttribute("data-state", "disabled")
 
     rerender(<Textarea aria-label="소개" readOnly />)
     expect(control).toHaveAttribute("readonly")
-    expect(control.closest(".jds-textarea")).toHaveAttribute("data-state", "readonly")
+    expect(control.closest(".jdsb-textarea")).toHaveAttribute("data-state", "readonly")
   })
 })

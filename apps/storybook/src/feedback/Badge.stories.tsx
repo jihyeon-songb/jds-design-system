@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Badge } from "@jds/components"
+import { Badge } from "@jdsb/components"
 
 const meta = {
   title: "Feedback/Badge",

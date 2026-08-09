@@ -1,14 +1,14 @@
-# JDS Button 설계
+# JDSB Button 설계
 
 ## 목적
 
-`@jds/components`의 첫 공개 컴포넌트로, 토큰 기반의 접근 가능한 네이티브 Button을 제공한다. 이 작업은 Button에 필요한 pnpm workspace, 토큰, 컴포넌트, Storybook, 검사 기반만 구축한다.
+`@jdsb/components`의 첫 공개 컴포넌트로, 토큰 기반의 접근 가능한 네이티브 Button을 제공한다. 이 작업은 Button에 필요한 pnpm workspace, 토큰, 컴포넌트, Storybook, 검사 기반만 구축한다.
 
 ## 범위
 
 포함:
 
-- `@jds/tokens`, `@jds/components`, Storybook workspace의 최소 구성
+- `@jdsb/tokens`, `@jdsb/components`, Storybook workspace의 최소 구성
 - DTCG 토큰 원본과 CSS 변수·TypeScript 토큰 타입 출력
 - Button의 variant, size, loading, 시작·끝 아이콘, 상태 스타일
 - Button Story와 axe 접근성 검사, 컴포넌트 테스트
@@ -23,13 +23,13 @@
 
 ```text
 packages/
-  tokens/       # @jds/tokens: DTCG 원본, CSS 변수, JavaScript, TypeScript 타입
-  components/   # @jds/components: Button과 Button CSS
+  tokens/       # @jdsb/tokens: DTCG 원본, CSS 변수, JavaScript, TypeScript 타입
+  components/   # @jdsb/components: Button과 Button CSS
 apps/
   storybook/    # 문서와 axe 검사, npm 비배포
 ```
 
-`@jds/components`는 React를 peer dependency로 선언하고, Button CSS를 별도 export한다. `@jds/tokens`는 primitive → semantic → component token 순서를 유지한다. Button 스타일은 semantic token을 우선 사용하며, Button에만 필요한 값만 `button.*` component token으로 둔다.
+`@jdsb/components`는 React를 peer dependency로 선언하고, Button CSS를 별도 export한다. `@jdsb/tokens`는 primitive → semantic → component token 순서를 유지한다. Button 스타일은 semantic token을 우선 사용하며, Button에만 필요한 값만 `button.*` component token으로 둔다.
 
 ## 공개 API
 
@@ -52,7 +52,7 @@ export type ButtonProps = React.ComponentPropsWithoutRef<"button"> & {
 }
 ```
 
-Button은 ref와 모든 적용 가능한 native button 속성을 전달하며, native `<button>`만 렌더링한다. 기본값은 `variant="primary"`, `size="md"`이다. 아이콘은 소비자가 전달하고 JDS는 위치와 간격만 제어한다.
+Button은 ref와 모든 적용 가능한 native button 속성을 전달하며, native `<button>`만 렌더링한다. 기본값은 `variant="primary"`, `size="md"`이다. 아이콘은 소비자가 전달하고 JDSB는 위치와 간격만 제어한다.
 
 ## 시각 규칙
 
@@ -61,7 +61,7 @@ Button은 ref와 모든 적용 가능한 native button 속성을 전달하며, n
 - 높이는 `sm` 32px, `md` 36px, `lg` 40px, `xl` 44px이다.
 - 모서리 반경은 `radius.control`의 8px 기본값이다.
 - 하드코딩한 시각 값은 컴포넌트 CSS에 두지 않고 토큰 원본에만 둔다.
-- 이 크기 정책은 상위 JDS 설계의 “Button 기본 44 x 44 CSS px” 규칙을 Button의 `xl` 크기로 한정하도록 갱신한다. `IconButton`의 기본 44 x 44 CSS px 규칙은 유지한다.
+- 이 크기 정책은 상위 JDSB 설계의 “Button 기본 44 x 44 CSS px” 규칙을 Button의 `xl` 크기로 한정하도록 갱신한다. `IconButton`의 기본 44 x 44 CSS px 규칙은 유지한다.
 
 ## 상태와 접근성
 

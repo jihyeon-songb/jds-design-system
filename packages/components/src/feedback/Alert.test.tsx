@@ -19,7 +19,7 @@ describe("Alert", () => {
     render(<Alert className="consumer-alert" ref={ref} id="save-result">저장했습니다.</Alert>)
 
     expect(ref.current).toHaveAttribute("id", "save-result")
-    expect(ref.current).toHaveClass("jds-alert", "consumer-alert")
+    expect(ref.current).toHaveClass("jdsb-alert", "consumer-alert")
     expect(ref.current).toHaveAttribute("role", "status")
     expect(ref.current).toHaveAttribute("data-variant", "info")
     expect(ref.current).toHaveAttribute("data-state", "open")

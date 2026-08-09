@@ -13,7 +13,7 @@ import {
   DialogTrigger,
   Field,
   Input,
-} from "@jds/components"
+} from "@jdsb/components"
 
 const meta = {
   title: "Overlays/Dialog",

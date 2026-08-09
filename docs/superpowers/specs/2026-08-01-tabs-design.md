@@ -1,8 +1,8 @@
-# JDS Tabs 설계
+# JDSB Tabs 설계
 
 ## 목적
 
-`@jds/components`에 빠르게 전환되는 정적 패널을 위한 접근 가능한 Tabs를 추가한다.
+`@jdsb/components`에 빠르게 전환되는 정적 패널을 위한 접근 가능한 Tabs를 추가한다.
 `Tabs`는 선택값을 관리하고, `TabsList`, `TabsTrigger`, `TabsContent`는 WAI-ARIA
 Tabs 패턴의 구조와 관계를 렌더링한다. 선택과 패널 전환은 동기적으로 끝나야 하므로
 화살표 키 이동 시 즉시 활성화한다.
@@ -86,9 +86,9 @@ export type TabsContentProps = Omit<
 소비자는 별도 id를 전달하지 않아도 `aria-controls`와 `aria-labelledby` 관계를 얻는다.
 같은 Tabs 안의 value는 고유해야 한다.
 
-- `Tabs` root는 `class="jds-tabs"`와 `data-state="enabled"`를 렌더링한다.
+- `Tabs` root는 `class="jdsb-tabs"`와 `data-state="enabled"`를 렌더링한다.
 - `TabsList`는 `role="tablist"`, `aria-orientation="horizontal"`,
-  `class="jds-tabs-list"`를 렌더링한다.
+  `class="jdsb-tabs-list"`를 렌더링한다.
 - `TabsTrigger`는 `role="tab"`, `aria-selected`, `aria-controls`, generated `id`,
   `tabIndex={0|-1}`, `data-state="active|inactive|disabled"`를 렌더링한다.
 - `TabsContent`는 `role="tabpanel"`, generated `id`, `aria-labelledby`,
@@ -134,7 +134,7 @@ Storybook은 기본, controlled, disabled Trigger, 긴 label, 긴 panel content 
 - Tab/Shift+Tab의 기본 이벤트 보존, compound part를 root 밖에서 사용했을 때의 명확한 오류
 
 구현 후 `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm lint`,
-`pnpm --filter @jds/storybook build`를 실행한다. Storybook에서 keyboard, 브라우저 확대,
+`pnpm --filter @jdsb/storybook build`를 실행한다. Storybook에서 keyboard, 브라우저 확대,
 forced-colors를 수동 확인하고 스크린리더로 tablist 이름, 선택 상태, 패널 연결과 disabled
 상태를 확인한다.
 

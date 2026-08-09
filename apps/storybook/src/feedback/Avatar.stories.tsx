@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { Avatar } from "@jds/components"
+import { Avatar } from "@jdsb/components"
 
 const meta = {
   title: "Feedback/Avatar",
@@ -31,7 +31,7 @@ export const Empty: Story = { args: {} }
 
 export const Sizes: Story = {
   render: () => (
-    <div style={{ alignItems: "center", display: "flex", gap: "var(--jds-space-button-gap)" }}>
+    <div style={{ alignItems: "center", display: "flex", gap: "var(--jdsb-space-button-gap)" }}>
       <Avatar name="김지현" size="sm" />
       <Avatar name="김지현" size="md" />
       <Avatar name="김지현" size="lg" />

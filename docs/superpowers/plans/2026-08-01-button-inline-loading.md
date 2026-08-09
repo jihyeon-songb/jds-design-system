@@ -56,5 +56,5 @@ Expected: PASS.
 
 - [ ] **Step 5: Run required verification**
 
-Run: `pnpm typecheck && pnpm test && pnpm build && pnpm lint && pnpm --filter @jds/storybook build`
+Run: `pnpm typecheck && pnpm test && pnpm build && pnpm lint && pnpm --filter @jdsb/storybook build`
 Expected: all commands exit 0.

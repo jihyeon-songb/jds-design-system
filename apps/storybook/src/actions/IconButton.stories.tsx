@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { IconButton } from "@jds/components"
+import { IconButton } from "@jdsb/components"
 
 function CloseIcon() {
   return <svg aria-hidden="true" viewBox="0 0 16 16"><path d="m3 3 10 10M13 3 3 13" stroke="currentColor" /></svg>

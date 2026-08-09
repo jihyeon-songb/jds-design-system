@@ -1,4 +1,4 @@
-# JDS Checkbox 설계
+# JDSB Checkbox 설계
 
 ## 우선순위
 
@@ -16,9 +16,9 @@
 
 ## 목적
 
-`@jds/components`에 토큰 기반의 접근 가능한 native Checkbox를 추가한다. 브라우저의
+`@jdsb/components`에 토큰 기반의 접근 가능한 native Checkbox를 추가한다. 브라우저의
 체크·해제, 폼 제출, 키보드, controlled·uncontrolled 상태는 native `<input>`에 맡기고,
-JDS는 일관된 크기·상태·focus-visible 스타일만 제공한다.
+JDSB는 일관된 크기·상태·focus-visible 스타일만 제공한다.
 
 ## 범위
 
@@ -91,7 +91,7 @@ Storybook은 기본, checked, disabled, invalid, native label, 긴 label, contro
 - label을 통한 접근 가능한 이름과 폼 값 제출
 
 구현 후 `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm lint`,
-`pnpm --filter @jds/storybook build`를 실행한다. 키보드 Space, label 클릭, 브라우저 확대,
+`pnpm --filter @jdsb/storybook build`를 실행한다. 키보드 Space, label 클릭, 브라우저 확대,
 forced-colors를 수동 확인한다.
 
 ## 성공 기준

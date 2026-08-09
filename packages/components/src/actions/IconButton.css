@@ -1,36 +1,36 @@
-.jds-icon-button {
+.jdsb-icon-button {
   align-items: center;
-  background: var(--jds-color-action-primary-background);
-  border: var(--jds-size-border) solid var(--jds-color-action-primary-background);
-  border-radius: var(--jds-radius-control);
-  color: var(--jds-color-action-primary-foreground);
+  background: var(--jdsb-color-action-primary-background);
+  border: var(--jdsb-size-border) solid var(--jdsb-color-action-primary-background);
+  border-radius: var(--jdsb-radius-control);
+  color: var(--jdsb-color-action-primary-foreground);
   cursor: pointer;
   display: inline-flex;
   font: inherit;
-  height: var(--jds-size-control-button-md-height);
+  height: var(--jdsb-size-control-button-md-height);
   justify-content: center;
   position: relative;
-  transition: background var(--jds-duration-spinner), transform var(--jds-duration-spinner);
-  width: var(--jds-size-control-button-md-height);
+  transition: background var(--jdsb-duration-spinner), transform var(--jdsb-duration-spinner);
+  width: var(--jdsb-size-control-button-md-height);
 }
 
-.jds-icon-button[data-variant="secondary"] { background: var(--jds-color-action-secondary-background); border-color: var(--jds-color-action-secondary-background); color: var(--jds-color-action-secondary-foreground); }
-.jds-icon-button[data-variant="outline"] { background: var(--jds-color-action-outline-background); border-color: var(--jds-color-action-outline-border); color: var(--jds-color-action-outline-foreground); }
-.jds-icon-button[data-variant="ghost"] { background: var(--jds-color-action-ghost-background); border-color: var(--jds-color-action-ghost-background); color: var(--jds-color-action-ghost-foreground); }
-.jds-icon-button[data-variant="destructive"] { background: var(--jds-color-action-destructive-background); border-color: var(--jds-color-action-destructive-background); color: var(--jds-color-action-destructive-foreground); }
-.jds-icon-button:hover:not(:disabled) { background: var(--jds-color-action-primary-hover); }
-.jds-icon-button[data-variant="secondary"]:hover:not(:disabled) { background: var(--jds-color-action-secondary-hover); border-color: var(--jds-color-action-secondary-hover); }
-.jds-icon-button[data-variant="outline"]:hover:not(:disabled) { background: var(--jds-color-action-outline-hover); }
-.jds-icon-button[data-variant="ghost"]:hover:not(:disabled) { background: var(--jds-color-action-ghost-hover); border-color: var(--jds-color-action-ghost-hover); }
-.jds-icon-button[data-variant="destructive"]:hover:not(:disabled) { background: var(--jds-color-action-destructive-hover); border-color: var(--jds-color-action-destructive-hover); }
-.jds-icon-button:active:not(:disabled) { transform: translateY(var(--jds-offset-button-active)); }
-.jds-icon-button:disabled { cursor: not-allowed; opacity: var(--jds-opacity-disabled); }
-.jds-icon-button:focus-visible { outline: var(--jds-size-focus) solid var(--jds-color-focus-ring); outline-offset: var(--jds-size-focus); }
-.jds-icon-button [data-slot="icon"] { display: inline-flex; height: var(--jds-size-icon); width: var(--jds-size-icon); }
-.jds-icon-button [data-slot="icon"] > svg { height: inherit; width: inherit; }
-.jds-icon-button [data-slot="spinner"] { animation: jds-icon-button-spin var(--jds-duration-spinner) linear infinite; border: var(--jds-size-border) solid currentColor; border-inline-end-color: var(--jds-color-action-ghost-background); border-radius: var(--jds-radius-control); height: var(--jds-size-icon); position: absolute; width: var(--jds-size-icon); }
-.jds-icon-button[data-state="loading"] [data-slot="icon"] { opacity: var(--jds-opacity-hidden); }
+.jdsb-icon-button[data-variant="secondary"] { background: var(--jdsb-color-action-secondary-background); border-color: var(--jdsb-color-action-secondary-background); color: var(--jdsb-color-action-secondary-foreground); }
+.jdsb-icon-button[data-variant="outline"] { background: var(--jdsb-color-action-outline-background); border-color: var(--jdsb-color-action-outline-border); color: var(--jdsb-color-action-outline-foreground); }
+.jdsb-icon-button[data-variant="ghost"] { background: var(--jdsb-color-action-ghost-background); border-color: var(--jdsb-color-action-ghost-background); color: var(--jdsb-color-action-ghost-foreground); }
+.jdsb-icon-button[data-variant="destructive"] { background: var(--jdsb-color-action-destructive-background); border-color: var(--jdsb-color-action-destructive-background); color: var(--jdsb-color-action-destructive-foreground); }
+.jdsb-icon-button:hover:not(:disabled) { background: var(--jdsb-color-action-primary-hover); }
+.jdsb-icon-button[data-variant="secondary"]:hover:not(:disabled) { background: var(--jdsb-color-action-secondary-hover); border-color: var(--jdsb-color-action-secondary-hover); }
+.jdsb-icon-button[data-variant="outline"]:hover:not(:disabled) { background: var(--jdsb-color-action-outline-hover); }
+.jdsb-icon-button[data-variant="ghost"]:hover:not(:disabled) { background: var(--jdsb-color-action-ghost-hover); border-color: var(--jdsb-color-action-ghost-hover); }
+.jdsb-icon-button[data-variant="destructive"]:hover:not(:disabled) { background: var(--jdsb-color-action-destructive-hover); border-color: var(--jdsb-color-action-destructive-hover); }
+.jdsb-icon-button:active:not(:disabled) { transform: translateY(var(--jdsb-offset-button-active)); }
+.jdsb-icon-button:disabled { cursor: not-allowed; opacity: var(--jdsb-opacity-disabled); }
+.jdsb-icon-button:focus-visible { outline: var(--jdsb-size-focus) solid var(--jdsb-color-focus-ring); outline-offset: var(--jdsb-size-focus); }
+.jdsb-icon-button [data-slot="icon"] { display: inline-flex; height: var(--jdsb-size-icon); width: var(--jdsb-size-icon); }
+.jdsb-icon-button [data-slot="icon"] > svg { height: inherit; width: inherit; }
+.jdsb-icon-button [data-slot="spinner"] { animation: jdsb-icon-button-spin var(--jdsb-duration-spinner) linear infinite; border: var(--jdsb-size-border) solid currentColor; border-inline-end-color: var(--jdsb-color-action-ghost-background); border-radius: var(--jdsb-radius-control); height: var(--jdsb-size-icon); position: absolute; width: var(--jdsb-size-icon); }
+.jdsb-icon-button[data-state="loading"] [data-slot="icon"] { opacity: var(--jdsb-opacity-hidden); }
 
-@keyframes jds-icon-button-spin { to { transform: rotate(var(--jds-angle-turn)); } }
-@media (prefers-reduced-motion: reduce) { .jds-icon-button, .jds-icon-button [data-slot="spinner"] { animation: none; transition: none; } }
-@media (forced-colors: active) { .jds-icon-button { forced-color-adjust: auto; } }
+@keyframes jdsb-icon-button-spin { to { transform: rotate(var(--jdsb-angle-turn)); } }
+@media (prefers-reduced-motion: reduce) { .jdsb-icon-button, .jdsb-icon-button [data-slot="spinner"] { animation: none; transition: none; } }
+@media (forced-colors: active) { .jdsb-icon-button { forced-color-adjust: auto; } }

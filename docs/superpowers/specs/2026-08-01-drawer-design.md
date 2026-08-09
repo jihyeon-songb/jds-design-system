@@ -1,8 +1,8 @@
-# JDS Drawer 설계
+# JDSB Drawer 설계
 
 ## 목적
 
-`@jds/components`에 화면 가장자리에서 열리는 접근 가능한 modal Drawer를 추가한다.
+`@jdsb/components`에 화면 가장자리에서 열리는 접근 가능한 modal Drawer를 추가한다.
 이미 검증된 `Dialog`의 native `<dialog>` lifecycle, 모달 focus 제한, Escape·backdrop
 정책을 재사용하고, Drawer는 패널의 방향과 배치만 담당한다.
 
@@ -41,7 +41,7 @@ export type DrawerContentProps = DialogContentProps & {
 ## 구현
 
 `Drawer`와 Trigger·Title·Description·Close는 Dialog의 공개 compound parts를 재사용한다.
-`DrawerContent`만 `DialogContent`을 감싸 `jds-drawer-content` class와 `data-side`를
+`DrawerContent`만 `DialogContent`을 감싸 `jdsb-drawer-content` class와 `data-side`를
 추가한다. 따라서 controlled state, cancel, outside click, autofocus, Trigger focus 복귀의
 행동은 Dialog와 동일하다.
 

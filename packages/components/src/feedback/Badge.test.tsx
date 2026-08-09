@@ -11,7 +11,7 @@ describe("Badge", () => {
     const props: PublicBadgeProps = { children: "초안" }
     render(<PublicBadge {...props} />)
 
-    expect(screen.getByText("초안")).toHaveClass("jds-badge")
+    expect(screen.getByText("초안")).toHaveClass("jdsb-badge")
   })
 
   it("uses neutral by default and forwards span props and its ref", () => {
@@ -20,7 +20,7 @@ describe("Badge", () => {
 
     expect(ref.current).toBe(screen.getByLabelText("문서 상태"))
     expect(ref.current).toHaveAttribute("id", "document-state")
-    expect(ref.current).toHaveClass("jds-badge", "consumer-badge")
+    expect(ref.current).toHaveClass("jdsb-badge", "consumer-badge")
     expect(ref.current).toHaveAttribute("data-variant", "neutral")
   })
 

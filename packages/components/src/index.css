@@ -15,7 +15,7 @@
 @import "./overlays/Dialog.css";
 @import "./overlays/Drawer.css";
 
-[class^="jds-"],
-[class*=" jds-"] {
-  font-size: var(--jds-typography-body-font-size);
+[class^="jdsb-"],
+[class*=" jdsb-"] {
+  font-size: var(--jdsb-typography-body-font-size);
 }
