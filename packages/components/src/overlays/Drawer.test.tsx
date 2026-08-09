@@ -82,7 +82,7 @@ describe("Drawer", () => {
     render(<Drawer><DrawerContent aria-label="메뉴" data-testid="drawer" ref={ref} side="bottom" /></Drawer>)
 
     expect(ref.current).toBe(screen.getByTestId("drawer"))
-    expect(ref.current).toHaveClass("jds-drawer-content")
+    expect(ref.current).toHaveClass("jdsb-drawer-content")
     expect(ref.current).toHaveAttribute("data-side", "bottom")
   })
 })

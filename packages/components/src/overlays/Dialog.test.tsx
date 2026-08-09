@@ -69,9 +69,9 @@ describe("Dialog", () => {
       </Dialog>
     )
 
-    expect(screen.getByText("프로필 편집").parentElement).toHaveClass("jds-dialog-header", "consumer-header")
+    expect(screen.getByText("프로필 편집").parentElement).toHaveClass("jdsb-dialog-header", "consumer-header")
     expect(screen.getByRole("button", { name: "취소" }).parentElement).toHaveClass(
-      "jds-dialog-footer", "consumer-footer"
+      "jdsb-dialog-footer", "consumer-footer"
     )
     expect(screen.getByRole("button", { name: "취소" })).toHaveAttribute("data-variant", "ghost")
   })
@@ -88,11 +88,11 @@ describe("Dialog", () => {
       </Dialog>
     )
 
-    expect(ref.current).toHaveClass("jds-dialog-content", "consumer-content")
-    expect(screen.getByText("제목")).toHaveClass("jds-dialog-title", "consumer-title")
-    expect(screen.getByText("설명")).toHaveClass("jds-dialog-description", "consumer-description")
+    expect(ref.current).toHaveClass("jdsb-dialog-content", "consumer-content")
+    expect(screen.getByText("제목")).toHaveClass("jdsb-dialog-title", "consumer-title")
+    expect(screen.getByText("설명")).toHaveClass("jdsb-dialog-description", "consumer-description")
     expect(screen.getByText("×").parentElement).toHaveClass(
-      "jds-button", "jds-dialog-close", "consumer-close"
+      "jdsb-button", "jdsb-dialog-close", "consumer-close"
     )
   })
 
@@ -106,7 +106,7 @@ describe("Dialog", () => {
     )
 
     await user.click(screen.getByRole("button", { name: "열기" }))
-    expect(screen.getByRole("button", { name: "열기" })).toHaveClass("jds-button")
+    expect(screen.getByRole("button", { name: "열기" })).toHaveClass("jdsb-button")
     expect(screen.getByRole("button", { name: "열기" })).toHaveAttribute("data-variant", "outline")
     expect(screen.getByRole("dialog")).toHaveAttribute("data-state", "open")
     expect(showModal).toHaveBeenCalledOnce()
@@ -265,7 +265,7 @@ describe("Dialog", () => {
     const styles = readFileSync(resolve(process.cwd(), "packages/components/src/overlays/Dialog.css"), "utf8")
 
     expect(styles).toMatch(
-      /\.jds-dialog-content:focus-visible\s*\{[^}]*outline:\s*var\(--jds-size-focus\) solid var\(--jds-color-focus-ring\);[^}]*outline-offset:\s*var\(--jds-size-focus\);[^}]*\}/s
+      /\.jdsb-dialog-content:focus-visible\s*\{[^}]*outline:\s*var\(--jdsb-size-focus\) solid var\(--jdsb-color-focus-ring\);[^}]*outline-offset:\s*var\(--jdsb-size-focus\);[^}]*\}/s
     )
   })
 

@@ -8,7 +8,7 @@ import {
   FieldError,
   FieldLabel,
   Switch,
-} from "@jds/components"
+} from "@jdsb/components"
 
 const meta = {
   title: "Inputs/Switch",

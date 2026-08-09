@@ -1,21 +1,21 @@
-# JDS 디자인 시스템 설계
+# JDSB 디자인 시스템 설계
 
-이 문서는 JDS의 목표, 패키지 구조, 토큰 체계, 컴포넌트, 접근성 기준, 검증 방법, 배포 정책을 정의한다.
+이 문서는 JDSB의 목표, 패키지 구조, 토큰 체계, 컴포넌트, 접근성 기준, 검증 방법, 배포 정책을 정의한다.
 
 ## 개요
 
-JDS(jh design system)는 npm으로 공개 배포하는 React 디자인 시스템이다. 20개의 범용 컴포넌트가 동작과 접근성을 공유한다. 각 서비스는 CSS 변수 기반 토큰을 재정의해 서로 다른 시각 테마를 적용한다.
+JDSB(jh design system)는 npm으로 공개 배포하는 React 디자인 시스템이다. 20개의 범용 컴포넌트가 동작과 접근성을 공유한다. 각 서비스는 CSS 변수 기반 토큰을 재정의해 서로 다른 시각 테마를 적용한다.
 
 첫 릴리스는 다음 두 패키지를 공개한다:
 
-- `@jds/tokens`
-- `@jds/components`
+- `@jdsb/tokens`
+- `@jdsb/components`
 
 Storybook은 같은 저장소에서 개발하지만 npm 패키지로 배포하지 않는다. 실제 서비스에서 두 번째 테마가 필요할 때 별도 테마 패키지를 추가한다.
 
 ## 목표
 
-JDS는 다음 목표를 충족해야 한다:
+JDSB는 다음 목표를 충족해야 한다:
 
 - 모든 컴포넌트에 일관된 API, 상태, 키보드 동작, 포커스 관리, 접근성 의미를 적용한다
 - 디자이너가 컴포넌트 구현을 수정하지 않고 토큰을 변경하거나 추가할 수 있게 한다
@@ -37,13 +37,13 @@ npm 자동 배포는 릴리스가 반복될 때 추가한다. 시각적 회귀 �
 
 ## 저장소 구조
 
-JDS는 pnpm workspace 기반 모노레포로 구성한다:
+JDSB는 pnpm workspace 기반 모노레포로 구성한다:
 
 ```text
 jh-design-system/
 ├── packages/
-│   ├── tokens/       # @jds/tokens
-│   └── components/   # @jds/components
+│   ├── tokens/       # @jdsb/tokens
+│   └── components/   # @jdsb/components
 └── apps/
     └── storybook/    # 문서와 컴포넌트 검증
 ```
@@ -52,7 +52,7 @@ jh-design-system/
 
 ## 패키지 구조
 
-### `@jds/tokens`
+### `@jdsb/tokens`
 
 토큰 패키지는 토큰 원본을 관리하고 다음 파일을 생성한다:
 
@@ -62,11 +62,11 @@ jh-design-system/
 
 토큰 원본은 디자인 토큰 커뮤니티 그룹(Design Tokens Community Group, DTCG) 2025.10 JSON 형식을 사용한다. 이 형식을 지원하는 디자인 도구와 토큰 파일을 교환할 수 있다.
 
-### `@jds/components`
+### `@jdsb/components`
 
-컴포넌트 패키지는 React API, 상태, 접근성 동작, JDS 기본 스타일을 관리한다. 모든 스타일은 의미 토큰을 사용한다. 서비스에 종속된 색상, 간격, 글꼴, 그림자, 모서리 반경을 컴포넌트에 직접 입력하지 않는다.
+컴포넌트 패키지는 React API, 상태, 접근성 동작, JDSB 기본 스타일을 관리한다. 모든 스타일은 의미 토큰을 사용한다. 서비스에 종속된 색상, 간격, 글꼴, 그림자, 모서리 반경을 컴포넌트에 직접 입력하지 않는다.
 
-모든 컴포넌트는 외부 UI 라이브러리 없이 네이티브 HTML과 표준 ARIA로 구현한다. 네이티브 요소가 제공하는 의미와 동작을 우선 사용하고, 복합 위젯에 필요한 WAI-ARIA 의미, 키보드 탐색, 포커스 관리는 JDS가 직접 제공한다.
+모든 컴포넌트는 외부 UI 라이브러리 없이 네이티브 HTML과 표준 ARIA로 구현한다. 네이티브 요소가 제공하는 의미와 동작을 우선 사용하고, 복합 위젯에 필요한 WAI-ARIA 의미, 키보드 탐색, 포커스 관리는 JDSB가 직접 제공한다.
 
 shadcn/ui에서는 조합 가능한 API와 문서 구성을 참고한다. shadcn/ui를 런타임 의존성이나 배포 방식으로 사용하지 않는다.
 
@@ -89,9 +89,9 @@ Figma 또는 토큰 편집 도구
         ↓
 DTCG *.tokens.json
         ↓ 검증과 빌드
-@jds/tokens
+@jdsb/tokens
         ↓
-@jds/components
+@jdsb/components
         ↓
 서비스 테마 CSS 재정의
 ```
@@ -153,7 +153,7 @@ DTCG *.tokens.json
 
 ## 접근성 기준
 
-JDS는 WCAG 2.2 AA를 최소 기준으로 삼고, 해당하는 WAI-ARIA Authoring Practices 패턴을 적용한다:
+JDSB는 WCAG 2.2 AA를 최소 기준으로 삼고, 해당하는 WAI-ARIA Authoring Practices 패턴을 적용한다:
 
 - 모든 상호작용 컴포넌트를 키보드로 조작할 수 있어야 한다
 - 모든 상호작용 컴포넌트에 보이는 포커스 표시를 제공한다
@@ -211,7 +211,7 @@ Storybook의 공식 접근성 addon으로 렌더링된 모든 Story에 axe 검�
 - API를 바꾸지 않는 토큰 값 수정과 동작 수정은 patch 버전을 올린다
 - 토큰 제거 또는 이름 변경, 컴포넌트 API 호환성 변경, 기존 상호작용 동작 변경은 major 버전을 올린다
 
-npm scope는 승인된 패키지 이름에 맞춰 `@jds`를 사용한다. npm에서 해당 scope를 소유할 수 없으면 package scope만 사용자 계정이나 조직 이름으로 바꾸고 패키지 구조와 API는 유지한다.
+npm scope는 승인된 패키지 이름에 맞춰 `@jdsb`를 사용한다. npm에서 해당 scope를 소유할 수 없으면 package scope만 사용자 계정이나 조직 이름으로 바꾸고 패키지 구조와 API는 유지한다.
 
 ## 참고 자료
 

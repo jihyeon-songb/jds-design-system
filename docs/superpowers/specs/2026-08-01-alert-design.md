@@ -1,8 +1,8 @@
-# JDS Alert 설계
+# JDSB Alert 설계
 
 ## 목적
 
-`@jds/components`에 작업 결과나 중요한 상태를 현재 위치에서 알리는 토큰 기반
+`@jdsb/components`에 작업 결과나 중요한 상태를 현재 위치에서 알리는 토큰 기반
 `Alert`를 추가한다. Alert는 포커스를 이동하지 않으며, 오류만 긴급 알림으로 전달하고
 그 밖의 상태는 비강제 상태 메시지로 전달한다.
 
@@ -117,7 +117,7 @@ controlled dismissible, 긴 본문 예시를 제공한다. 모든 Story는 previ
 - close button의 keyboard Enter/Space 동작 및 focus-visible 대상 존재
 
 구현 후 `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm lint`,
-`pnpm --filter @jds/storybook build`를 실행한다. Storybook에서 Tab/Shift+Tab,
+`pnpm --filter @jdsb/storybook build`를 실행한다. Storybook에서 Tab/Shift+Tab,
 Enter·Space 닫기, 200% 확대, forced-colors, 스크린리더의 variant별 announcement를
 수동 확인한다.
 

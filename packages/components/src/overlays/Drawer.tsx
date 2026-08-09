@@ -36,7 +36,7 @@ export const DrawerContent = forwardRef<HTMLDialogElement, DrawerContentProps>(f
     <DialogContent
       {...props}
       ref={ref}
-      className={["jds-drawer-content", className].filter(Boolean).join(" ")}
+      className={["jdsb-drawer-content", className].filter(Boolean).join(" ")}
       data-side={side}
     />
   )

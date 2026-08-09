@@ -14,7 +14,7 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(function Badge(
     <span
       {...props}
       ref={ref}
-      className={["jds-badge", className].filter(Boolean).join(" ")}
+      className={["jdsb-badge", className].filter(Boolean).join(" ")}
       data-variant={variant}
     />
   )

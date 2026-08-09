@@ -1,4 +1,4 @@
-# JDS Button 인라인 로딩 설계
+# JDSB Button 인라인 로딩 설계
 
 ## 목적
 

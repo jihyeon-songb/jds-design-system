@@ -46,6 +46,6 @@ describe("IconButton", () => {
   it("exports the public IconButton", () => {
     render(<PublicIconButton aria-label="메뉴 열기"><svg /></PublicIconButton>)
 
-    expect(screen.getByRole("button", { name: "메뉴 열기" })).toHaveClass("jds-icon-button")
+    expect(screen.getByRole("button", { name: "메뉴 열기" })).toHaveClass("jdsb-icon-button")
   })
 })

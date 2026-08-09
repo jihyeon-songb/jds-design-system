@@ -1,4 +1,4 @@
-# JDS Git Flow 브랜치 전략 적용 계획
+# JDSB Git Flow 브랜치 전략 적용 계획
 
 > **에이전트 작업자용:** 이 계획은 `superpowers:subagent-driven-development` 또는 `superpowers:executing-plans`를 사용해 작업 단위로 실행한다.
 

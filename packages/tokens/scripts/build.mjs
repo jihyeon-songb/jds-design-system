@@ -28,13 +28,13 @@ export function buildTokens(source) {
       : token.$value
   }
   const values = Object.fromEntries([...tokens.keys()].map((name) => [name, resolve(name)]))
-  const css = `:root {\n${Object.entries(values).map(([name, value]) => `  --jds-${name.replaceAll(".", "-")}: ${value};`).join("\n")}\n}\n`
+  const css = `:root {\n${Object.entries(values).map(([name, value]) => `  --jdsb-${name.replaceAll(".", "-")}: ${value};`).join("\n")}\n}\n`
   const declarations = `export type TokenName = ${[...tokens.keys()].map((name) => JSON.stringify(name)).join(" | ")}\nexport declare const tokens: Record<TokenName, string>\n`
   return { css, source: `export const tokens = ${JSON.stringify(values, null, 2)}\n`, declarations }
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const source = JSON.parse(await readFile(new URL("../src/jds.tokens.json", import.meta.url), "utf8"))
+  const source = JSON.parse(await readFile(new URL("../src/jdsb.tokens.json", import.meta.url), "utf8"))
   const output = buildTokens(source)
   await mkdir(new URL("../dist/", import.meta.url), { recursive: true })
   await Promise.all([

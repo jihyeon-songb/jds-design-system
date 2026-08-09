@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Native radio 동작을 보존하는 접근 가능한 controlled·uncontrolled RadioGroup을 `@jds/components`에 추가한다.
+**Goal:** Native radio 동작을 보존하는 접근 가능한 controlled·uncontrolled RadioGroup을 `@jdsb/components`에 추가한다.
 
 **Architecture:** `RadioGroup`은 Context로 값·name·상태를 Item에 전달하는 `role="radiogroup"` div다. `RadioGroupItem`은 native radio 한 개만 렌더링하고 label은 기존 `Label`/`FieldLabel`에 맡긴다. 브라우저가 radio의 키보드·폼 동작을 담당하며 React는 선택값과 `data-state`만 동기화한다.
 
@@ -11,7 +11,7 @@
 ## Global Constraints
 
 - 외부 UI 라이브러리나 새 의존성을 추가하지 않는다.
-- 모든 시각 값은 `@jds/tokens`의 semantic 또는 component token CSS 변수만 사용한다.
+- 모든 시각 값은 `@jdsb/tokens`의 semantic 또는 component token CSS 변수만 사용한다.
 - Item label은 `Label` 또는 `FieldLabel`의 `htmlFor`로 연결하고 Item label prop을 추가하지 않는다.
 - native `type="radio"`, name group, keyboard, form submission, required validation, reset을 보존한다.
 - `RadioGroupItem`에는 `value`가 필수이며 `checked`, `defaultChecked`, `name`, `required`, `type`, `value` 전달은 금지한다.
@@ -25,7 +25,7 @@
 - Create: `packages/components/src/inputs/RadioGroup.tsx` — Root·Item 공개 API, Context, native radio 상태 동기화.
 - Create: `packages/components/src/inputs/RadioGroup.css` — token 기반 root 방향과 radio 상태 스타일.
 - Create: `packages/components/src/inputs/RadioGroup.test.tsx` — public API, native form, state, keyboard 회귀 검사.
-- Modify: `packages/tokens/src/jds.tokens.json` — radio 크기·target 토큰.
+- Modify: `packages/tokens/src/jdsb.tokens.json` — radio 크기·target 토큰.
 - Modify: `packages/components/src/index.ts` — RadioGroup public export.
 - Modify: `packages/components/src/index.css` — RadioGroup CSS public import.
 - Modify: `packages/components/package.json` — publish files에 CSS 추가.
@@ -142,11 +142,11 @@ export type RadioGroupItemProps = Omit<ComponentPropsWithoutRef<"input">, "check
 
 Implement `RadioGroup` with `useState(defaultValue)`, `selectedValue = value ?? uncontrolledValue`, and a `requestValue` function that returns when `event.defaultPrevented` is true, updates uncontrolled value only when `value === undefined`, then invokes `onValueChange`. Keep current `defaultValue` and controlled status in refs; `resetUncontrolled` queues `setUncontrolledValue(defaultValueRef.current)` only while uncontrolled. Render the Context provider and one div with `role="radiogroup"`, `aria-invalid={invalid ? true : ariaInvalid}`, `data-orientation`, and disabled > invalid > enabled root state.
 
-Implement `RadioGroupItem` as `forwardRef<HTMLInputElement, RadioGroupItemProps>`. Its `checked` value is `selectedValue === value`; its disabled value is `group.disabled || disabled`; its state priority is disabled > group invalid > checked > unchecked. Compose its forwarded ref in a callback ref, attach a `reset` listener to `node.form`, and remove the preceding listener before replacing the node. On reset call `resetUncontrolled`. Render `<input {...props}>` with fixed `type="radio"`, Context name/required/checked/disabled, class `jds-radio-group-item`, state data attribute, and an `onChange` that calls the consumer handler before `requestValue(value, event.defaultPrevented)`.
+Implement `RadioGroupItem` as `forwardRef<HTMLInputElement, RadioGroupItemProps>`. Its `checked` value is `selectedValue === value`; its disabled value is `group.disabled || disabled`; its state priority is disabled > group invalid > checked > unchecked. Compose its forwarded ref in a callback ref, attach a `reset` listener to `node.form`, and remove the preceding listener before replacing the node. On reset call `resetUncontrolled`. Render `<input {...props}>` with fixed `type="radio"`, Context name/required/checked/disabled, class `jdsb-radio-group-item`, state data attribute, and an `onChange` that calls the consumer handler before `requestValue(value, event.defaultPrevented)`.
 
 - [ ] **Step 4: 테스트와 component typecheck를 통과시킨다**
 
-Run: `pnpm test packages/components/src/inputs/RadioGroup.test.tsx && pnpm --filter @jds/components typecheck`
+Run: `pnpm test packages/components/src/inputs/RadioGroup.test.tsx && pnpm --filter @jdsb/components typecheck`
 
 Expected: PASS.
 
@@ -162,13 +162,13 @@ git commit -m "feat: RadioGroup native API 추가"
 **Files:**
 
 - Modify: `packages/components/src/inputs/RadioGroup.test.tsx`
-- Modify: `packages/tokens/src/jds.tokens.json`
+- Modify: `packages/tokens/src/jdsb.tokens.json`
 - Create: `packages/components/src/inputs/RadioGroup.css`
 
 **Interfaces:**
 
 - Consumes: Task 1의 RadioGroup public API 및 `data-state`/`data-orientation` attribute.
-- Produces: `--jds-size-control-radio-size`, `--jds-space-radio-target`, `.jds-radio-group`, `.jds-radio-group-item`.
+- Produces: `--jdsb-size-control-radio-size`, `--jdsb-space-radio-target`, `.jdsb-radio-group`, `.jdsb-radio-group-item`.
 
 - [ ] **Step 1: 상태, reset, keyboard의 실패 테스트를 추가한다**
 
@@ -241,55 +241,55 @@ under `space`.
 Create `RadioGroup.css`:
 
 ```css
-.jds-radio-group {
+.jdsb-radio-group {
   display: flex;
   flex-direction: column;
-  gap: var(--jds-space-field-item);
+  gap: var(--jdsb-space-field-item);
 }
 
-.jds-radio-group[data-orientation="horizontal"] {
+.jdsb-radio-group[data-orientation="horizontal"] {
   flex-direction: row;
 }
 
-.jds-radio-group-item {
-  accent-color: var(--jds-color-action-primary-background);
-  block-size: var(--jds-size-control-radio-size);
+.jdsb-radio-group-item {
+  accent-color: var(--jdsb-color-action-primary-background);
+  block-size: var(--jdsb-size-control-radio-size);
   box-sizing: content-box;
-  inline-size: var(--jds-size-control-radio-size);
+  inline-size: var(--jdsb-size-control-radio-size);
   margin: 0;
-  padding: var(--jds-space-radio-target);
+  padding: var(--jdsb-space-radio-target);
   vertical-align: middle;
 }
 
-.jds-radio-group-item[data-state="invalid"] {
-  outline: var(--jds-size-border) solid var(--jds-color-field-invalid-border);
-  outline-offset: var(--jds-size-border);
+.jdsb-radio-group-item[data-state="invalid"] {
+  outline: var(--jdsb-size-border) solid var(--jdsb-color-field-invalid-border);
+  outline-offset: var(--jdsb-size-border);
 }
 
-.jds-radio-group-item[data-state="disabled"] {
-  opacity: var(--jds-opacity-disabled);
+.jdsb-radio-group-item[data-state="disabled"] {
+  opacity: var(--jdsb-opacity-disabled);
 }
 
-.jds-radio-group-item:focus-visible {
-  outline: var(--jds-size-focus) solid var(--jds-color-focus-ring);
-  outline-offset: var(--jds-size-focus);
+.jdsb-radio-group-item:focus-visible {
+  outline: var(--jdsb-size-focus) solid var(--jdsb-color-focus-ring);
+  outline-offset: var(--jdsb-size-focus);
 }
 
 @media (forced-colors: active) {
-  .jds-radio-group-item { forced-color-adjust: auto; }
+  .jdsb-radio-group-item { forced-color-adjust: auto; }
 }
 ```
 
 - [ ] **Step 4: token build와 회귀 테스트를 통과시킨다**
 
-Run: `pnpm --filter @jds/tokens build && pnpm test packages/components/src/inputs/RadioGroup.test.tsx`
+Run: `pnpm --filter @jdsb/tokens build && pnpm test packages/components/src/inputs/RadioGroup.test.tsx`
 
 Expected: PASS; 생성 CSS에는 radio size·target custom property가 포함된다.
 
 - [ ] **Step 5: 커밋한다**
 
 ```sh
-git add packages/tokens/src/jds.tokens.json packages/components/src/inputs/RadioGroup.css packages/components/src/inputs/RadioGroup.test.tsx
+git add packages/tokens/src/jdsb.tokens.json packages/components/src/inputs/RadioGroup.css packages/components/src/inputs/RadioGroup.test.tsx
 git commit -m "feat: RadioGroup 상태 스타일 추가"
 ```
 
@@ -306,7 +306,7 @@ git commit -m "feat: RadioGroup 상태 스타일 추가"
 **Interfaces:**
 
 - Consumes: Task 1의 `RadioGroup`, `RadioGroupItem`, props types; Task 2의 CSS and radio tokens; existing `Field*` and `Label` components.
-- Produces: `@jds/components` named exports and `@jds/components/css` RadioGroup styles; Storybook `Inputs/RadioGroup` stories.
+- Produces: `@jdsb/components` named exports and `@jdsb/components/css` RadioGroup styles; Storybook `Inputs/RadioGroup` stories.
 
 - [ ] **Step 1: public package entrypoint의 실패 테스트를 추가한다**
 
@@ -359,7 +359,7 @@ Create `RadioGroup.stories.tsx` with a `deliveryOptions` JSX constant that uses 
 
 - [ ] **Step 4: public API, typecheck, Storybook build를 통과시킨다**
 
-Run: `pnpm test packages/components/src/inputs/RadioGroup.test.tsx && pnpm typecheck && pnpm --filter @jds/storybook typecheck && pnpm --filter @jds/storybook build`
+Run: `pnpm test packages/components/src/inputs/RadioGroup.test.tsx && pnpm typecheck && pnpm --filter @jdsb/storybook typecheck && pnpm --filter @jdsb/storybook build`
 
 Expected: PASS; every RadioGroup Story builds with the configured axe checks.
 

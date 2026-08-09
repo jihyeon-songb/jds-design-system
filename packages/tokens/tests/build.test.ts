@@ -13,23 +13,23 @@ describe("buildTokens", () => {
       }
     })
 
-    expect(result.css).toContain("--jds-color-action: #0057ff;")
+    expect(result.css).toContain("--jdsb-color-action: #0057ff;")
     expect(result.declarations).toContain('"color.action"')
   })
 
   it("resolves neutral outline foreground and border", () => {
-    const source = JSON.parse(readFileSync(new URL("../src/jds.tokens.json", import.meta.url), "utf8"))
+    const source = JSON.parse(readFileSync(new URL("../src/jdsb.tokens.json", import.meta.url), "utf8"))
     const result = buildTokens(source)
 
-    expect(result.css).toContain("--jds-color-action-outline-foreground: #17212b;")
-    expect(result.css).toContain("--jds-color-action-outline-border: #c9ced3;")
+    expect(result.css).toContain("--jdsb-color-action-outline-foreground: #17212b;")
+    expect(result.css).toContain("--jdsb-color-action-outline-border: #c9ced3;")
   })
 
   it("publishes the 14px component typography token", () => {
-    const source = JSON.parse(readFileSync(new URL("../src/jds.tokens.json", import.meta.url), "utf8"))
+    const source = JSON.parse(readFileSync(new URL("../src/jdsb.tokens.json", import.meta.url), "utf8"))
     const result = buildTokens(source)
 
-    expect(result.css).toContain("--jds-typography-body-font-size: 14px;")
+    expect(result.css).toContain("--jdsb-typography-body-font-size: 14px;")
   })
 
   it("rejects unknown token aliases", () => {

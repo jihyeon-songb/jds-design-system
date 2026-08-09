@@ -71,7 +71,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
       <div
         {...props}
         ref={forwardedRef}
-        className={["jds-tabs", className].filter(Boolean).join(" ")}
+        className={["jdsb-tabs", className].filter(Boolean).join(" ")}
         data-state="enabled"
       >
         {children}
@@ -91,7 +91,7 @@ export const TabsList = forwardRef<HTMLDivElement, TabsListProps>(function TabsL
       ref={forwardedRef}
       role="tablist"
       aria-orientation="horizontal"
-      className={["jds-tabs-list", className].filter(Boolean).join(" ")}
+      className={["jdsb-tabs-list", className].filter(Boolean).join(" ")}
     />
   )
 })
@@ -132,11 +132,12 @@ export const TabsTrigger = forwardRef<HTMLButtonElement, TabsTriggerProps>(funct
       type="button"
       role="tab"
       id={getTabId(context.idPrefix, value)}
+      // 엘리먼트가 어떤 다른 엘리먼트의 상태/표시 여부를 제어하는지를 알려주는 ARIA 속성 (여러 개의 제어 대상이 있는 구조에 사용)
       aria-controls={getPanelId(context.idPrefix, value)}
       aria-selected={selected}
       tabIndex={selected ? 0 : -1}
       disabled={disabled}
-      className={["jds-tabs-trigger", className].filter(Boolean).join(" ")}
+      className={["jdsb-tabs-trigger", className].filter(Boolean).join(" ")}
       data-state={state}
       data-value={value}
       onClick={(event) => {
@@ -166,9 +167,10 @@ export const TabsContent = forwardRef<HTMLDivElement, TabsContentProps>(function
       id={getPanelId(context.idPrefix, value)}
       role="tabpanel"
       aria-labelledby={getTabId(context.idPrefix, value)}
+      // div는 원래 포커스가 안 되니, 키보드 사용자가 Tab으로 접근할 수 있게 하려면 tabIndex={0}을 명시적으로 붙여야 함
       tabIndex={0}
       hidden={!selected}
-      className={["jds-tabs-content", className].filter(Boolean).join(" ")}
+      className={["jdsb-tabs-content", className].filter(Boolean).join(" ")}
       data-state={selected ? "active" : "inactive"}
     >
       {children}

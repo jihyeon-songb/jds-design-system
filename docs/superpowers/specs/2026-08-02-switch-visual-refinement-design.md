@@ -1,4 +1,4 @@
-# JDS Switch 외형 개선 설계
+# JDSB Switch 외형 개선 설계
 
 ## 목표
 

@@ -1,8 +1,8 @@
-# JDS Dialog 설계
+# JDSB Dialog 설계
 
 ## 목적
 
-`@jds/components`에 짧은 작업이나 확인을 위해 문서의 나머지 부분을 일시적으로
+`@jdsb/components`에 짧은 작업이나 확인을 위해 문서의 나머지 부분을 일시적으로
 차단하는 접근 가능한 modal Dialog를 추가한다. 브라우저의 native `<dialog>`와
 `showModal()`을 사용해 top layer, backdrop, 모달 focus 제한을 재사용하며 외부 UI
 라이브러리나 별도 Portal을 만들지 않는다.
@@ -145,7 +145,7 @@ Trigger가 삭제됐거나 비활성화됐다면 포커스를 강제하지 않�
 `space.field.item`, `opacity.disabled` semantic token을 재사용한다.
 
 Content는 box sizing과 border를 token으로 설정하고, viewport보다 큰 콘텐츠가
-잘리지 않도록 `max-block-size: calc(100dvb - var(--jds-space-field-group))`와
+잘리지 않도록 `max-block-size: calc(100dvb - var(--jdsb-space-field-group))`와
 overflow를 사용한다. backdrop은 `color.field.foreground`와 `opacity.disabled`를
 사용한다. focus-visible은 2px 이상의 focus token outline을 사용한다. animation과
 transition은 추가하지 않으며 forced-colors에서는 시스템 색을 허용한다.
@@ -170,7 +170,7 @@ Storybook은 기본, controlled, 긴 콘텐츠, label만 사용한 Content, back
 Story는 기존 preview의 axe error 설정으로 검사한다.
 
 릴리스 전 `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm lint`,
-`pnpm --filter @jds/storybook build`를 실행한다. 실제 브라우저에서 Tab과
+`pnpm --filter @jdsb/storybook build`를 실행한다. 실제 브라우저에서 Tab과
 Shift+Tab의 modal 제한, Escape, backdrop, focus 복귀, 확대, forced-colors와
 스크린리더의 dialog 이름·설명을 수동 확인한다.
 

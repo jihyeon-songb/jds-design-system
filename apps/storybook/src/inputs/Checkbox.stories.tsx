@@ -8,7 +8,7 @@ import {
   FieldDescription,
   FieldError,
   FieldLabel,
-} from "@jds/components"
+} from "@jdsb/components"
 
 const meta = {
   title: "Inputs/Checkbox",

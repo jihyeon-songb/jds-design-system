@@ -21,14 +21,14 @@
 
 **Files:**
 - Modify: `packages/tokens/tests/build.test.ts:4`
-- Modify: `packages/tokens/src/jds.tokens.json:13`
+- Modify: `packages/tokens/src/jdsb.tokens.json:13`
 - Modify: `packages/tokens/dist/tokens.css`
 - Modify: `packages/tokens/dist/index.js`
 - Modify: `packages/tokens/dist/index.d.ts`
 
 **Interfaces:**
 - Consumes: `color.action.outline.foreground` and `color.action.outline.border` aliases in the token source.
-- Produces: `--jds-color-action-outline-foreground: #17212b;` and `--jds-color-action-outline-border: #c9ced3;` in the CSS token export.
+- Produces: `--jdsb-color-action-outline-foreground: #17212b;` and `--jdsb-color-action-outline-border: #c9ced3;` in the CSS token export.
 
 - [ ] **Step 1: Write the failing token-alias test**
 
@@ -39,11 +39,11 @@
   import { readFileSync } from "node:fs"
 
   it("resolves neutral outline foreground and border", () => {
-    const source = JSON.parse(readFileSync(new URL("../src/jds.tokens.json", import.meta.url), "utf8"))
+    const source = JSON.parse(readFileSync(new URL("../src/jdsb.tokens.json", import.meta.url), "utf8"))
     const result = buildTokens(source)
 
-    expect(result.css).toContain("--jds-color-action-outline-foreground: #17212b;")
-    expect(result.css).toContain("--jds-color-action-outline-border: #c9ced3;")
+    expect(result.css).toContain("--jdsb-color-action-outline-foreground: #17212b;")
+    expect(result.css).toContain("--jdsb-color-action-outline-border: #c9ced3;")
   })
   ```
 
@@ -55,18 +55,18 @@
 
 - [ ] **Step 3: Change the DTCG aliases and regenerate outputs**
 
-  Replace the two outline aliases in `packages/tokens/src/jds.tokens.json`:
+  Replace the two outline aliases in `packages/tokens/src/jdsb.tokens.json`:
 
   ```json
   "foreground": { "$value": "{color.neutral.900}", "$type": "color" },
   "border": { "$value": "{color.neutral.300}", "$type": "color" }
   ```
 
-  Then run: `pnpm --filter @jds/tokens build`
+  Then run: `pnpm --filter @jdsb/tokens build`
 
 - [ ] **Step 4: Run the focused test and inspect generated CSS**
 
-  Run: `pnpm vitest run packages/tokens/tests/build.test.ts && rg -n -- '--jds-color-action-outline-(foreground|border)' packages/tokens/dist/tokens.css`
+  Run: `pnpm vitest run packages/tokens/tests/build.test.ts && rg -n -- '--jdsb-color-action-outline-(foreground|border)' packages/tokens/dist/tokens.css`
 
   Expected: PASS; foreground is `#17212b` and border is `#c9ced3`.
 
@@ -79,6 +79,6 @@
 - [ ] **Step 6: Commit the token change**
 
   ```bash
-  git add packages/tokens/src/jds.tokens.json packages/tokens/tests/build.test.ts packages/tokens/dist/index.d.ts packages/tokens/dist/index.js packages/tokens/dist/tokens.css
+  git add packages/tokens/src/jdsb.tokens.json packages/tokens/tests/build.test.ts packages/tokens/dist/index.d.ts packages/tokens/dist/index.js packages/tokens/dist/tokens.css
   git commit -m "fix: outline 기본 색상을 중립으로 변경"
   ```

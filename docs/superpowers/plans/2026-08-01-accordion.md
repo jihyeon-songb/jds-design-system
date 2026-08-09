@@ -2,7 +2,7 @@
 
 > **에이전트 작업자용:** 이 계획을 작업별로 구현할 때 `superpowers:subagent-driven-development`(권장) 또는 `superpowers:executing-plans` 하위 스킬을 반드시 사용한다. 진행 상태는 체크박스로 관리한다.
 
-**목표:** single·multiple controlled/uncontrolled 상태와 native heading/button 의미를 갖는 접근 가능한 Accordion을 `@jds/components`에 추가한다.
+**목표:** single·multiple controlled/uncontrolled 상태와 native heading/button 의미를 갖는 접근 가능한 Accordion을 `@jdsb/components`에 추가한다.
 
 **구조:** `Accordion`은 type별 열린 value, 상태 변경 요청, ID prefix, heading level을 root Context로 제공한다. `AccordionItem`은 자신만의 value·disabled·open 상태와 Trigger/Content ID를 item Context로 제공하고 native button이 click·Enter·Space·Tab 동작을 담당한다.
 
@@ -111,15 +111,15 @@ export type AccordionContentProps = Omit<ComponentPropsWithoutRef<"div">, "aria-
 
 `useAccordionContext`와 `useAccordionItemContext`를 추가한다. Context가 없을 때 각각 `Accordion compound components must be used within Accordion`, `Accordion item components must be used within AccordionItem` 오류를 던진다. Root Context는 `{ headingLevel, idPrefix, isOpen, requestValue }`, Item Context는 `{ contentId, disabled, open, triggerId, value }`를 제공한다.
 
-`Accordion`은 `useId`와 `useState(defaultValue)`로 Root 상태를 만든다. `AccordionItem`도 `useId`를 호출해 Root prefix와 조합한 Trigger·Content ID를 만들므로 중복 value도 ARIA ID 충돌을 만들지 않는다. `isOpen`은 single value 동등성 또는 multiple 배열의 `includes`로 계산한다. `requestValue`에서 single의 열린 value는 `null`로, 다른 single value는 해당 value로 바꾼다. multiple은 `includes`와 `filter`/spread로 현재 value를 제거하거나 추가한다. 실제 변화가 있을 때만 type에 맞는 `onValueChange`를 호출하고, 해당 type의 `value` prop이 없을 때만 internal state를 갱신한다. forwarded `<div>`에는 `jds-accordion`, `data-type={type}`를 준다.
+`Accordion`은 `useId`와 `useState(defaultValue)`로 Root 상태를 만든다. `AccordionItem`도 `useId`를 호출해 Root prefix와 조합한 Trigger·Content ID를 만들므로 중복 value도 ARIA ID 충돌을 만들지 않는다. `isOpen`은 single value 동등성 또는 multiple 배열의 `includes`로 계산한다. `requestValue`에서 single의 열린 value는 `null`로, 다른 single value는 해당 value로 바꾼다. multiple은 `includes`와 `filter`/spread로 현재 value를 제거하거나 추가한다. 실제 변화가 있을 때만 type에 맞는 `onValueChange`를 호출하고, 해당 type의 `value` prop이 없을 때만 internal state를 갱신한다. forwarded `<div>`에는 `jdsb-accordion`, `data-type={type}`를 준다.
 
-`AccordionItem`은 Root Context로 open을 계산하고 root prefix 및 value로 `triggerId`, `contentId`를 만든다. forwarded `<div>`에는 `jds-accordion-item`, `data-state={disabled ? "disabled" : open ? "open" : "closed"}`를 준다.
+`AccordionItem`은 Root Context로 open을 계산하고 root prefix 및 value로 `triggerId`, `contentId`를 만든다. forwarded `<div>`에는 `jdsb-accordion-item`, `data-state={disabled ? "disabled" : open ? "open" : "closed"}`를 준다.
 
-`AccordionHeader`는 Root Context의 `headingLevel`로 `h${headingLevel}`을 선택해 `jds-accordion-header`를 렌더링하고 Header Context를 제공한다. `AccordionTrigger`는 Header Context 밖에서 쓰면 명확한 오류를 내며, forwarded native button에 고정 `type="button"`, 생성한 `id`, `aria-controls`, `aria-expanded`, disabled, `jds-accordion-trigger`, Item과 같은 state 우선순위를 준다. 소비자 `onClick`을 먼저 호출하고 prevent되지 않았을 때만 `requestValue(item.value)`를 부른다. `AccordionContent`에는 생성한 `id`, `aria-labelledby`, `hidden={!open}`, `jds-accordion-content`, `data-state={open ? "open" : "closed"}`를 준다. key handler, effect, `useMemo`, `useCallback`은 추가하지 않는다.
+`AccordionHeader`는 Root Context의 `headingLevel`로 `h${headingLevel}`을 선택해 `jdsb-accordion-header`를 렌더링하고 Header Context를 제공한다. `AccordionTrigger`는 Header Context 밖에서 쓰면 명확한 오류를 내며, forwarded native button에 고정 `type="button"`, 생성한 `id`, `aria-controls`, `aria-expanded`, disabled, `jdsb-accordion-trigger`, Item과 같은 state 우선순위를 준다. 소비자 `onClick`을 먼저 호출하고 prevent되지 않았을 때만 `requestValue(item.value)`를 부른다. `AccordionContent`에는 생성한 `id`, `aria-labelledby`, `hidden={!open}`, `jdsb-accordion-content`, `data-state={open ? "open" : "closed"}`를 준다. key handler, effect, `useMemo`, `useCallback`은 추가하지 않는다.
 
 - [ ] **4단계: 집중 테스트와 컴포넌트 typecheck를 실행한다**
 
-실행: `pnpm test packages/components/src/navigation/Accordion.test.tsx && pnpm --filter @jds/components typecheck`
+실행: `pnpm test packages/components/src/navigation/Accordion.test.tsx && pnpm --filter @jdsb/components typecheck`
 
 예상: 통과한다.
 
@@ -202,16 +202,16 @@ it("public API를 export하고 잘못된 compound 위치에는 오류를 낸다"
 `packages/components/src/navigation/Accordion.css`를 만든다.
 
 ```css
-.jds-accordion { border-block: var(--jds-size-border) solid var(--jds-color-field-border); }
-.jds-accordion-item + .jds-accordion-item { border-block-start: var(--jds-size-border) solid var(--jds-color-field-border); }
-.jds-accordion-header { margin: 0; }
-.jds-accordion-trigger { align-items: center; background: var(--jds-color-field-background); border: 0; color: var(--jds-color-field-foreground); cursor: pointer; display: flex; font: inherit; justify-content: space-between; min-block-size: var(--jds-size-alert-close); padding: var(--jds-space-button-inline); text-align: start; width: 100%; }
-.jds-accordion-trigger[data-state="open"] { border-block-end: var(--jds-size-border) solid var(--jds-color-field-border); }
-.jds-accordion-trigger:not(:disabled):hover { background: var(--jds-color-action-ghost-hover); }
-.jds-accordion-trigger:disabled { cursor: not-allowed; opacity: var(--jds-opacity-disabled); }
-.jds-accordion-trigger:focus-visible { outline: var(--jds-size-focus) solid var(--jds-color-focus-ring); outline-offset: calc(var(--jds-size-focus) * -1); }
-.jds-accordion-content { padding: var(--jds-space-field-item) var(--jds-space-button-inline); }
-@media (forced-colors: active) { .jds-accordion-trigger { forced-color-adjust: auto; } }
+.jdsb-accordion { border-block: var(--jdsb-size-border) solid var(--jdsb-color-field-border); }
+.jdsb-accordion-item + .jdsb-accordion-item { border-block-start: var(--jdsb-size-border) solid var(--jdsb-color-field-border); }
+.jdsb-accordion-header { margin: 0; }
+.jdsb-accordion-trigger { align-items: center; background: var(--jdsb-color-field-background); border: 0; color: var(--jdsb-color-field-foreground); cursor: pointer; display: flex; font: inherit; justify-content: space-between; min-block-size: var(--jdsb-size-alert-close); padding: var(--jdsb-space-button-inline); text-align: start; width: 100%; }
+.jdsb-accordion-trigger[data-state="open"] { border-block-end: var(--jdsb-size-border) solid var(--jdsb-color-field-border); }
+.jdsb-accordion-trigger:not(:disabled):hover { background: var(--jdsb-color-action-ghost-hover); }
+.jdsb-accordion-trigger:disabled { cursor: not-allowed; opacity: var(--jdsb-opacity-disabled); }
+.jdsb-accordion-trigger:focus-visible { outline: var(--jdsb-size-focus) solid var(--jdsb-color-focus-ring); outline-offset: calc(var(--jdsb-size-focus) * -1); }
+.jdsb-accordion-content { padding: var(--jdsb-space-field-item) var(--jdsb-space-button-inline); }
+@media (forced-colors: active) { .jdsb-accordion-trigger { forced-color-adjust: auto; } }
 ```
 
 `packages/components/src/index.ts`에 다음 export를 추가한다.
@@ -254,7 +254,7 @@ git commit -m "feat: Accordion 스타일과 export 추가"
 import { useState } from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { expect, userEvent, within } from "storybook/test"
-import { Accordion, AccordionContent, AccordionHeader, AccordionItem, AccordionTrigger } from "@jds/components"
+import { Accordion, AccordionContent, AccordionHeader, AccordionItem, AccordionTrigger } from "@jdsb/components"
 
 const meta = { title: "Navigation/Accordion", component: Accordion } satisfies Meta<typeof Accordion>
 export default meta
@@ -280,7 +280,7 @@ export const Single: Story = {
 
 - [ ] **2단계: Storybook typecheck를 실행한다**
 
-실행: `pnpm --filter @jds/storybook typecheck`
+실행: `pnpm --filter @jdsb/storybook typecheck`
 
 예상: 통과한다.
 
@@ -299,7 +299,7 @@ export const DisabledItem: Story = { args: { children: null, defaultValue: "ship
 
 - [ ] **4단계: 전체 자동 검증을 실행한다**
 
-실행: `pnpm typecheck && pnpm test && pnpm build && pnpm lint && pnpm --filter @jds/storybook build`
+실행: `pnpm typecheck && pnpm test && pnpm build && pnpm lint && pnpm --filter @jdsb/storybook build`
 
 예상: 모든 명령이 exit 0으로 끝난다. Storybook build는 모든 Story에 구성된 axe 검사를 실행한다.
 

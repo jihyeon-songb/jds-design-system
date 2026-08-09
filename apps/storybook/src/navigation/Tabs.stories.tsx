@@ -1,7 +1,7 @@
 import { useState } from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { expect, userEvent, within } from "storybook/test"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@jds/components"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@jdsb/components"
 
 const meta = {
   title: "Navigation/Tabs",

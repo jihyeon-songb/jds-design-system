@@ -120,7 +120,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(function Acc
       <div
         {...props}
         ref={ref}
-        className={["jds-accordion", className].filter(Boolean).join(" ")}
+        className={["jdsb-accordion", className].filter(Boolean).join(" ")}
         data-type={type}
       >
         {children}
@@ -149,7 +149,7 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(func
       <div
         {...props}
         ref={ref}
-        className={["jds-accordion-item", className].filter(Boolean).join(" ")}
+        className={["jdsb-accordion-item", className].filter(Boolean).join(" ")}
         data-state={disabled ? "disabled" : open ? "open" : "closed"}
       >
         {children}
@@ -167,7 +167,7 @@ export const AccordionHeader = forwardRef<HTMLHeadingElement, AccordionHeaderPro
   const Heading = `h${headingLevel}` as "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
 
   return (
-    <Heading {...props} ref={ref} className={["jds-accordion-header", className].filter(Boolean).join(" ")}>
+    <Heading {...props} ref={ref} className={["jdsb-accordion-header", className].filter(Boolean).join(" ")}>
       <AccordionHeaderContext.Provider value>{children}</AccordionHeaderContext.Provider>
     </Heading>
   )
@@ -191,7 +191,7 @@ export const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerPr
       aria-controls={item.contentId}
       aria-expanded={item.open}
       disabled={item.disabled}
-      className={["jds-accordion-trigger", className].filter(Boolean).join(" ")}
+      className={["jdsb-accordion-trigger", className].filter(Boolean).join(" ")}
       data-state={state}
       onClick={(event) => {
         onClick?.(event)
@@ -215,7 +215,7 @@ export const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps
       id={item.contentId}
       aria-labelledby={item.triggerId}
       hidden={!item.open}
-      className={["jds-accordion-content", className].filter(Boolean).join(" ")}
+      className={["jdsb-accordion-content", className].filter(Boolean).join(" ")}
       data-state={item.open ? "open" : "closed"}
     />
   )

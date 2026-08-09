@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** 접근 가능한 이름과 44 × 44 CSS px 조작 영역을 보장하는 native `IconButton`을 `@jds/components`에 추가한다.
+**Goal:** 접근 가능한 이름과 44 × 44 CSS px 조작 영역을 보장하는 native `IconButton`을 `@jdsb/components`에 추가한다.
 
 **Architecture:** `IconButton`은 Button과 분리된 `forwardRef` native `<button>`이다. 기존 semantic token과 native disabled 동작만 재사용하며 공통 base component, 새 token, 새 의존성은 만들지 않는다.
 
@@ -111,7 +111,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
   { "aria-label": ariaLabel, children, className, disabled, loading = false, variant = "primary", ...props }, ref
 ) {
   const state = loading ? "loading" : disabled ? "disabled" : "idle"
-  return <button {...props} ref={ref} aria-busy={loading || undefined} aria-label={ariaLabel} className={["jds-icon-button", className].filter(Boolean).join(" ")} data-state={state} data-variant={variant} disabled={disabled || loading}><span aria-hidden="true" data-slot="icon">{children}</span>{loading ? <span aria-hidden="true" data-slot="spinner" /> : null}</button>
+  return <button {...props} ref={ref} aria-busy={loading || undefined} aria-label={ariaLabel} className={["jdsb-icon-button", className].filter(Boolean).join(" ")} data-state={state} data-variant={variant} disabled={disabled || loading}><span aria-hidden="true" data-slot="icon">{children}</span>{loading ? <span aria-hidden="true" data-slot="spinner" /> : null}</button>
 })
 ```
 
@@ -134,7 +134,7 @@ it("exposes disabled without setting busy", () => {
 
 - [ ] **Step 5: 검사하고 커밋한다**
 
-Run: `pnpm test packages/components/src/actions/IconButton.test.tsx && pnpm --filter @jds/components typecheck`
+Run: `pnpm test packages/components/src/actions/IconButton.test.tsx && pnpm --filter @jdsb/components typecheck`
 
 Expected: PASS.
 
@@ -155,8 +155,8 @@ git commit -m "feat: IconButton native API 추가"
 
 **Interfaces:**
 
-- Consumes: Task 1의 `.jds-icon-button`, `data-state`, `data-variant`, `IconButton`.
-- Produces: root import와 `@jds/components/css`에서 사용 가능한 public API와 CSS.
+- Consumes: Task 1의 `.jdsb-icon-button`, `data-state`, `data-variant`, `IconButton`.
+- Produces: root import와 `@jdsb/components/css`에서 사용 가능한 public API와 CSS.
 
 - [ ] **Step 1: 실패하는 public export test를 추가한다**
 
@@ -165,7 +165,7 @@ import { IconButton as PublicIconButton } from "../index.js"
 
 it("exports the public IconButton", () => {
   render(<PublicIconButton aria-label="메뉴 열기"><svg /></PublicIconButton>)
-  expect(screen.getByRole("button", { name: "메뉴 열기" })).toHaveClass("jds-icon-button")
+  expect(screen.getByRole("button", { name: "메뉴 열기" })).toHaveClass("jdsb-icon-button")
 })
 ```
 
@@ -177,7 +177,7 @@ Expected: FAIL — `../index.js`가 `IconButton`을 export하지 않는다.
 
 - [ ] **Step 3: token-only CSS와 exports를 작성한다**
 
-`IconButton.css`는 `.jds-icon-button`에 `align-items`, `display: inline-flex`, `justify-content`, `position: relative`, `font: inherit`, `cursor`, primary background/border/color와 `height`·`width: var(--jds-size-control-button-xl-height)`를 적용한다. Button CSS와 같은 variant, hover, active, disabled, focus-visible selector를 `.jds-icon-button`으로 반복한다. spinner와 icon은 각각 `data-slot="spinner"`, `data-slot="icon"`을 사용한다. spinner는 `size.control.icon`, `size.border`, `color.action.primary.foreground/background`, `radius.control`, `duration.spinner`, `angle.turn` token으로 만들고 loading에서는 icon opacity를 `opacity.hidden`으로 바꾼다. motion reduction과 forced-colors media query도 Button과 동등하게 추가한다.
+`IconButton.css`는 `.jdsb-icon-button`에 `align-items`, `display: inline-flex`, `justify-content`, `position: relative`, `font: inherit`, `cursor`, primary background/border/color와 `height`·`width: var(--jdsb-size-control-button-xl-height)`를 적용한다. Button CSS와 같은 variant, hover, active, disabled, focus-visible selector를 `.jdsb-icon-button`으로 반복한다. spinner와 icon은 각각 `data-slot="spinner"`, `data-slot="icon"`을 사용한다. spinner는 `size.control.icon`, `size.border`, `color.action.primary.foreground/background`, `radius.control`, `duration.spinner`, `angle.turn` token으로 만들고 loading에서는 icon opacity를 `opacity.hidden`으로 바꾼다. motion reduction과 forced-colors media query도 Button과 동등하게 추가한다.
 
 Add exactly to `index.ts`:
 
@@ -219,7 +219,7 @@ git commit -m "feat: IconButton 스타일과 export 추가"
 
 ```tsx
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { IconButton } from "@jds/components"
+import { IconButton } from "@jdsb/components"
 
 function CloseIcon() { return <svg aria-hidden="true" viewBox="0 0 16 16"><path d="m3 3 10 10M13 3 3 13" /></svg> }
 
@@ -237,7 +237,7 @@ export const LongLabel: Story = { args: { "aria-label": "현재 편집 중인 �
 
 - [ ] **Step 2: 전체 자동 검사를 통과시킨다**
 
-Run: `pnpm typecheck && pnpm test && pnpm build && pnpm lint && pnpm --filter @jds/storybook build`
+Run: `pnpm typecheck && pnpm test && pnpm build && pnpm lint && pnpm --filter @jdsb/storybook build`
 
 Expected: all commands exit 0; Storybook preview의 axe error mode가 모든 IconButton Story를 통과한다.
 

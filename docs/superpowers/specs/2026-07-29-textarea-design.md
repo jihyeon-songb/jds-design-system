@@ -1,8 +1,8 @@
-# JDS Textarea 설계
+# JDSB Textarea 설계
 
 ## 목적
 
-`@jds/components`에 토큰 기반의 접근 가능한 native Textarea를 추가한다. 이 컴포넌트는 브라우저의 `<textarea>` 동작을 보존하고, `maxLength`가 설정된 경우에만 현재 글자 수 카운터를 제공한다.
+`@jdsb/components`에 토큰 기반의 접근 가능한 native Textarea를 추가한다. 이 컴포넌트는 브라우저의 `<textarea>` 동작을 보존하고, `maxLength`가 설정된 경우에만 현재 글자 수 카운터를 제공한다.
 
 ## 범위
 
@@ -49,7 +49,7 @@ export type TextareaProps = React.ComponentPropsWithoutRef<"textarea"> & {
 
 Textarea에 필요한 최소 semantic/component 토큰을 추가한다. 기본·hover·invalid의 배경, 글자색, 테두리색과 `sm`, `md`, `lg` 최소 높이 및 여백을 토큰으로 둔다. 기존 focus ring, disabled opacity, border size, control radius 토큰은 재사용한다.
 
-CSS에는 시각 값 리터럴을 쓰지 않고 `--jds-*` 변수만 사용한다. `:focus-visible`은 기존 focus token으로 표시하며, disabled·readOnly·invalid 상태와 forced-colors 모드를 지원한다. `prefers-reduced-motion`에서 transition을 제거한다. Textarea의 기본 `resize` 동작은 CSS로 재정의하지 않는다.
+CSS에는 시각 값 리터럴을 쓰지 않고 `--jdsb-*` 변수만 사용한다. `:focus-visible`은 기존 focus token으로 표시하며, disabled·readOnly·invalid 상태와 forced-colors 모드를 지원한다. `prefers-reduced-motion`에서 transition을 제거한다. Textarea의 기본 `resize` 동작은 CSS로 재정의하지 않는다.
 
 ## 문서와 검증
 

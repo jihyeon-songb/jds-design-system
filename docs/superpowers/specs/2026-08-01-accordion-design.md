@@ -1,8 +1,8 @@
-# JDS Accordion 설계
+# JDSB Accordion 설계
 
 ## 목적
 
-`@jds/components`에 세로로 쌓인 섹션을 열고 닫는 접근 가능한 Accordion을 추가한다.
+`@jdsb/components`에 세로로 쌓인 섹션을 열고 닫는 접근 가능한 Accordion을 추가한다.
 하나만 열 수 있는 `single`과 여러 개를 열 수 있는 `multiple`을 하나의 compound API로
 제공한다. 각 header는 native heading 안의 native button으로 구현해 표준 키보드 동작과
 접근성 의미를 보존한다.
@@ -129,15 +129,15 @@ ARIA ID 충돌을 만들지 않는다.
 `AccordionHeader`는 동적으로 선택한 `<h1>`부터 `<h6>` 중 하나이며, 그 안에는
 AccordionTrigger button 하나만 둔다.
 
-- Root는 `class="jds-accordion"`, `data-type="single|multiple"`를 렌더링한다.
-- Item은 `class="jds-accordion-item"` 및 `data-state="open|closed|disabled"`를
+- Root는 `class="jdsb-accordion"`, `data-type="single|multiple"`를 렌더링한다.
+- Item은 `class="jdsb-accordion-item"` 및 `data-state="open|closed|disabled"`를
   렌더링한다. disabled가 open보다 우선한다.
-- Header는 `class="jds-accordion-header"`의 native heading이다.
+- Header는 `class="jdsb-accordion-header"`의 native heading이다.
 - Trigger는 `type="button"`, generated `id`, `aria-controls`, `aria-expanded`,
-  `disabled`, `class="jds-accordion-trigger"`,
+  `disabled`, `class="jdsb-accordion-trigger"`,
   `data-state="open|closed|disabled"`를 렌더링한다.
 - Content는 generated `id`, `aria-labelledby`, native `hidden`,
-  `class="jds-accordion-content"`, `data-state="open|closed"`를 렌더링한다.
+  `class="jdsb-accordion-content"`, `data-state="open|closed"`를 렌더링한다.
 
 Trigger click은 소비자의 `onClick`을 먼저 호출한다. event가 prevent되지 않았고
 Item이 enabled이면 Root에 해당 value 변경을 요청한다. disabled button은 native
@@ -175,7 +175,7 @@ preview의 axe 오류 설정으로 검사한다.
 - heading level 렌더링과 compound part를 잘못된 문맥에서 쓴 경우의 명확한 오류
 
 구현 후 `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm lint`,
-`pnpm --filter @jds/storybook build`를 실행한다. Storybook에서 Tab·Shift+Tab,
+`pnpm --filter @jdsb/storybook build`를 실행한다. Storybook에서 Tab·Shift+Tab,
 Enter·Space, label과 긴 콘텐츠, 브라우저 확대, forced-colors를 수동 확인하고,
 스크린리더로 header heading level, expanded/collapsed 상태, button과 panel 연결,
 disabled 상태를 확인한다.

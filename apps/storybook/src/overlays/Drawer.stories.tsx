@@ -9,7 +9,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
   type DrawerSide,
-} from "@jds/components"
+} from "@jdsb/components"
 
 const meta = {
   title: "Overlays/Drawer",
