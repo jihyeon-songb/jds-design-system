@@ -76,6 +76,8 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(function Pagi
             className="jdsb-pagination-control"
             aria-label={previousLabel}
             disabled={selectedPage === 1}
+            data-direction="previous"
+            data-state={selectedPage === 1 ? "disabled" : "enabled"}
             onClick={() => requestPage(selectedPage - 1)}
           >
             {previousLabel}
@@ -91,6 +93,7 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(function Pagi
                 className="jdsb-pagination-page"
                 aria-current={current ? "page" : undefined}
                 aria-label={getPageLabel(item, current)}
+                data-state={current ? "current" : "idle"}
                 onClick={() => requestPage(item)}
               >
                 {item}
@@ -104,6 +107,8 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(function Pagi
             className="jdsb-pagination-control"
             aria-label={nextLabel}
             disabled={selectedPage === totalPages}
+            data-direction="next"
+            data-state={selectedPage === totalPages ? "disabled" : "enabled"}
             onClick={() => requestPage(selectedPage + 1)}
           >
             {nextLabel}
