@@ -28,7 +28,7 @@ type TooltipContextValue = {
 export type TooltipSide = "top" | "right" | "bottom" | "left"
 export type TooltipProps = ComponentPropsWithoutRef<"span"> & { children: ReactNode }
 export type TooltipTriggerProps = { children: ReactElement }
-export type TooltipContentProps = Omit<ComponentPropsWithoutRef<"span">, "id" | "role"> & {
+export type TooltipContentProps = Omit<ComponentPropsWithoutRef<"span">, "id" | "role" | "tabIndex"> & {
   side?: TooltipSide
 }
 
@@ -131,9 +131,12 @@ export const TooltipTrigger = forwardRef<HTMLElement, TooltipTriggerProps>(funct
 })
 
 export const TooltipContent = forwardRef<HTMLSpanElement, TooltipContentProps>(function TooltipContent(
-  { className, onPointerLeave, side = "top", ...props },
+  contentProps,
   ref
 ) {
+  const { className, onPointerLeave, side = "top", tabIndex: _tabIndex, ...props } = contentProps as TooltipContentProps & {
+    tabIndex?: unknown
+  }
   const { closeNow, contentId, open, wrapperRef } = useTooltipContext()
 
   return (

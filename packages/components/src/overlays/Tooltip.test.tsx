@@ -107,6 +107,18 @@ describe("Tooltip", () => {
     expect(contentRef.current?.parentElement).toHaveAttribute("title", "wrapper title")
   })
 
+  it("does not forward tabIndex to non-focusable content", () => {
+    render(
+      <Tooltip>
+        <TooltipTrigger><button>설명</button></TooltipTrigger>
+        {/* @ts-expect-error Tooltip content must not be focusable. */}
+        <TooltipContent tabIndex={0}>보조 설명</TooltipContent>
+      </Tooltip>
+    )
+
+    expect(screen.getByRole("tooltip", { hidden: true })).not.toHaveAttribute("tabindex")
+  })
+
   it("throws when a compound part is rendered outside Tooltip", () => {
     expect(() => render(<TooltipTrigger><button>설명</button></TooltipTrigger>)).toThrow(
       "Tooltip compound components must be used within Tooltip"
