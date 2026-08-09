@@ -58,6 +58,27 @@ describe("Tooltip", () => {
     expect(content).toHaveAttribute("hidden")
   })
 
+  it("opens 300ms after hover and closes immediately when leaving to the body", () => {
+    render(
+      <Tooltip>
+        <TooltipTrigger><button>도움말</button></TooltipTrigger>
+        <TooltipContent>추가 정보를 표시합니다.</TooltipContent>
+      </Tooltip>
+    )
+    const trigger = screen.getByRole("button", { name: "도움말" })
+    const content = screen.getByRole("tooltip", { hidden: true })
+
+    fireEvent.pointerEnter(trigger)
+    expect(content).toHaveAttribute("data-state", "closed")
+    act(() => vi.advanceTimersByTime(299))
+    expect(content).toHaveAttribute("data-state", "closed")
+    act(() => vi.advanceTimersByTime(1))
+    expect(content).toHaveAttribute("data-state", "open")
+
+    fireEvent.pointerLeave(trigger, { relatedTarget: document.body })
+    expect(content).toHaveAttribute("data-state", "closed")
+  })
+
   it("keeps open while moving from trigger to content and closes on Escape", () => {
     render(
       <Tooltip>
