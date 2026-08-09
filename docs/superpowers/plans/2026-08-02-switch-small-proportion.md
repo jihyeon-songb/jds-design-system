@@ -11,10 +11,10 @@
 ### Task 1: Small Switch token 갱신
 
 **Files:**
-- Modify: `packages/tokens/src/jds.tokens.json`
+- Modify: `packages/tokens/src/jdsb.tokens.json`
 - Modify: `packages/tokens/dist/index.js`
 - Modify: `packages/tokens/dist/tokens.css`
 
 - [ ] Set `sm.track-inline` to `24px` and `sm.thumb-travel` to `10px`.
-- [ ] Run: `pnpm --filter @jds/tokens build && pnpm test packages/components/src/inputs/Switch.test.tsx && pnpm typecheck && pnpm build && pnpm lint`
+- [ ] Run: `pnpm --filter @jdsb/tokens build && pnpm test packages/components/src/inputs/Switch.test.tsx && pnpm typecheck && pnpm build && pnpm lint`
 - [ ] Commit with `fix: Switch small 비율 조정`.

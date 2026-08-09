@@ -1,22 +1,22 @@
-.jds-input {
-  background: var(--jds-color-field-background);
-  border: var(--jds-size-border) solid var(--jds-color-field-border);
-  border-radius: var(--jds-radius-control);
+.jdsb-input {
+  background: var(--jdsb-color-field-background);
+  border: var(--jdsb-size-border) solid var(--jdsb-color-field-border);
+  border-radius: var(--jdsb-radius-control);
   box-sizing: border-box;
-  color: var(--jds-color-field-foreground);
+  color: var(--jdsb-color-field-foreground);
   font: inherit;
-  height: var(--jds-size-control-input-md-height);
-  padding-inline: var(--jds-space-input-inline);
+  height: var(--jdsb-size-control-input-md-height);
+  padding-inline: var(--jdsb-space-input-inline);
 }
 
-.jds-input[data-size="sm"] { height: var(--jds-size-control-input-sm-height); }
-.jds-input[data-size="lg"] { height: var(--jds-size-control-input-lg-height); }
-.jds-input[data-size="xl"] { height: var(--jds-size-control-input-xl-height); }
-.jds-input[data-state="invalid"] { border-color: var(--jds-color-field-invalid-border); }
-.jds-input:hover:not(:disabled):not([readonly]) { border-color: var(--jds-color-field-hover-border); }
-.jds-input[data-state="disabled"] { opacity: var(--jds-opacity-disabled); }
-.jds-input[data-state="readonly"] { border-color: var(--jds-color-field-border); }
-.jds-input:focus-visible { outline: var(--jds-size-focus) solid var(--jds-color-focus-ring); outline-offset: var(--jds-size-focus); }
+.jdsb-input[data-size="sm"] { height: var(--jdsb-size-control-input-sm-height); }
+.jdsb-input[data-size="lg"] { height: var(--jdsb-size-control-input-lg-height); }
+.jdsb-input[data-size="xl"] { height: var(--jdsb-size-control-input-xl-height); }
+.jdsb-input[data-state="invalid"] { border-color: var(--jdsb-color-field-invalid-border); }
+.jdsb-input:hover:not(:disabled):not([readonly]) { border-color: var(--jdsb-color-field-hover-border); }
+.jdsb-input[data-state="disabled"] { opacity: var(--jdsb-opacity-disabled); }
+.jdsb-input[data-state="readonly"] { border-color: var(--jdsb-color-field-border); }
+.jdsb-input:focus-visible { outline: var(--jdsb-size-focus) solid var(--jdsb-color-focus-ring); outline-offset: var(--jdsb-size-focus); }
 
-@media (prefers-reduced-motion: reduce) { .jds-input { transition: none; } }
-@media (forced-colors: active) { .jds-input { forced-color-adjust: auto; } }
+@media (prefers-reduced-motion: reduce) { .jdsb-input { transition: none; } }
+@media (forced-colors: active) { .jdsb-input { forced-color-adjust: auto; } }

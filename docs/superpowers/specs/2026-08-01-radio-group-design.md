@@ -1,10 +1,10 @@
-# JDS RadioGroup 설계
+# JDSB RadioGroup 설계
 
 ## 목적
 
-`@jds/components`에 하나의 값만 선택하는 토큰 기반 RadioGroup을 추가한다.
+`@jdsb/components`에 하나의 값만 선택하는 토큰 기반 RadioGroup을 추가한다.
 각 항목은 native `<input type="radio">`로 구현해 브라우저의 단일 선택, 화살표 키,
-Space, 폼 제출, constraint validation과 form reset을 보존한다. JDS는 controlled와
+Space, 폼 제출, constraint validation과 form reset을 보존한다. JDSB는 controlled와
 uncontrolled 값, Group 상태 전파, 일관된 상태 스타일만 담당한다.
 
 ## 범위
@@ -133,7 +133,7 @@ axe 오류 설정으로 검사한다.
 - Group 밖 Item 사용 시 명확한 오류를 냄
 
 구현 후 `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm lint`,
-`pnpm --filter @jds/storybook build`를 실행한다. Storybook에서 Tab/Shift+Tab, Space,
+`pnpm --filter @jdsb/storybook build`를 실행한다. Storybook에서 Tab/Shift+Tab, Space,
 좌우·상하 화살표, label click, form reset, 브라우저 확대, forced-colors를 수동 확인하고
 스크린리더로 Group 이름·선택 상태·disabled·invalid 전달을 확인한다.
 

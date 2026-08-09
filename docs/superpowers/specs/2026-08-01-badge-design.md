@@ -1,8 +1,8 @@
-# JDS Badge 설계
+# JDSB Badge 설계
 
 ## 목적
 
-`@jds/components`에 상태와 분류를 짧은 텍스트로 보조하는 token 기반 `Badge`를
+`@jdsb/components`에 상태와 분류를 짧은 텍스트로 보조하는 token 기반 `Badge`를
 추가한다. Badge는 독립적인 알림이나 동작이 아니라, 인접한 콘텐츠의 상태를 읽기
 쉽게 보강하는 비상호작용 표현 요소다.
 
@@ -59,7 +59,7 @@ export type BadgeProps = React.ComponentPropsWithoutRef<"span"> & {
 ## 토큰과 스타일
 
 기존 primitive와 action semantic 토큰을 참조하는 다음 Badge component token을
-`packages/tokens/src/jds.tokens.json`에 추가한다.
+`packages/tokens/src/jdsb.tokens.json`에 추가한다.
 
 - `color.badge.{neutral,info,success,warning,error}.{background,foreground,border}`
 - `space.badge.inline`, `space.badge.block`
@@ -89,7 +89,7 @@ Storybook은 neutral 기본값과 info, success, warning, error의 다섯 Story�
 - package entry의 `Badge`, `BadgeProps`, `BadgeVariant` export
 
 구현 후 `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm lint`,
-`pnpm --filter @jds/storybook build`를 실행한다. Storybook에서 200% 확대 및
+`pnpm --filter @jdsb/storybook build`를 실행한다. Storybook에서 200% 확대 및
 forced-colors를 수동 확인한다.
 
 ## 성공 기준

@@ -1,5 +1,5 @@
 {
-  "name": "@jds/storybook",
+  "name": "@jdsb/storybook",
   "private": true,
   "type": "module",
   "scripts": {

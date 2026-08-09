@@ -12,7 +12,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@jds/components"
+} from "@jdsb/components"
 
 const meta = {
   title: "Forms/Field",

@@ -1,28 +1,28 @@
-.jds-avatar {
+.jdsb-avatar {
   align-items: center;
-  background: var(--jds-color-avatar-background);
-  block-size: var(--jds-size-avatar-md);
-  border-radius: var(--jds-radius-avatar);
-  color: var(--jds-color-avatar-foreground);
+  background: var(--jdsb-color-avatar-background);
+  block-size: var(--jdsb-size-avatar-md);
+  border-radius: var(--jdsb-radius-avatar);
+  color: var(--jdsb-color-avatar-foreground);
   display: inline-flex;
   flex: none;
-  inline-size: var(--jds-size-avatar-md);
+  inline-size: var(--jdsb-size-avatar-md);
   justify-content: center;
   overflow: hidden;
 }
 
-.jds-avatar[data-size="sm"] { block-size: var(--jds-size-avatar-sm); inline-size: var(--jds-size-avatar-sm); }
-.jds-avatar[data-size="lg"] { block-size: var(--jds-size-avatar-lg); inline-size: var(--jds-size-avatar-lg); }
-.jds-avatar[data-size="xl"] { block-size: var(--jds-size-avatar-xl); inline-size: var(--jds-size-avatar-xl); }
+.jdsb-avatar[data-size="sm"] { block-size: var(--jdsb-size-avatar-sm); inline-size: var(--jdsb-size-avatar-sm); }
+.jdsb-avatar[data-size="lg"] { block-size: var(--jdsb-size-avatar-lg); inline-size: var(--jdsb-size-avatar-lg); }
+.jdsb-avatar[data-size="xl"] { block-size: var(--jdsb-size-avatar-xl); inline-size: var(--jdsb-size-avatar-xl); }
 
-.jds-avatar > img {
+.jdsb-avatar > img {
   block-size: 100%;
   inline-size: 100%;
   object-fit: cover;
 }
 
-.jds-avatar > span { font: inherit; }
+.jdsb-avatar > span { font: inherit; }
 
 @media (forced-colors: active) {
-  .jds-avatar { forced-color-adjust: auto; }
+  .jdsb-avatar { forced-color-adjust: auto; }
 }

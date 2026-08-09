@@ -12,36 +12,36 @@ export type FieldDescriptionProps = ComponentPropsWithoutRef<"div">
 export type FieldErrorProps = ComponentPropsWithoutRef<"div">
 
 export const Label = forwardRef<HTMLLabelElement, LabelProps>(function Label({ className, ...props }, ref) {
-  return <label {...props} ref={ref} className={["jds-label", className].filter(Boolean).join(" ")} />
+  return <label {...props} ref={ref} className={["jdsb-label", className].filter(Boolean).join(" ")} />
 })
 
 export const FieldGroup = forwardRef<HTMLDivElement, FieldGroupProps>(function FieldGroup({ className, ...props }, ref) {
-  return <div {...props} ref={ref} className={["jds-field-group", className].filter(Boolean).join(" ")} />
+  return <div {...props} ref={ref} className={["jdsb-field-group", className].filter(Boolean).join(" ")} />
 })
 
 export const Field = forwardRef<HTMLDivElement, FieldProps>(function Field(
   { className, orientation = "vertical", ...props },
   ref
 ) {
-  return <div {...props} ref={ref} className={["jds-field", className].filter(Boolean).join(" ")} data-orientation={orientation} />
+  return <div {...props} ref={ref} className={["jdsb-field", className].filter(Boolean).join(" ")} data-orientation={orientation} />
 })
 
 export const FieldContent = forwardRef<HTMLDivElement, FieldContentProps>(function FieldContent({ className, ...props }, ref) {
-  return <div {...props} ref={ref} className={["jds-field-content", className].filter(Boolean).join(" ")} />
+  return <div {...props} ref={ref} className={["jdsb-field-content", className].filter(Boolean).join(" ")} />
 })
 
 export const FieldLabel = forwardRef<HTMLLabelElement, FieldLabelProps>(function FieldLabel({ className, ...props }, ref) {
-  return <label {...props} ref={ref} className={["jds-field-label", className].filter(Boolean).join(" ")} />
+  return <label {...props} ref={ref} className={["jdsb-field-label", className].filter(Boolean).join(" ")} />
 })
 
 export const FieldTitle = forwardRef<HTMLDivElement, FieldTitleProps>(function FieldTitle({ className, ...props }, ref) {
-  return <div {...props} ref={ref} className={["jds-field-title", className].filter(Boolean).join(" ")} />
+  return <div {...props} ref={ref} className={["jdsb-field-title", className].filter(Boolean).join(" ")} />
 })
 
 export const FieldDescription = forwardRef<HTMLDivElement, FieldDescriptionProps>(function FieldDescription({ className, ...props }, ref) {
-  return <div {...props} ref={ref} className={["jds-field-description", className].filter(Boolean).join(" ")} />
+  return <div {...props} ref={ref} className={["jdsb-field-description", className].filter(Boolean).join(" ")} />
 })
 
 export const FieldError = forwardRef<HTMLDivElement, FieldErrorProps>(function FieldError({ className, ...props }, ref) {
-  return <div {...props} ref={ref} className={["jds-field-error", className].filter(Boolean).join(" ")} />
+  return <div {...props} ref={ref} className={["jdsb-field-error", className].filter(Boolean).join(" ")} />
 })

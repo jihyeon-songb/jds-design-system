@@ -1,8 +1,8 @@
-# JDS Select 설계
+# JDSB Select 설계
 
 ## 목적
 
-`@jds/components`에 접근 가능한 단일 선택 복합 Select를 추가한다. 이
+`@jdsb/components`에 접근 가능한 단일 선택 복합 Select를 추가한다. 이
 컴포넌트는 native `<select>`가 아닌 WAI-ARIA select-only combobox 패턴을
 구현하며, 옵션 안의 조합 가능한 콘텐츠와 그룹을 지원한다.
 
@@ -138,7 +138,7 @@ absolute 배치하며 Trigger와 같은 너비를 사용한다. 별도 그림자
 
 기본 chevron은 inline SVG로 렌더링하고 `aria-hidden="true"` 및
 `focusable="false"`를 설정한다. CSS의 모든 색상·간격·크기·테두리·반경은
-`--jds-*` 토큰만 사용한다. forced-colors에서는 시스템 색을 허용하고,
+`--jdsb-*` 토큰만 사용한다. forced-colors에서는 시스템 색을 허용하고,
 prefers-reduced-motion에서는 전환을 적용하지 않는다.
 
 ## 검증

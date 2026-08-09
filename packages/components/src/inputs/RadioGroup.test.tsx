@@ -55,7 +55,7 @@ describe("RadioGroup", () => {
     )
 
     const group = screen.getByRole("radiogroup", { name: "배송 방식" })
-    expect(group).toHaveClass("jds-radio-group", "custom-group")
+    expect(group).toHaveClass("jdsb-radio-group", "custom-group")
     expect(group).toHaveAttribute("data-orientation", "horizontal")
   })
 

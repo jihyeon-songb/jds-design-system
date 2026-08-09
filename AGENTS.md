@@ -1,8 +1,8 @@
-# JDS 저장소 규칙
+# JDSB 저장소 규칙
 
 ## 프로젝트 개요
 
-JDS는 npm으로 배포하는 React 디자인 시스템이다. `@jds/tokens`는 CSS·JavaScript·TypeScript 토큰을 제공하고, `@jds/components`는 토큰 기반의 접근 가능한 UI 컴포넌트를 제공한다. Storybook은 컴포넌트 문서와 검증을 담당하며 배포 패키지에는 포함하지 않는다.
+JDSB는 npm으로 배포하는 React 디자인 시스템이다. `@jdsb/tokens`는 CSS·JavaScript·TypeScript 토큰을 제공하고, `@jdsb/components`는 토큰 기반의 접근 가능한 UI 컴포넌트를 제공한다. Storybook은 컴포넌트 문서와 검증을 담당하며 배포 패키지에는 포함하지 않는다.
 
 ## 개발
 
@@ -56,7 +56,7 @@ pnpm lint
 - 새 의존성은 필요성을 확인한 뒤에만 추가하고, 최소 권한과 최신 보안 패치를 유지한다.
 - 공개 컴포넌트는 전달받은 HTML 속성과 이벤트가 의도치 않게 위험한 동작을 만들지 않는지 검토한다.
 
-자세한 설계와 검증 기준은 `docs/superpowers/specs/2026-07-28-jds-design-system-design.md`를 따른다.
+자세한 설계와 검증 기준은 `docs/superpowers/specs/2026-07-28-jdsb-design-system-design.md`를 따른다.
 
 ## Git Flow 브랜치 규칙
 

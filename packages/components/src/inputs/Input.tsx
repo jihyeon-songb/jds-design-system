@@ -17,7 +17,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     <input
       {...props}
       ref={ref}
-      className={["jds-input", className].filter(Boolean).join(" ")}
+      className={["jdsb-input", className].filter(Boolean).join(" ")}
       disabled={disabled}
       readOnly={readOnly}
       aria-invalid={invalid ? true : ariaInvalid}

@@ -1,11 +1,11 @@
-# JDS Switch 설계
+# JDSB Switch 설계
 
 ## 목적
 
-`@jds/components`에 boolean 값을 전환하는 토큰 기반 `Switch`를 추가한다.
+`@jdsb/components`에 boolean 값을 전환하는 토큰 기반 `Switch`를 추가한다.
 native `<input type="checkbox">`를 유지하고 `role="switch"`를 추가해, 브라우저의
 폼 제출, constraint validation, form reset, label click, Tab과 Space 동작을 보존한다.
-JDS는 controlled·uncontrolled 상태, `data-state`, 크기와 토큰 기반 시각 표현만 담당한다.
+JDSB는 controlled·uncontrolled 상태, `data-state`, 크기와 토큰 기반 시각 표현만 담당한다.
 
 ## 범위
 
@@ -108,7 +108,7 @@ Storybook은 기본, 각 크기, checked, controlled, disabled, invalid, require
 - disabled 제출 제외와 상태 우선순위, required, invalid ARIA, 모든 size attribute
 
 구현 후 `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm lint`,
-`pnpm --filter @jds/storybook build`를 실행한다. Storybook에서 Tab/Shift+Tab, Space,
+`pnpm --filter @jdsb/storybook build`를 실행한다. Storybook에서 Tab/Shift+Tab, Space,
 label click, form reset, 브라우저 확대, forced-colors를 수동 확인하고, 스크린리더로
 이름·switch 상태·disabled·invalid를 확인한다.
 

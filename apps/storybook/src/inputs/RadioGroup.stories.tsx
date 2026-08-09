@@ -8,7 +8,7 @@ import {
   FieldLabel,
   RadioGroup,
   RadioGroupItem,
-} from "@jds/components"
+} from "@jdsb/components"
 
 const deliveryOptions = (
   <>

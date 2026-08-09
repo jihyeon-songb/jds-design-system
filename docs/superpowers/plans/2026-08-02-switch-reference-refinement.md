@@ -23,14 +23,14 @@
 - Test: `packages/components/src/inputs/Switch.test.tsx`
 
 **Interfaces:**
-- Consumes: `.jds-switch::before`의 기존 track token.
+- Consumes: `.jdsb-switch::before`의 기존 track token.
 - Produces: 경계선 없이 `color.field.border`로 채워진 off track.
 
 - [ ] **Step 1: track 테두리를 제거한다**
 
 ```css
-.jds-switch::before {
-  background: var(--jds-color-field-border);
+.jdsb-switch::before {
+  background: var(--jdsb-color-field-border);
   border: none;
 }
 ```

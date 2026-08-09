@@ -1,52 +1,52 @@
-.jds-accordion {
-  border-block: var(--jds-size-border) solid var(--jds-color-field-border);
+.jdsb-accordion {
+  border-block: var(--jdsb-size-border) solid var(--jdsb-color-field-border);
 }
 
-.jds-accordion-item + .jds-accordion-item {
-  border-block-start: var(--jds-size-border) solid var(--jds-color-field-border);
+.jdsb-accordion-item + .jdsb-accordion-item {
+  border-block-start: var(--jdsb-size-border) solid var(--jdsb-color-field-border);
 }
 
-.jds-accordion-header {
+.jdsb-accordion-header {
   margin: 0;
 }
 
-.jds-accordion-trigger {
+.jdsb-accordion-trigger {
   align-items: center;
-  background: var(--jds-color-field-background);
+  background: var(--jdsb-color-field-background);
   border: 0;
-  color: var(--jds-color-field-foreground);
+  color: var(--jdsb-color-field-foreground);
   cursor: pointer;
   display: flex;
   font: inherit;
   justify-content: space-between;
-  min-block-size: var(--jds-size-alert-close);
-  padding: var(--jds-space-button-inline);
+  min-block-size: var(--jdsb-size-alert-close);
+  padding: var(--jdsb-space-button-inline);
   text-align: start;
   width: 100%;
 }
 
-.jds-accordion-trigger[data-state="open"] {
-  border-block-end: var(--jds-size-border) solid var(--jds-color-field-border);
+.jdsb-accordion-trigger[data-state="open"] {
+  border-block-end: var(--jdsb-size-border) solid var(--jdsb-color-field-border);
 }
 
-.jds-accordion-trigger:not(:disabled):hover {
-  background: var(--jds-color-action-ghost-hover);
+.jdsb-accordion-trigger:not(:disabled):hover {
+  background: var(--jdsb-color-action-ghost-hover);
 }
 
-.jds-accordion-trigger:disabled {
+.jdsb-accordion-trigger:disabled {
   cursor: not-allowed;
-  opacity: var(--jds-opacity-disabled);
+  opacity: var(--jdsb-opacity-disabled);
 }
 
-.jds-accordion-trigger:focus-visible {
-  outline: var(--jds-size-focus) solid var(--jds-color-focus-ring);
-  outline-offset: calc(var(--jds-size-focus) * -1);
+.jdsb-accordion-trigger:focus-visible {
+  outline: var(--jdsb-size-focus) solid var(--jdsb-color-focus-ring);
+  outline-offset: calc(var(--jdsb-size-focus) * -1);
 }
 
-.jds-accordion-content {
-  padding: var(--jds-space-field-item) var(--jds-space-button-inline);
+.jdsb-accordion-content {
+  padding: var(--jdsb-space-field-item) var(--jdsb-space-button-inline);
 }
 
 @media (forced-colors: active) {
-  .jds-accordion-trigger { forced-color-adjust: auto; }
+  .jdsb-accordion-trigger { forced-color-adjust: auto; }
 }

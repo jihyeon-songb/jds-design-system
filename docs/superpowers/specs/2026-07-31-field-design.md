@@ -1,4 +1,4 @@
-# JDS Field와 Label 설계
+# JDSB Field와 Label 설계
 
 ## 목적
 
@@ -93,7 +93,7 @@ focus와 checked의 시각 상태는 control CSS가 담당한다.
 - horizontal Checkbox, 설명 포함 Checkbox, disabled 문맥, 긴 텍스트 Story 및 axe 검사
 
 각 구현 뒤 `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm lint`,
-`pnpm --filter @jds/storybook build`를 실행한다. 키보드, 브라우저 확대, forced-colors에서
+`pnpm --filter @jdsb/storybook build`를 실행한다. 키보드, 브라우저 확대, forced-colors에서
 label 클릭과 설명·오류 읽기를 수동 확인한다.
 
 ## 범위 제외

@@ -1,44 +1,44 @@
-.jds-alert {
+.jdsb-alert {
   align-items: start;
-  background: var(--jds-color-alert-info-background);
-  border: var(--jds-size-border) solid var(--jds-color-alert-info-border);
-  border-radius: var(--jds-radius-control);
-  color: var(--jds-color-alert-info-foreground);
+  background: var(--jdsb-color-alert-info-background);
+  border: var(--jdsb-size-border) solid var(--jdsb-color-alert-info-border);
+  border-radius: var(--jdsb-radius-control);
+  color: var(--jdsb-color-alert-info-foreground);
   display: grid;
-  gap: var(--jds-space-alert-gap) var(--jds-space-alert-close-gap);
+  gap: var(--jdsb-space-alert-gap) var(--jdsb-space-alert-close-gap);
   grid-template-columns: minmax(0, 1fr) auto;
-  padding: var(--jds-space-alert-block) var(--jds-space-alert-inline);
+  padding: var(--jdsb-space-alert-block) var(--jdsb-space-alert-inline);
 }
 
-.jds-alert[data-variant="success"] {
-  background: var(--jds-color-alert-success-background);
-  border-color: var(--jds-color-alert-success-border);
-  color: var(--jds-color-alert-success-foreground);
+.jdsb-alert[data-variant="success"] {
+  background: var(--jdsb-color-alert-success-background);
+  border-color: var(--jdsb-color-alert-success-border);
+  color: var(--jdsb-color-alert-success-foreground);
 }
 
-.jds-alert[data-variant="warning"] {
-  background: var(--jds-color-alert-warning-background);
-  border-color: var(--jds-color-alert-warning-border);
-  color: var(--jds-color-alert-warning-foreground);
+.jdsb-alert[data-variant="warning"] {
+  background: var(--jdsb-color-alert-warning-background);
+  border-color: var(--jdsb-color-alert-warning-border);
+  color: var(--jdsb-color-alert-warning-foreground);
 }
 
-.jds-alert[data-variant="error"] {
-  background: var(--jds-color-alert-error-background);
-  border-color: var(--jds-color-alert-error-border);
-  color: var(--jds-color-alert-error-foreground);
+.jdsb-alert[data-variant="error"] {
+  background: var(--jdsb-color-alert-error-background);
+  border-color: var(--jdsb-color-alert-error-border);
+  color: var(--jdsb-color-alert-error-foreground);
 }
 
-.jds-alert [data-slot="title"],
-.jds-alert [data-slot="description"] {
+.jdsb-alert [data-slot="title"],
+.jdsb-alert [data-slot="description"] {
   grid-column: 1;
 }
 
-.jds-alert [data-slot="close"] {
+.jdsb-alert [data-slot="close"] {
   align-self: start;
   background: inherit;
-  block-size: var(--jds-size-control-alert-close);
-  border: var(--jds-size-border) solid currentColor;
-  border-radius: var(--jds-radius-control);
+  block-size: var(--jdsb-size-control-alert-close);
+  border: var(--jdsb-size-border) solid currentColor;
+  border-radius: var(--jdsb-radius-control);
   box-sizing: border-box;
   color: inherit;
   cursor: pointer;
@@ -46,18 +46,18 @@
   font: inherit;
   grid-column: 2;
   grid-row: 1;
-  inline-size: var(--jds-size-control-alert-close);
+  inline-size: var(--jdsb-size-control-alert-close);
   place-items: center;
 }
 
-.jds-alert [data-slot="close"]:focus-visible {
-  outline: var(--jds-size-focus) solid var(--jds-color-focus-ring);
-  outline-offset: var(--jds-size-focus);
+.jdsb-alert [data-slot="close"]:focus-visible {
+  outline: var(--jdsb-size-focus) solid var(--jdsb-color-focus-ring);
+  outline-offset: var(--jdsb-size-focus);
 }
 
 @media (forced-colors: active) {
-  .jds-alert,
-  .jds-alert [data-slot="close"] {
+  .jdsb-alert,
+  .jdsb-alert [data-slot="close"] {
     forced-color-adjust: auto;
   }
 }
