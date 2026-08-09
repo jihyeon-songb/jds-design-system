@@ -1,7 +1,24 @@
 import { createRef } from "react"
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react"
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
-import { Tooltip, TooltipContent, TooltipTrigger } from "./Tooltip.js"
+import { afterEach, beforeEach, describe, expect, expectTypeOf, it, vi } from "vitest"
+import {
+  Tooltip as PublicTooltip,
+  TooltipContent as PublicTooltipContent,
+  TooltipTrigger as PublicTooltipTrigger,
+  type TooltipContentProps as PublicTooltipContentProps,
+  type TooltipProps as PublicTooltipProps,
+  type TooltipSide as PublicTooltipSide,
+  type TooltipTriggerProps as PublicTooltipTriggerProps,
+} from "../index.js"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  type TooltipContentProps,
+  type TooltipProps,
+  type TooltipSide,
+  type TooltipTriggerProps,
+} from "./Tooltip.js"
 
 beforeEach(() => vi.useFakeTimers())
 afterEach(() => {
@@ -10,6 +27,16 @@ afterEach(() => {
 })
 
 describe("Tooltip", () => {
+  it("exports the Tooltip API from the package entry", () => {
+    expect(PublicTooltip).toBe(Tooltip)
+    expect(PublicTooltipTrigger).toBe(TooltipTrigger)
+    expect(PublicTooltipContent).toBe(TooltipContent)
+    expectTypeOf<PublicTooltipProps>().toEqualTypeOf<TooltipProps>()
+    expectTypeOf<PublicTooltipTriggerProps>().toEqualTypeOf<TooltipTriggerProps>()
+    expectTypeOf<PublicTooltipContentProps>().toEqualTypeOf<TooltipContentProps>()
+    expectTypeOf<PublicTooltipSide>().toEqualTypeOf<TooltipSide>()
+  })
+
   it("opens 300ms after focus and closes immediately on blur", () => {
     render(
       <Tooltip>

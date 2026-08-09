@@ -1,0 +1,39 @@
+.jdsb-tooltip {
+  display: inline-flex;
+  position: relative;
+}
+
+.jdsb-tooltip-content {
+  background: var(--jdsb-color-action-primary-background);
+  border-radius: var(--jdsb-radius-control);
+  color: var(--jdsb-color-action-primary-foreground);
+  padding-block: var(--jdsb-space-field-content);
+  padding-inline: var(--jdsb-space-button-inline);
+  position: absolute;
+}
+
+.jdsb-tooltip-content[data-side="top"] {
+  inset-block-end: calc(100% + var(--jdsb-space-field-content));
+  inset-inline-start: 0;
+}
+
+.jdsb-tooltip-content[data-side="bottom"] {
+  inset-block-start: calc(100% + var(--jdsb-space-field-content));
+  inset-inline-start: 0;
+}
+
+.jdsb-tooltip-content[data-side="left"] {
+  inset-block-start: 0;
+  inset-inline-end: calc(100% + var(--jdsb-space-field-content));
+}
+
+.jdsb-tooltip-content[data-side="right"] {
+  inset-block-start: 0;
+  inset-inline-start: calc(100% + var(--jdsb-space-field-content));
+}
+
+@media (forced-colors: active) {
+  .jdsb-tooltip-content {
+    forced-color-adjust: auto;
+  }
+}
