@@ -103,3 +103,12 @@ export {
   type DrawerTitleProps,
   type DrawerTriggerProps,
 } from "./overlays/Drawer.js"
+export {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  type TooltipContentProps,
+  type TooltipProps,
+  type TooltipSide,
+  type TooltipTriggerProps,
+} from "./overlays/Tooltip.js"

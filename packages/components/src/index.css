@@ -14,6 +14,7 @@
 @import "./navigation/Tabs.css";
 @import "./overlays/Dialog.css";
 @import "./overlays/Drawer.css";
+@import "./overlays/Tooltip.css";
 
 [class^="jdsb-"],
 [class*=" jdsb-"] {
