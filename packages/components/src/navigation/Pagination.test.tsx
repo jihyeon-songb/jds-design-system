@@ -32,7 +32,7 @@ describe("Pagination", () => {
   it("marks boundary controls and preserves native keyboard activation", async () => {
     const user = userEvent.setup()
     const changed = vi.fn()
-    render(<Pagination aria-label="검색 결과" defaultPage={1} totalPages={3} onPageChange={changed} />)
+    const { unmount } = render(<Pagination aria-label="검색 결과" defaultPage={1} totalPages={3} onPageChange={changed} />)
 
     expect(screen.getByRole("button", { name: "이전 페이지" })).toHaveAttribute("data-direction", "previous")
     expect(screen.getByRole("button", { name: "이전 페이지" })).toHaveAttribute("data-state", "disabled")
@@ -48,6 +48,12 @@ describe("Pagination", () => {
 
     expect(changed).toHaveBeenNthCalledWith(1, 2)
     expect(changed).toHaveBeenNthCalledWith(2, 3)
+
+    unmount()
+    render(<Pagination aria-label="검색 결과" defaultPage={3} totalPages={3} />)
+    expect(screen.getByRole("button", { name: "이전 페이지" })).toHaveAttribute("data-state", "enabled")
+    expect(screen.getByRole("button", { name: "다음 페이지" })).toBeDisabled()
+    expect(screen.getByRole("button", { name: "다음 페이지" })).toHaveAttribute("data-state", "disabled")
   })
 
   it("renders the fixed seven-page window at beginning, middle, and end boundaries", () => {
