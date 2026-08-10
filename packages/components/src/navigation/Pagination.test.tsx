@@ -1,12 +1,21 @@
 import { createRef } from "react"
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { userEvent } from "@testing-library/user-event"
-import { afterEach, describe, expect, it, vi } from "vitest"
-import { Pagination } from "./Pagination.js"
+import { afterEach, describe, expect, expectTypeOf, it, vi } from "vitest"
+import { Pagination as PublicPagination, type PaginationProps as PublicPaginationProps } from "../index.js"
+import { Pagination, type PaginationProps } from "./Pagination.js"
 
 afterEach(cleanup)
 
 describe("Pagination", () => {
+  it("exports the public component and permits localized control names", () => {
+    expect(PublicPagination).toBe(Pagination)
+    expectTypeOf<PublicPaginationProps>().toEqualTypeOf<PaginationProps>()
+    render(<Pagination aria-label="Results" defaultPage={1} totalPages={2} previousLabel="Previous" nextLabel="Next" getPageLabel={(page) => `Page ${page}`} />)
+    expect(screen.getByRole("button", { name: "Next" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Page 1" })).toHaveAttribute("aria-current", "page")
+  })
+
   it("renders a named native navigation landmark and forwards its ref", () => {
     const ref = createRef<HTMLElement>()
     render(<Pagination ref={ref} aria-label="검색 결과" defaultPage={2} totalPages={3} className="custom" />)
