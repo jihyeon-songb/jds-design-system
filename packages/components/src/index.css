@@ -11,6 +11,7 @@
 @import "./inputs/Switch.css";
 @import "./inputs/Textarea.css";
 @import "./navigation/Accordion.css";
+@import "./navigation/Pagination.css";
 @import "./navigation/Tabs.css";
 @import "./overlays/Dialog.css";
 @import "./overlays/Drawer.css";

@@ -70,6 +70,7 @@ export {
   type TabsProps,
   type TabsTriggerProps,
 } from "./navigation/Tabs.js"
+export { Pagination, type PaginationProps } from "./navigation/Pagination.js"
 export {
   Dialog,
   DialogClose,

@@ -1,0 +1,136 @@
+import { createRef } from "react"
+import { cleanup, fireEvent, render, screen } from "@testing-library/react"
+import { userEvent } from "@testing-library/user-event"
+import { afterEach, describe, expect, expectTypeOf, it, vi } from "vitest"
+import { Pagination as PublicPagination, type PaginationProps as PublicPaginationProps } from "../index.js"
+import { Pagination, type PaginationProps } from "./Pagination.js"
+
+afterEach(cleanup)
+
+describe("Pagination", () => {
+  it("exports the public component and permits localized control names", () => {
+    expect(PublicPagination).toBe(Pagination)
+    expectTypeOf<PublicPaginationProps>().toEqualTypeOf<PaginationProps>()
+    render(<Pagination aria-label="Results" defaultPage={1} totalPages={2} previousLabel="Previous" nextLabel="Next" getPageLabel={(page) => `Page ${page}`} />)
+    expect(screen.getByRole("button", { name: "Next" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Page 1" })).toHaveAttribute("aria-current", "page")
+  })
+
+  it("renders a named native navigation landmark and forwards its ref", () => {
+    const ref = createRef<HTMLElement>()
+    render(<Pagination ref={ref} aria-label="검색 결과" defaultPage={2} totalPages={3} className="custom" />)
+    expect(ref.current).toHaveClass("jdsb-pagination", "custom")
+    expect(screen.getByRole("navigation", { name: "검색 결과" })).toBe(ref.current)
+    expect(screen.getByRole("button", { name: "2 페이지, 현재 페이지" })).toHaveAttribute("aria-current", "page")
+  })
+
+  it("updates an uncontrolled page once and only notifies controlled selection", async () => {
+    const user = userEvent.setup()
+    const changed = vi.fn()
+    const { rerender } = render(<Pagination aria-label="검색 결과" defaultPage={1} totalPages={3} onPageChange={changed} />)
+    await user.click(screen.getByRole("button", { name: "2 페이지" }))
+    await user.click(screen.getByRole("button", { name: "2 페이지, 현재 페이지" }))
+    expect(changed).toHaveBeenCalledTimes(1)
+    expect(changed).toHaveBeenLastCalledWith(2)
+    rerender(<Pagination aria-label="검색 결과" page={1} totalPages={3} onPageChange={changed} />)
+    await user.click(screen.getByRole("button", { name: "다음 페이지" }))
+    expect(changed).toHaveBeenLastCalledWith(2)
+    expect(screen.getByRole("button", { name: "1 페이지, 현재 페이지" })).toBeInTheDocument()
+  })
+
+  it("keeps an uncontrolled page within a reduced total", () => {
+    const { rerender } = render(
+      <Pagination aria-label="검색 결과" defaultPage={6} totalPages={8} />
+    )
+
+    rerender(<Pagination aria-label="검색 결과" defaultPage={6} totalPages={3} />)
+
+    expect(screen.getByRole("button", { name: "3 페이지, 현재 페이지" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "다음 페이지" })).toBeDisabled()
+
+    rerender(<Pagination aria-label="검색 결과" defaultPage={6} totalPages={8} />)
+    expect(screen.getByRole("button", { name: "3 페이지, 현재 페이지" })).toBeInTheDocument()
+  })
+
+  it("marks boundary controls and preserves native keyboard activation", async () => {
+    const user = userEvent.setup()
+    const changed = vi.fn()
+    const { unmount } = render(<Pagination aria-label="검색 결과" defaultPage={1} totalPages={3} onPageChange={changed} />)
+
+    expect(screen.getByRole("button", { name: "이전 페이지" })).toHaveAttribute("data-direction", "previous")
+    expect(screen.getByRole("button", { name: "이전 페이지" })).toHaveAttribute("data-state", "disabled")
+    expect(screen.getByRole("button", { name: "다음 페이지" })).toHaveAttribute("data-direction", "next")
+    expect(screen.getByRole("button", { name: "다음 페이지" })).toHaveAttribute("data-state", "enabled")
+    expect(screen.getByRole("button", { name: "1 페이지, 현재 페이지" })).toHaveAttribute("data-state", "current")
+    expect(screen.getByRole("button", { name: "2 페이지" })).toHaveAttribute("data-state", "idle")
+
+    screen.getByRole("button", { name: "다음 페이지" }).focus()
+    await user.keyboard("{Enter}")
+    screen.getByRole("button", { name: "3 페이지" }).focus()
+    await user.keyboard(" ")
+
+    expect(changed).toHaveBeenNthCalledWith(1, 2)
+    expect(changed).toHaveBeenNthCalledWith(2, 3)
+
+    unmount()
+    render(<Pagination aria-label="검색 결과" defaultPage={3} totalPages={3} />)
+    expect(screen.getByRole("button", { name: "이전 페이지" })).toHaveAttribute("data-state", "enabled")
+    expect(screen.getByRole("button", { name: "다음 페이지" })).toBeDisabled()
+    expect(screen.getByRole("button", { name: "다음 페이지" })).toHaveAttribute("data-state", "disabled")
+  })
+
+  it("renders the fixed seven-page window at beginning, middle, and end boundaries", () => {
+    const cases = [
+      { defaultPage: 4, pages: [1, 2, 3, 4, 5, 10], ellipses: 1 },
+      { defaultPage: 5, pages: [1, 4, 5, 6, 10], ellipses: 2 },
+      { defaultPage: 7, pages: [1, 6, 7, 8, 9, 10], ellipses: 1 },
+    ]
+
+    for (const { defaultPage, pages, ellipses } of cases) {
+      const { container, unmount } = render(
+        <Pagination aria-label="검색 결과" defaultPage={defaultPage} totalPages={10} />
+      )
+      expect(screen.getAllByRole("button", { name: /페이지/ }).filter((button) =>
+        button.classList.contains("jdsb-pagination-page")
+      ).map((button) => Number(button.textContent))).toEqual(pages)
+      expect(container.querySelectorAll('span[aria-hidden="true"]')).toHaveLength(ellipses)
+      unmount()
+    }
+  })
+
+  it.each([
+    { totalPages: 7, pages: [1, 2, 3, 4, 5, 6, 7], ellipses: 0 },
+    { totalPages: 8, pages: [1, 2, 3, 4, 5, 8], ellipses: 1 },
+  ])("renders the $totalPages-page threshold", ({ totalPages, pages, ellipses }) => {
+    const { container } = render(
+      <Pagination aria-label="검색 결과" defaultPage={4} totalPages={totalPages} />
+    )
+
+    expect(container.querySelectorAll(".jdsb-pagination-page")).toHaveLength(pages.length)
+    expect(Array.from(container.querySelectorAll(".jdsb-pagination-page"), (button) => Number(button.textContent))).toEqual(pages)
+    expect(container.querySelectorAll('span[aria-hidden="true"]')).toHaveLength(ellipses)
+  })
+
+  it("keeps ellipses inert", () => {
+    const changed = vi.fn()
+    const { container } = render(
+      <Pagination aria-label="검색 결과" defaultPage={5} totalPages={10} onPageChange={changed} />
+    )
+
+    for (const ellipsis of container.querySelectorAll('span[aria-hidden="true"]')) fireEvent.click(ellipsis)
+
+    expect(changed).not.toHaveBeenCalled()
+    expect(screen.getByRole("button", { name: "5 페이지, 현재 페이지" })).toBeInTheDocument()
+  })
+
+  it.each([
+    ["totalPages", <Pagination aria-label="검색 결과" defaultPage={1} totalPages={0} />],
+    ["fractional totalPages", <Pagination aria-label="검색 결과" defaultPage={1} totalPages={2.5} />],
+    ["page", <Pagination aria-label="검색 결과" page={4} totalPages={3} />],
+    ["fractional page", <Pagination aria-label="검색 결과" page={1.5} totalPages={3} />],
+    ["defaultPage", <Pagination aria-label="검색 결과" defaultPage={0} totalPages={3} />],
+    ["fractional defaultPage", <Pagination aria-label="검색 결과" defaultPage={1.5} totalPages={3} />],
+  ])("rejects an invalid %s", (_, element) => {
+    expect(() => render(element)).toThrow(RangeError)
+  })
+})
