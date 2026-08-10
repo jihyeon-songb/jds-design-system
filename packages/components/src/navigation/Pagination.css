@@ -1,5 +1,6 @@
 .jdsb-pagination > ul {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--jdsb-space-button-gap);
   list-style: none;
   margin: 0;
@@ -39,5 +40,12 @@
   .jdsb-pagination-page,
   .jdsb-pagination-control {
     forced-color-adjust: auto;
+  }
+
+  .jdsb-pagination-page[data-state="current"] {
+    background: Highlight;
+    border-color: Highlight;
+    color: HighlightText;
+    text-decoration: underline;
   }
 }

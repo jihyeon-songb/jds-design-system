@@ -38,6 +38,20 @@ describe("Pagination", () => {
     expect(screen.getByRole("button", { name: "1 페이지, 현재 페이지" })).toBeInTheDocument()
   })
 
+  it("keeps an uncontrolled page within a reduced total", () => {
+    const { rerender } = render(
+      <Pagination aria-label="검색 결과" defaultPage={6} totalPages={8} />
+    )
+
+    rerender(<Pagination aria-label="검색 결과" defaultPage={6} totalPages={3} />)
+
+    expect(screen.getByRole("button", { name: "3 페이지, 현재 페이지" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "다음 페이지" })).toBeDisabled()
+
+    rerender(<Pagination aria-label="검색 결과" defaultPage={6} totalPages={8} />)
+    expect(screen.getByRole("button", { name: "3 페이지, 현재 페이지" })).toBeInTheDocument()
+  })
+
   it("marks boundary controls and preserves native keyboard activation", async () => {
     const user = userEvent.setup()
     const changed = vi.fn()
@@ -84,6 +98,19 @@ describe("Pagination", () => {
     }
   })
 
+  it.each([
+    { totalPages: 7, pages: [1, 2, 3, 4, 5, 6, 7], ellipses: 0 },
+    { totalPages: 8, pages: [1, 2, 3, 4, 5, 8], ellipses: 1 },
+  ])("renders the $totalPages-page threshold", ({ totalPages, pages, ellipses }) => {
+    const { container } = render(
+      <Pagination aria-label="검색 결과" defaultPage={4} totalPages={totalPages} />
+    )
+
+    expect(container.querySelectorAll(".jdsb-pagination-page")).toHaveLength(pages.length)
+    expect(Array.from(container.querySelectorAll(".jdsb-pagination-page"), (button) => Number(button.textContent))).toEqual(pages)
+    expect(container.querySelectorAll('span[aria-hidden="true"]')).toHaveLength(ellipses)
+  })
+
   it("keeps ellipses inert", () => {
     const changed = vi.fn()
     const { container } = render(
@@ -98,8 +125,11 @@ describe("Pagination", () => {
 
   it.each([
     ["totalPages", <Pagination aria-label="검색 결과" defaultPage={1} totalPages={0} />],
+    ["fractional totalPages", <Pagination aria-label="검색 결과" defaultPage={1} totalPages={2.5} />],
     ["page", <Pagination aria-label="검색 결과" page={4} totalPages={3} />],
+    ["fractional page", <Pagination aria-label="검색 결과" page={1.5} totalPages={3} />],
     ["defaultPage", <Pagination aria-label="검색 결과" defaultPage={0} totalPages={3} />],
+    ["fractional defaultPage", <Pagination aria-label="검색 결과" defaultPage={1.5} totalPages={3} />],
   ])("rejects an invalid %s", (_, element) => {
     expect(() => render(element)).toThrow(RangeError)
   })

@@ -53,9 +53,13 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(function Pagi
   forwardedRef
 ) {
   assertPage(totalPages, "totalPages")
-  assertPage(page ?? defaultPage!, page === undefined ? "defaultPage" : "page", totalPages)
-  const [uncontrolledPage, setUncontrolledPage] = useState(defaultPage)
-  const selectedPage = page ?? uncontrolledPage!
+  if (page !== undefined) assertPage(page, "page", totalPages)
+  const [uncontrolledPage, setUncontrolledPage] = useState(() => {
+    if (page === undefined) assertPage(defaultPage!, "defaultPage", totalPages)
+    return defaultPage
+  })
+  const selectedPage = page ?? Math.min(uncontrolledPage!, totalPages)
+  if (page === undefined && uncontrolledPage !== selectedPage) setUncontrolledPage(selectedPage)
 
   function requestPage(nextPage: number): void {
     if (nextPage === selectedPage) return

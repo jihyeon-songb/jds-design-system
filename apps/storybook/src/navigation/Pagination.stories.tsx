@@ -29,6 +29,14 @@ export const Controlled: Story = { render: () => <ControlledPagination /> }
 export const FirstPage: Story = { args: { defaultPage: 1, totalPages: 5 } }
 export const LastPage: Story = { args: { defaultPage: 5, totalPages: 5 } }
 export const Ellipsis: Story = { args: { defaultPage: 5, totalPages: 10 } }
+export const NarrowEllipsis: Story = {
+  render: (args) => <div style={{ inlineSize: 320, maxInlineSize: "100%" }}><Pagination {...args} /></div>,
+  args: { defaultPage: 5, totalPages: 10 },
+  play: async ({ canvasElement }) => {
+    const navigation = within(canvasElement).getByRole("navigation")
+    expect(navigation.scrollWidth).toBeLessThanOrEqual(navigation.clientWidth)
+  },
+}
 export const LocalizedLabels: Story = {
   args: {
     "aria-label": "Search results pagination with localized control names",
