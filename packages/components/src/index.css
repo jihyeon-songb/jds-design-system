@@ -1,5 +1,6 @@
 @import "./actions/Button.css";
 @import "./feedback/Alert.css";
+@import "./feedback/Toast.css";
 @import "./feedback/Avatar.css";
 @import "./feedback/Badge.css";
 @import "./actions/IconButton.css";

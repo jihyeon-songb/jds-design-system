@@ -76,6 +76,10 @@ function SaveButton() {
 `Toast`는 목록 표시를 위한 저수준 공개 컴포넌트다. 일반 소비자는 Provider API를
 사용하며, 직접 렌더링할 때는 `variant`, `message`, `onDismiss`를 모두 제공한다.
 
+`ToastProvider`는 children과 Toast viewport를 포함하는 일반 `<div>` wrapper를
+렌더링한다. Provider의 native props와 ref는 wrapper로 전달되고, 고정 위치·live region
+semantic은 children의 layout에 영향을 주지 않도록 내부 viewport에만 적용한다.
+
 ## 상태와 상호작용
 
 `ToastProvider`는 생성 순서대로 Toast 목록을 소유하고, 현재 목록의 끝에 새 Toast를
@@ -95,7 +99,7 @@ interactive descendant를 넣지 않으며, 사용자가 응답해야 하는 작
 
 ## 접근성
 
-Provider의 Toast viewport는 `role="region"`과 `aria-label="알림"`을 가진다. 각
+Provider가 렌더링하는 Toast viewport는 `role="region"`과 `aria-label="알림"`을 가진다. 각
 Toast는 `role="status"`와 `aria-live="polite"`를 사용한다. 오류도 사용자의 현재
 입력을 끊지 않도록 첫 릴리스에서는 assertive announcement를 사용하지 않는다.
 

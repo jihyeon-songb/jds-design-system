@@ -1,0 +1,70 @@
+.jdsb-toast-viewport {
+  display: grid;
+  gap: var(--jdsb-space-field-content);
+  inset-block-end: var(--jdsb-space-field-group);
+  inset-inline: 0;
+  justify-items: center;
+  position: fixed;
+}
+
+.jdsb-toast {
+  align-items: start;
+  background: var(--jdsb-color-alert-info-background);
+  border: var(--jdsb-size-border) solid var(--jdsb-color-alert-info-border);
+  border-radius: var(--jdsb-radius-control);
+  color: var(--jdsb-color-alert-info-foreground);
+  display: grid;
+  gap: var(--jdsb-space-alert-gap) var(--jdsb-space-alert-close-gap);
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: var(--jdsb-space-alert-block) var(--jdsb-space-alert-inline);
+}
+
+.jdsb-toast[data-variant="success"] {
+  background: var(--jdsb-color-alert-success-background);
+  border-color: var(--jdsb-color-alert-success-border);
+  color: var(--jdsb-color-alert-success-foreground);
+}
+
+.jdsb-toast[data-variant="warning"] {
+  background: var(--jdsb-color-alert-warning-background);
+  border-color: var(--jdsb-color-alert-warning-border);
+  color: var(--jdsb-color-alert-warning-foreground);
+}
+
+.jdsb-toast[data-variant="error"] {
+  background: var(--jdsb-color-alert-error-background);
+  border-color: var(--jdsb-color-alert-error-border);
+  color: var(--jdsb-color-alert-error-foreground);
+}
+
+.jdsb-toast [data-slot="message"] {
+  grid-column: 1;
+}
+
+.jdsb-toast [data-slot="close"] {
+  align-self: start;
+  background: inherit;
+  block-size: var(--jdsb-size-control-alert-close);
+  border: var(--jdsb-size-border) solid currentColor;
+  border-radius: var(--jdsb-radius-control);
+  box-sizing: border-box;
+  color: inherit;
+  cursor: pointer;
+  display: inline-grid;
+  font: inherit;
+  grid-column: 2;
+  inline-size: var(--jdsb-size-control-alert-close);
+  place-items: center;
+}
+
+.jdsb-toast [data-slot="close"]:focus-visible {
+  outline: var(--jdsb-size-focus) solid var(--jdsb-color-focus-ring);
+  outline-offset: var(--jdsb-size-focus);
+}
+
+@media (forced-colors: active) {
+  .jdsb-toast,
+  .jdsb-toast [data-slot="close"] {
+    forced-color-adjust: auto;
+  }
+}

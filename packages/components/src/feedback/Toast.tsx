@@ -138,14 +138,14 @@ export const ToastProvider = forwardRef<HTMLDivElement, ToastProviderProps>(func
       <div
         {...props}
         ref={ref}
-        aria-label="알림"
-        className={["jdsb-toast-viewport", className].filter(Boolean).join(" ")}
-        role="region"
+        className={["jdsb-toast-provider", className].filter(Boolean).join(" ")}
       >
         {children}
-        {records.map((record) => (
-          <Toast key={record.id} message={record.message} onDismiss={() => dismiss(record.id)} variant={record.variant} />
-        ))}
+        <div aria-label="알림" className="jdsb-toast-viewport" role="region">
+          {records.map((record) => (
+            <Toast key={record.id} message={record.message} onDismiss={() => dismiss(record.id)} variant={record.variant} />
+          ))}
+        </div>
       </div>
     </ToastContext.Provider>
   )

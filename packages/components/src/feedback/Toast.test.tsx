@@ -1,7 +1,13 @@
 import { createRef, useRef } from "react"
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { userEvent } from "@testing-library/user-event"
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { afterEach, beforeEach, describe, expect, expectTypeOf, it, vi } from "vitest"
+import {
+  Toast as PublicToast,
+  ToastProvider as PublicToastProvider,
+  useToast as publicUseToast,
+  type ToastApi as PublicToastApi,
+} from "../index.js"
 import { Toast, ToastProvider, useToast } from "./Toast.js"
 
 beforeEach(() => vi.useFakeTimers())
@@ -41,6 +47,13 @@ function DismissControl() {
 }
 
 describe("ToastProvider", () => {
+  it("exports Toast API from the package entry", () => {
+    expect(PublicToast).toBe(Toast)
+    expect(PublicToastProvider).toBe(ToastProvider)
+    expect(publicUseToast).toBe(useToast)
+    expectTypeOf<PublicToastApi>().toEqualTypeOf<import("./Toast.js").ToastApi>()
+  })
+
   it("shows a success toast and removes it after five seconds", () => {
     render(
       <ToastProvider>
