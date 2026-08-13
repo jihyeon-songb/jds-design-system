@@ -1,6 +1,7 @@
 import { createRef } from "react"
 import { cleanup, render, screen } from "@testing-library/react"
 import { afterEach, describe, expect, it } from "vitest"
+import { Card as PublicCard, type CardProps as PublicCardProps } from "../index.js"
 import {
   Card,
   CardContent,
@@ -13,6 +14,14 @@ import {
 afterEach(cleanup)
 
 describe("Card", () => {
+  it("exports Card and its props from the package entry", () => {
+    const props: PublicCardProps = { children: "사용량" }
+    render(<PublicCard {...props} />)
+
+    expect(PublicCard).toBe(Card)
+    expect(screen.getByText("사용량")).toHaveClass("jdsb-card")
+  })
+
   it("forwards Card div props and its ref", () => {
     const ref = createRef<HTMLDivElement>()
     render(<Card aria-label="월간 사용량" className="consumer-card" id="usage" ref={ref} />)
