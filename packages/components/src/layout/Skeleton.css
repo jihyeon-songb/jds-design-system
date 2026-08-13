@@ -1,0 +1,11 @@
+.jdsb-skeleton {
+  background: var(--jdsb-color-skeleton-background);
+  border-radius: var(--jdsb-radius-control);
+  display: block;
+}
+
+@media (forced-colors: active) {
+  .jdsb-skeleton {
+    forced-color-adjust: auto;
+  }
+}

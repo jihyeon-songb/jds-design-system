@@ -57,6 +57,7 @@ export const tokens = {
   "color.card.foreground": "#17212b",
   "color.card.border": "#c9ced3",
   "color.card.description": "#38434f",
+  "color.skeleton.background": "#f1f3f5",
   "color.focus.ring": "#0057d9",
   "color.field.background": "#ffffff",
   "color.field.foreground": "#17212b",
