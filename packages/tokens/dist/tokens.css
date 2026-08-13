@@ -53,6 +53,10 @@
   --jdsb-color-badge-error-background: #c9372c;
   --jdsb-color-badge-error-foreground: #ffffff;
   --jdsb-color-badge-error-border: #c9372c;
+  --jdsb-color-card-background: #ffffff;
+  --jdsb-color-card-foreground: #17212b;
+  --jdsb-color-card-border: #c9ced3;
+  --jdsb-color-card-description: #38434f;
   --jdsb-color-focus-ring: #0057d9;
   --jdsb-color-field-background: #ffffff;
   --jdsb-color-field-foreground: #17212b;
@@ -107,6 +111,9 @@
   --jdsb-space-badge-block: 4px;
   --jdsb-space-button-inline: 12px;
   --jdsb-space-button-gap: 8px;
+  --jdsb-space-card-inline: 12px;
+  --jdsb-space-card-block: 8px;
+  --jdsb-space-card-gap: 4px;
   --jdsb-space-checkbox-target: 4px;
   --jdsb-space-textarea-block: 8px;
   --jdsb-space-textarea-inline: 12px;

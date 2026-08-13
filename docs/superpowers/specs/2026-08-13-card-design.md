@@ -66,17 +66,17 @@ forwardRef로 렌더링한다. `CardTitle`은 기본 `<h3>`를 렌더링하며, 
 
 ## 토큰과 스타일
 
-Card는 `color.surface`, `color.border`, `color.foreground`, `radius.control`, `size.border`와
-기존 spacing token을 우선 재사용한다. 누락된 Card 전용 token은 추가하지 않는다. CSS는
-하드코딩한 색·간격·반경·크기 값을 포함하지 않는다.
+Card는 기존 `radius.control`, `size.border`를 재사용하고, surface·foreground·border·description
+색과 역할별 간격은 Card semantic token으로 제공한다. 이 token은 Card surface와 구획별 padding
+의 테마 제어점이며, CSS는 하드코딩한 색·간격·반경·크기 값을 포함하지 않는다.
 
-- `Card`: surface, border, radius, foreground와 내부 padding
-- `CardHeader`, `CardContent`, `CardFooter`: 역할별 padding과 vertical gap
-- `CardTitle`: 기존 heading typography token
-- `CardDescription`: muted foreground와 body typography token
+- `Card`: surface, border, radius, foreground. root에는 padding을 두지 않는다.
+- `CardHeader`, `CardContent`, `CardFooter`: Card block/inline spacing token으로 역할별 padding.
+- `CardHeader`, `CardFooter`: Card gap token으로 자식 사이 간격.
+- `CardTitle`: inherited typography를 사용한다.
+- `CardDescription`: Card description foreground token을 사용한다.
 
-간격과 typography에 필요한 semantic token이 없다면 컴포넌트 token을 새로 만들기 전에 기존
-token의 의미가 맞는지 확인한다.
+Card 전용 token 외에는 기존 token의 의미가 맞을 때 우선 재사용한다.
 
 ## 문서와 검증
 
