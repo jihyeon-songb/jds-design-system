@@ -6,6 +6,7 @@
 @import "./actions/IconButton.css";
 @import "./forms/Field.css";
 @import "./layout/Card.css";
+@import "./layout/Separator.css";
 @import "./inputs/Checkbox.css";
 @import "./inputs/Input.css";
 @import "./inputs/RadioGroup.css";

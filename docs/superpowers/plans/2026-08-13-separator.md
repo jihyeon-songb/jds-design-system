@@ -110,14 +110,13 @@ Expected: FAIL because `./Separator.js` and its package-entry exports do not exi
 
 - [ ] **Step 3: Add the minimal component and styles**
 
-Create `packages/components/src/layout/Separator.tsx`. Keep the overload type so a horizontal consumer receives an `HTMLHRElement` ref and a vertical consumer receives an `HTMLDivElement` ref.
+Create `packages/components/src/layout/Separator.tsx`. Use a single `forwardRef<HTMLHRElement | HTMLDivElement, SeparatorProps>` component so Storybook can consume both orientation branches; the ref still receives the rendered native element.
 
 ```tsx
 import {
   forwardRef,
   type ComponentPropsWithoutRef,
-  type ComponentPropsWithRef,
-  type ReactElement,
+  type Ref,
 } from "react"
 
 export type SeparatorOrientation = "horizontal" | "vertical"
@@ -125,23 +124,18 @@ type HorizontalSeparatorProps = ComponentPropsWithoutRef<"hr"> & { orientation?:
 type VerticalSeparatorProps = ComponentPropsWithoutRef<"div"> & { orientation: "vertical" }
 export type SeparatorProps = HorizontalSeparatorProps | VerticalSeparatorProps
 
-type SeparatorComponent = {
-  (props: HorizontalSeparatorProps & { ref?: ComponentPropsWithRef<"hr">["ref"] }): ReactElement | null
-  (props: VerticalSeparatorProps & { ref?: ComponentPropsWithRef<"div">["ref"] }): ReactElement | null
-}
-
-export const Separator = forwardRef<HTMLElement, SeparatorProps>(function Separator(
+export const Separator = forwardRef<HTMLHRElement | HTMLDivElement, SeparatorProps>(function Separator(
   { className, orientation = "horizontal", ...props },
   ref,
 ) {
   const classNames = ["jdsb-separator", className].filter(Boolean).join(" ")
 
   if (orientation === "vertical") {
-    return <div {...(props as ComponentPropsWithoutRef<"div">)} ref={ref as ComponentPropsWithRef<"div">["ref"]} aria-orientation="vertical" className={classNames} role="separator" />
+    return <div {...(props as ComponentPropsWithoutRef<"div">)} ref={ref as Ref<HTMLDivElement>} aria-orientation="vertical" className={classNames} role="separator" />
   }
 
-  return <hr {...(props as ComponentPropsWithoutRef<"hr">)} ref={ref as ComponentPropsWithRef<"hr">["ref"]} className={classNames} />
-}) as SeparatorComponent
+  return <hr {...(props as ComponentPropsWithoutRef<"hr">)} ref={ref as Ref<HTMLHRElement>} className={classNames} />
+})
 ```
 
 Create `packages/components/src/layout/Separator.css`.

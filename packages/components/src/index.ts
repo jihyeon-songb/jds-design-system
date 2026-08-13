@@ -27,6 +27,7 @@ export {
   type CardProps,
   type CardTitleProps,
 } from "./layout/Card.js"
+export { Separator, type SeparatorOrientation, type SeparatorProps } from "./layout/Separator.js"
 export {
   Accordion,
   AccordionContent,

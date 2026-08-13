@@ -1,0 +1,19 @@
+.jdsb-separator {
+  border: 0;
+  margin: 0;
+}
+
+hr.jdsb-separator {
+  border-block-start: var(--jdsb-size-border) solid var(--jdsb-color-field-border);
+}
+
+div.jdsb-separator[aria-orientation="vertical"] {
+  align-self: stretch;
+  border-inline-start: var(--jdsb-size-border) solid var(--jdsb-color-field-border);
+}
+
+@media (forced-colors: active) {
+  .jdsb-separator {
+    forced-color-adjust: auto;
+  }
+}
