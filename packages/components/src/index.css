@@ -7,6 +7,7 @@
 @import "./forms/Field.css";
 @import "./layout/Card.css";
 @import "./layout/Separator.css";
+@import "./layout/Skeleton.css";
 @import "./inputs/Checkbox.css";
 @import "./inputs/Input.css";
 @import "./inputs/RadioGroup.css";

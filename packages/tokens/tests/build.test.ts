@@ -32,6 +32,13 @@ describe("buildTokens", () => {
     expect(result.css).toContain("--jdsb-typography-body-font-size: 14px;")
   })
 
+  it("publishes the Skeleton background token", () => {
+    const source = JSON.parse(readFileSync(new URL("../src/jdsb.tokens.json", import.meta.url), "utf8"))
+    const result = buildTokens(source)
+
+    expect(result.css).toContain("--jdsb-color-skeleton-background: #f1f3f5;")
+  })
+
   it("rejects unknown token aliases", () => {
     expect(() => buildTokens({ color: { action: { $value: "{color.missing}", $type: "color" } } }))
       .toThrow("Unknown token reference: color.missing")
