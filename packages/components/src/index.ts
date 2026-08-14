@@ -15,6 +15,24 @@ export { Avatar, type AvatarProps, type AvatarSize } from "./feedback/Avatar.js"
 export { Badge, type BadgeProps, type BadgeVariant } from "./feedback/Badge.js"
 export { Progress, type ProgressProps } from "./feedback/Progress.js"
 export {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+  type TableBodyProps,
+  type TableCaptionProps,
+  type TableCellProps,
+  type TableFooterProps,
+  type TableHeadProps,
+  type TableHeaderProps,
+  type TableProps,
+  type TableRowProps,
+} from "./data/Table.js"
+export {
   Card,
   CardContent,
   CardDescription,

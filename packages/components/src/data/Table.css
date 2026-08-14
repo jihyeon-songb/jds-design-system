@@ -1,0 +1,12 @@
+.jdsb-table {
+  background: var(--jdsb-color-field-background);
+  border-collapse: collapse;
+  color: var(--jdsb-color-field-foreground);
+}
+
+.jdsb-table-head,
+.jdsb-table-cell {
+  border-block-end: var(--jdsb-size-border) solid var(--jdsb-color-field-border);
+  padding: var(--jdsb-space-field-item);
+  text-align: start;
+}
