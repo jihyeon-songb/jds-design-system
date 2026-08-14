@@ -34,6 +34,7 @@
       "description": { "$value": "{color.neutral.700}", "$type": "color" }
     },
     "skeleton": { "background": { "$value": "{color.neutral.100}", "$type": "color" } },
+    "progress": { "track": { "$value": "{color.neutral.100}", "$type": "color" }, "indicator": { "$value": "{color.action.primary.background}", "$type": "color" } },
     "focus": { "ring": { "$value": "{color.blue.600}", "$type": "color" } },
     "field": {
       "background": { "$value": "{color.neutral.0}", "$type": "color" },

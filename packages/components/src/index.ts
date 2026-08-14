@@ -13,6 +13,7 @@ export {
 } from "./feedback/Toast.js"
 export { Avatar, type AvatarProps, type AvatarSize } from "./feedback/Avatar.js"
 export { Badge, type BadgeProps, type BadgeVariant } from "./feedback/Badge.js"
+export { Progress, type ProgressProps } from "./feedback/Progress.js"
 export {
   Card,
   CardContent,
