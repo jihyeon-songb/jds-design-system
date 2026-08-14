@@ -3,6 +3,7 @@
 @import "./feedback/Toast.css";
 @import "./feedback/Avatar.css";
 @import "./feedback/Badge.css";
+@import "./feedback/Progress.css";
 @import "./actions/IconButton.css";
 @import "./forms/Field.css";
 @import "./layout/Card.css";
