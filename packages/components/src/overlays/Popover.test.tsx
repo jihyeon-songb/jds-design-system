@@ -1,7 +1,7 @@
 import { createRef } from "react"
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { userEvent } from "@testing-library/user-event"
-import { afterEach, describe, expect, expectTypeOf, it, vi } from "vitest"
+import { afterEach, beforeEach, describe, expect, expectTypeOf, it, vi } from "vitest"
 import {
   Popover as PublicPopover,
   PopoverContent as PublicPopoverContent,
@@ -22,6 +22,18 @@ import {
 } from "./Popover.js"
 
 afterEach(cleanup)
+
+const nativeDescriptors = {
+  hidePopover: Object.getOwnPropertyDescriptor(HTMLElement.prototype, "hidePopover"),
+  showPopover: Object.getOwnPropertyDescriptor(HTMLElement.prototype, "showPopover"),
+}
+
+function restoreNativePopoverDescriptors(): void {
+  for (const [name, descriptor] of Object.entries(nativeDescriptors)) {
+    if (descriptor) Object.defineProperty(HTMLElement.prototype, name, descriptor)
+    else Reflect.deleteProperty(HTMLElement.prototype, name)
+  }
+}
 
 describe("Popover", () => {
   it("package entry에서 Popover API를 export한다", () => {
@@ -153,5 +165,73 @@ describe("Popover", () => {
     expect(() => render(<PopoverContent>내용</PopoverContent>)).toThrow(
       "Popover compound components must be used within Popover"
     )
+  })
+})
+
+describe("native Popover API", () => {
+  const showPopover = vi.fn(function (this: HTMLElement) {
+    this.setAttribute("data-native-open", "")
+  })
+  const hidePopover = vi.fn(function (this: HTMLElement) {
+    this.removeAttribute("data-native-open")
+  })
+
+  beforeEach(() => {
+    Object.defineProperty(HTMLElement.prototype, "showPopover", { configurable: true, value: showPopover })
+    Object.defineProperty(HTMLElement.prototype, "hidePopover", { configurable: true, value: hidePopover })
+  })
+
+  afterEach(() => {
+    restoreNativePopoverDescriptors()
+    vi.restoreAllMocks()
+  })
+
+  it("native Popover API와 toggle close를 React state에 동기화한다", () => {
+    const onOpenChange = vi.fn()
+    render(
+      <Popover defaultOpen onOpenChange={onOpenChange}>
+        <PopoverTrigger>설정</PopoverTrigger>
+        <PopoverContent>내용</PopoverContent>
+      </Popover>
+    )
+    const content = screen.getByText("내용")
+    const toggleEvent = new Event("toggle")
+    Object.defineProperties(toggleEvent, {
+      newState: { value: "closed" },
+      oldState: { value: "open" },
+    })
+
+    expect(showPopover).toHaveBeenCalledOnce()
+    fireEvent(content, toggleEvent)
+
+    expect(onOpenChange).toHaveBeenCalledWith(false)
+    expect(screen.getByRole("button", { name: "설정" })).toHaveFocus()
+  })
+})
+
+describe("Popover API fallback", () => {
+  beforeEach(() => {
+    Reflect.deleteProperty(HTMLElement.prototype, "showPopover")
+    Reflect.deleteProperty(HTMLElement.prototype, "hidePopover")
+  })
+
+  afterEach(() => {
+    restoreNativePopoverDescriptors()
+    vi.restoreAllMocks()
+  })
+
+  it("Popover API가 없으면 hidden fallback으로 표시 여부를 관리한다", async () => {
+    const user = userEvent.setup()
+    render(
+      <Popover>
+        <PopoverTrigger>설정</PopoverTrigger>
+        <PopoverContent>내용</PopoverContent>
+      </Popover>
+    )
+    const content = screen.getByText("내용")
+
+    expect(content).toHaveAttribute("hidden")
+    await user.click(screen.getByRole("button", { name: "설정" }))
+    expect(content).not.toHaveAttribute("hidden")
   })
 })
