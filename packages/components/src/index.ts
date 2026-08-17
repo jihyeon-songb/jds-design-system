@@ -173,6 +173,18 @@ export {
   type PopoverTriggerProps,
 } from "./overlays/Popover.js"
 export {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  type DropdownMenuContentProps,
+  type DropdownMenuItemProps,
+  type DropdownMenuProps,
+  type DropdownMenuSeparatorProps,
+  type DropdownMenuTriggerProps,
+} from "./overlays/DropdownMenu.js"
+export {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
