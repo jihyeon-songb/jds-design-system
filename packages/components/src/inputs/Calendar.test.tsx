@@ -189,4 +189,17 @@ describe("Calendar", () => {
 
     expect(trigger).toHaveFocus()
   })
+
+  it("keeps month-control focus after prior keyboard navigation", async () => {
+    const user = userEvent.setup()
+    render(<Calendar aria-label="예약 날짜" defaultMonth="2026-08" defaultValue="2026-08-13" locale="ko-KR" />)
+    const day13 = within(screen.getByRole("gridcell", { name: /2026년 8월 13일/ })).getByRole("button")
+
+    day13.focus()
+    await user.keyboard("{ArrowRight}")
+    const nextMonth = screen.getByRole("button", { name: "다음 달" })
+    await user.click(nextMonth)
+
+    expect(nextMonth).toHaveFocus()
+  })
 })

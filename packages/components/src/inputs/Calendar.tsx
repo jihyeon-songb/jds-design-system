@@ -145,7 +145,8 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
     onValueChange?.(nextValue)
   }
 
-  function requestMonth(nextMonth: string): void {
+  function requestMonth(nextMonth: string, restoreFocus = false): void {
+    if (!restoreFocus) setFocusValue(undefined)
     if (month === undefined) setUncontrolledMonth(nextMonth)
     onMonthChange?.(nextMonth)
   }
@@ -155,7 +156,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
     const nextValue = formatDate(clampedDate)
     setFocusValue(nextValue)
     const nextMonth = formatMonth(clampedDate)
-    if (nextMonth !== visibleMonth) requestMonth(nextMonth)
+    if (nextMonth !== visibleMonth) requestMonth(nextMonth, true)
   }
 
   function onDayKeyDown(event: KeyboardEvent<HTMLButtonElement>, date: Date): void {
