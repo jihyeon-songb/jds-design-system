@@ -1,0 +1,51 @@
+.jdsb-calendar {
+  display: grid;
+  gap: var(--jdsb-space-group-gap);
+}
+
+.jdsb-calendar-header,
+.jdsb-calendar-weekdays,
+.jdsb-calendar-week {
+  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--jdsb-space-button-gap);
+}
+
+.jdsb-calendar-header {
+  grid-template-columns: auto 1fr auto;
+}
+
+.jdsb-calendar-month {
+  text-align: center;
+}
+
+.jdsb-calendar-day,
+.jdsb-calendar-control {
+  background: var(--jdsb-color-action-secondary-background);
+  border: var(--jdsb-size-border) solid var(--jdsb-color-action-secondary-background);
+  border-radius: var(--jdsb-radius-control);
+  color: var(--jdsb-color-action-secondary-foreground);
+  font: inherit;
+  min-block-size: var(--jdsb-size-control-button-md-height);
+}
+
+.jdsb-calendar-day {
+  inline-size: 100%;
+}
+
+.jdsb-calendar-day[data-state="selected"] {
+  background: var(--jdsb-color-action-primary-background);
+  color: var(--jdsb-color-action-primary-foreground);
+}
+
+.jdsb-calendar-day:disabled,
+.jdsb-calendar-control:disabled {
+  opacity: var(--jdsb-opacity-disabled);
+}
+
+.jdsb-calendar-day:focus-visible,
+.jdsb-calendar-control:focus-visible {
+  outline: var(--jdsb-size-focus) solid var(--jdsb-color-focus-ring);
+  outline-offset: var(--jdsb-size-focus);
+}

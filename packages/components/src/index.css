@@ -11,6 +11,7 @@
 @import "./layout/Separator.css";
 @import "./layout/Skeleton.css";
 @import "./inputs/Checkbox.css";
+@import "./inputs/Calendar.css";
 @import "./inputs/Combobox.css";
 @import "./inputs/Input.css";
 @import "./inputs/RadioGroup.css";
