@@ -40,6 +40,7 @@ export type CalendarProps = Omit<ComponentPropsWithoutRef<"div">, "children"> & 
 없으면 현재 지역 날짜가 속한 월을 표시한다. `value`가 있으면 해당 날짜의
 월을 우선 표시한다. `onValueChange`와 `onMonthChange`는 요청한 ISO 문자열을
 전달하며, controlled 상태는 부모가 새 props를 전달할 때만 변경된다.
+`locale`을 생략하면 런타임 기본 locale을 사용한다.
 
 모든 날짜는 실제 달력 날짜여야 한다. 잘못된 `value`, `defaultValue`, `min`,
 `max`는 `RangeError`를 발생시키며, `min > max`도 `RangeError`다. `month`와
