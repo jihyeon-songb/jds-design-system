@@ -49,7 +49,7 @@ export type PopoverProps =
 
 export type PopoverTriggerProps = Omit<
   ComponentPropsWithoutRef<"button">,
-  "aria-controls" | "aria-expanded" | "aria-haspopup" | "type"
+  "aria-controls" | "aria-expanded" | "aria-haspopup" | "popoverTarget" | "type"
 >
 
 export type PopoverSide = "top" | "right" | "bottom" | "left"
@@ -66,11 +66,13 @@ export type PopoverContentProps = Omit<
 `onOpenChange(nextOpen)`만 요청한다. `open`을 생략하면 `defaultOpen`으로 초기화한
 내부 상태를 변경한다. 두 prop은 동시에 제공할 수 없다.
 
-`Popover`는 `span` wrapper를 렌더링해 Trigger와 Content의 배치 기준을 만든다.
+`Popover`는 `span` wrapper를 렌더링해 Trigger와 Content의 API·fallback 배치 범위를
+묶는다.
 `PopoverTrigger`는 항상 `<button type="button">`이며 `aria-haspopup="dialog"`,
-`aria-expanded`, `aria-controls`를 제공한다. 소비자의 `onClick`을 먼저 실행하고
-취소되지 않았을 때만 열림 상태를 토글한다. Content가 의미 있는 상호작용을
-제공하면 소비자는 Content에 `aria-label` 또는 `aria-labelledby`를 제공한다.
+`aria-expanded`, `aria-controls`, `popovertarget`를 제공한다. 이 declarative association은
+native Content의 implicit anchor도 만든다. 소비자의 `onClick`을 먼저 실행하고
+취소되지 않았을 때 browser default를 막은 뒤 열림 상태를 토글한다. Content가 의미 있는
+상호작용을 제공하면 소비자는 Content에 `aria-label` 또는 `aria-labelledby`를 제공한다.
 
 `PopoverContent`는 `<div>`에 stable id, `popover="auto"`, `data-state`,
 `data-side`를 제공한다. `side` 기본값은 `bottom`이다. Popover가 닫혀도 Content는
@@ -112,10 +114,13 @@ click은 상태를 바꾸지 않는다.
 `space.field.content`, `space.field.item` semantic token으로 배경·테두리·여백·focus
 표시를 구성한다.
 
-`side`는 논리 inset으로 배치한다. top/bottom은 inline-start 정렬, left/right는
-block-start 정렬이며 Trigger와의 간격은 `space.field.content`를 사용한다. 화면 가장자리
-충돌 회피, 재배치, animation은 제공하지 않는다. forced-colors에서는 시스템 색을
-허용한다.
+native Popover가 top layer에 올라가면 부모의 position을 기준으로 배치되지 않으므로,
+side는 implicit anchor와 CSS Anchor Positioning의 `position-area`로 배치한다.
+top/bottom은 각각 `block-start`/`block-end`, left/right는 `inline-start`/`inline-end`를
+사용하며 간격은 `space.field.content`를 사용한다. Anchor Positioning이 없는 브라우저는
+native Popover의 기본 viewport 배치를 유지한다. 이 경우의 위치 계산 JavaScript,
+화면 가장자리 충돌 회피, 재배치, animation은 제공하지 않는다. forced-colors에서는
+시스템 색을 허용한다.
 
 ## 검증
 
