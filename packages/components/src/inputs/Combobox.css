@@ -1,0 +1,88 @@
+.jdsb-combobox {
+  display: inline-block;
+  max-width: 100%;
+  position: relative;
+}
+
+.jdsb-combobox-input {
+  background: var(--jdsb-color-field-background);
+  border: var(--jdsb-size-border) solid var(--jdsb-color-field-border);
+  border-radius: var(--jdsb-radius-control);
+  box-sizing: border-box;
+  color: var(--jdsb-color-field-foreground);
+  font: inherit;
+  min-height: var(--jdsb-size-control-input-md-height);
+  padding-inline: var(--jdsb-space-input-inline);
+  width: 100%;
+}
+
+.jdsb-combobox:not([data-state="invalid"]) .jdsb-combobox-input:hover:not(:disabled) {
+  border-color: var(--jdsb-color-field-hover-border);
+}
+
+.jdsb-combobox[data-state="invalid"] .jdsb-combobox-input {
+  border-color: var(--jdsb-color-field-invalid-border);
+}
+
+.jdsb-combobox[data-state="disabled"] .jdsb-combobox-input {
+  opacity: var(--jdsb-opacity-disabled);
+}
+
+.jdsb-combobox-input:focus-visible,
+.jdsb-combobox-option[data-state="active"] {
+  outline: var(--jdsb-size-focus) solid var(--jdsb-color-focus-ring);
+  outline-offset: var(--jdsb-size-focus);
+}
+
+.jdsb-combobox-list {
+  background: var(--jdsb-color-field-background);
+  border: var(--jdsb-size-border) solid var(--jdsb-color-field-border);
+  border-radius: var(--jdsb-radius-control);
+  box-sizing: border-box;
+  color: var(--jdsb-color-field-foreground);
+  inset-block-start: 100%;
+  inset-inline-start: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.jdsb-combobox-option,
+.jdsb-combobox-empty {
+  align-items: center;
+  display: flex;
+  min-height: var(--jdsb-size-control-input-md-height);
+  padding-inline: var(--jdsb-space-input-inline);
+}
+
+.jdsb-combobox-option {
+  cursor: pointer;
+}
+
+.jdsb-combobox-option:hover:not([data-state="disabled"]) {
+  background: var(--jdsb-color-action-secondary-hover);
+}
+
+.jdsb-combobox-option[data-state="selected"],
+.jdsb-combobox-option[data-state="active"] {
+  background: var(--jdsb-color-action-secondary-background);
+}
+
+.jdsb-combobox-option[data-state="disabled"] {
+  cursor: not-allowed;
+  opacity: var(--jdsb-opacity-disabled);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jdsb-combobox-input,
+  .jdsb-combobox-list {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .jdsb-combobox-input,
+  .jdsb-combobox-list,
+  .jdsb-combobox-option {
+    forced-color-adjust: auto;
+  }
+}

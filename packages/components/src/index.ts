@@ -80,6 +80,18 @@ export {
   type LabelProps,
 } from "./forms/Field.js"
 export { Checkbox, type CheckboxProps } from "./inputs/Checkbox.js"
+export {
+  Combobox,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxList,
+  ComboboxOption,
+  type ComboboxEmptyProps,
+  type ComboboxInputProps,
+  type ComboboxListProps,
+  type ComboboxOptionProps,
+  type ComboboxProps,
+} from "./inputs/Combobox.js"
 export { Input, type InputProps, type InputSize } from "./inputs/Input.js"
 export { Switch, type SwitchProps, type SwitchSize } from "./inputs/Switch.js"
 export {
