@@ -22,6 +22,16 @@ describe("Calendar", () => {
     expect(grid).toBeVisible()
     expect(selected).toHaveAttribute("aria-selected", "true")
     expect(within(selected).getByRole("button")).toHaveAttribute("tabindex", "0")
+    expect(within(selected).getByRole("button")).toHaveAccessibleName("2026년 8월 13일")
+  })
+
+  it("shows a controlled value month when no month prop is supplied", () => {
+    render(<Calendar aria-label="예약 날짜" value="2031-04-19" locale="ko-KR" />)
+
+    expect(screen.getByRole("gridcell", { name: /2031년 4월 19일/ })).toHaveAttribute(
+      "aria-selected",
+      "true"
+    )
   })
 
   it("selects the arrow-key focus target with Enter", async () => {
@@ -69,6 +79,43 @@ describe("Calendar", () => {
 
     await user.keyboard("{Shift>}{PageUp}{/Shift}")
     expect(within(screen.getByRole("gridcell", { name: /2025년 9월 13일/ })).getByRole("button")).toHaveFocus()
+  })
+
+  it("moves backward by month and forward by year with keyboard shortcuts", async () => {
+    const user = userEvent.setup()
+    render(<Calendar aria-label="예약 날짜" defaultMonth="2026-08" defaultValue="2026-08-13" locale="ko-KR" />)
+    const day13 = within(screen.getByRole("gridcell", { name: /2026년 8월 13일/ })).getByRole("button")
+
+    day13.focus()
+    await user.keyboard("{PageUp}")
+    expect(within(screen.getByRole("gridcell", { name: /2026년 7월 13일/ })).getByRole("button")).toHaveFocus()
+
+    await user.keyboard("{Shift>}{PageDown}{/Shift}")
+    expect(within(screen.getByRole("gridcell", { name: /2027년 7월 13일/ })).getByRole("button")).toHaveFocus()
+  })
+
+  it("truncates month keyboard navigation to the target month's last day", async () => {
+    const user = userEvent.setup()
+    render(<Calendar aria-label="예약 날짜" defaultMonth="2026-03" defaultValue="2026-03-31" locale="ko-KR" />)
+    const day31 = within(screen.getByRole("gridcell", { name: /2026년 3월 31일/ })).getByRole("button")
+
+    day31.focus()
+    await user.keyboard("{PageUp}")
+
+    expect(within(screen.getByRole("gridcell", { name: /2026년 2월 28일/ })).getByRole("button")).toHaveFocus()
+  })
+
+  it("moves across month boundaries with arrow keys", async () => {
+    const user = userEvent.setup()
+    render(<Calendar aria-label="예약 날짜" defaultMonth="2026-08" defaultValue="2026-08-01" locale="ko-KR" />)
+    const august1 = within(screen.getByRole("gridcell", { name: /2026년 8월 1일/ })).getByRole("button")
+
+    august1.focus()
+    await user.keyboard("{ArrowLeft}")
+    expect(within(screen.getByRole("gridcell", { name: /2026년 7월 31일/ })).getByRole("button")).toHaveFocus()
+
+    await user.keyboard("{ArrowRight}")
+    expect(within(screen.getByRole("gridcell", { name: /2026년 8월 1일/ })).getByRole("button")).toHaveFocus()
   })
 
   it("clamps keyboard navigation to range boundaries", async () => {
@@ -161,6 +208,56 @@ describe("Calendar", () => {
     expect(() => render(<Calendar aria-label="예약 날짜" value="2026-08-21" max="2026-08-20" />)).toThrow(
       "value must be within min and max"
     )
+  })
+
+  it("rejects an uncontrolled selection when a changed range excludes it", async () => {
+    const user = userEvent.setup()
+    const { rerender } = render(<Calendar aria-label="예약 날짜" defaultMonth="2026-08" locale="ko-KR" />)
+
+    await user.click(within(screen.getByRole("gridcell", { name: /2026년 8월 13일/ })).getByRole("button"))
+
+    expect(() =>
+      rerender(<Calendar aria-label="예약 날짜" defaultMonth="2026-08" locale="ko-KR" max="2026-08-12" />)
+    ).toThrow("value must be within min and max")
+  })
+
+  it("makes a clicked day the roving tab stop after keyboard navigation", async () => {
+    const user = userEvent.setup()
+    render(<Calendar aria-label="예약 날짜" defaultMonth="2026-08" defaultValue="2026-08-13" locale="ko-KR" />)
+    const day13 = within(screen.getByRole("gridcell", { name: /2026년 8월 13일/ })).getByRole("button")
+
+    day13.focus()
+    await user.keyboard("{ArrowRight}")
+    const day14 = within(screen.getByRole("gridcell", { name: /2026년 8월 14일/ })).getByRole("button")
+    const day20 = within(screen.getByRole("gridcell", { name: /2026년 8월 20일/ })).getByRole("button")
+    await user.click(day20)
+
+    expect(day14).toHaveAttribute("tabindex", "-1")
+    expect(day20).toHaveAttribute("tabindex", "0")
+  })
+
+  it("clamps keyboard navigation and disables the next control at the maximum supported year", async () => {
+    const user = userEvent.setup()
+    render(<Calendar aria-label="Booking date" defaultMonth="9999-12" defaultValue="9999-12-31" locale="en-US" />)
+    const lastDay = within(screen.getByRole("gridcell", { name: "December 31, 9999" })).getByRole("button")
+
+    expect(screen.getByRole("button", { name: "next month" })).toBeDisabled()
+    lastDay.focus()
+    await user.keyboard("{ArrowRight}{PageDown}")
+
+    expect(lastDay).toHaveFocus()
+  })
+
+  it("clamps keyboard navigation and disables the previous control at the minimum supported year", async () => {
+    const user = userEvent.setup()
+    render(<Calendar aria-label="Booking date" defaultMonth="0000-01" defaultValue="0000-01-01" locale="en-US" />)
+    const firstDay = within(screen.getByRole("gridcell", { name: "January 1, 1" })).getByRole("button")
+
+    expect(screen.getByRole("button", { name: "last month" })).toBeDisabled()
+    firstDay.focus()
+    await user.keyboard("{ArrowLeft}{PageUp}")
+
+    expect(firstDay).toHaveFocus()
   })
 
   it("moves focus to the first enabled day when the range changes", async () => {

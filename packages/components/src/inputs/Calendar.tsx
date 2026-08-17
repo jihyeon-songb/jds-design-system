@@ -20,6 +20,16 @@ export type CalendarProps = Omit<ComponentPropsWithoutRef<"div">, "children" | "
   value?: string
 }
 
+function createDate(year: number, month: number, day: number): Date {
+  const date = new Date(0)
+  date.setHours(0, 0, 0, 0)
+  date.setFullYear(year, month, day)
+  return date
+}
+
+const MIN_SUPPORTED_DATE = createDate(0, 0, 1)
+const MAX_SUPPORTED_DATE = createDate(9999, 11, 31)
+
 function formatDate(date: Date): string {
   return [date.getFullYear(), date.getMonth() + 1, date.getDate()]
     .map((part, index) => index === 0 ? String(part).padStart(4, "0") : String(part).padStart(2, "0"))
@@ -29,7 +39,7 @@ function formatDate(date: Date): string {
 function parseDate(value: string, name: string): Date {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value)
   if (!match) throw new RangeError(`${name} must be a YYYY-MM-DD date`)
-  const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]))
+  const date = createDate(Number(match[1]), Number(match[2]) - 1, Number(match[3]))
   if (formatDate(date) !== value) throw new RangeError(`${name} must be a valid date`)
   return date
 }
@@ -41,18 +51,18 @@ function formatMonth(date: Date): string {
 function parseMonth(value: string, name: string): Date {
   const match = /^(\d{4})-(\d{2})$/.exec(value)
   if (!match) throw new RangeError(`${name} must be a YYYY-MM month`)
-  const date = new Date(Number(match[1]), Number(match[2]) - 1, 1)
+  const date = createDate(Number(match[1]), Number(match[2]) - 1, 1)
   if (formatMonth(date) !== value) throw new RangeError(`${name} must be a valid month`)
   return date
 }
 
 function addDays(date: Date, amount: number): Date {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate() + amount)
+  return createDate(date.getFullYear(), date.getMonth(), date.getDate() + amount)
 }
 
 function addMonths(date: Date, amount: number): Date {
-  const targetMonth = new Date(date.getFullYear(), date.getMonth() + amount, 1)
-  return new Date(
+  const targetMonth = createDate(date.getFullYear(), date.getMonth() + amount, 1)
+  return createDate(
     targetMonth.getFullYear(),
     targetMonth.getMonth(),
     Math.min(date.getDate(), getDaysInMonth(targetMonth))
@@ -60,23 +70,23 @@ function addMonths(date: Date, amount: number): Date {
 }
 
 function getDaysInMonth(date: Date): number {
-  return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
+  return createDate(date.getFullYear(), date.getMonth() + 1, 0).getDate()
 }
 
 function clampDate(date: Date, min?: Date, max?: Date): Date {
-  if (min && date < min) return min
-  if (max && date > max) return max
+  if (date < (min ?? MIN_SUPPORTED_DATE)) return min ?? MIN_SUPPORTED_DATE
+  if (date > (max ?? MAX_SUPPORTED_DATE)) return max ?? MAX_SUPPORTED_DATE
   return date
 }
 
 function isSelectable(date: Date, min?: Date, max?: Date): boolean {
-  return (!min || date >= min) && (!max || date <= max)
+  return date >= MIN_SUPPORTED_DATE && date <= MAX_SUPPORTED_DATE && (!min || date >= min) && (!max || date <= max)
 }
 
 function getMonthDays(month: Date): Date[] {
   return Array.from(
     { length: getDaysInMonth(month) },
-    (_, index) => new Date(month.getFullYear(), month.getMonth(), index + 1)
+    (_, index) => createDate(month.getFullYear(), month.getMonth(), index + 1)
   )
 }
 
@@ -119,7 +129,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
   if (defaultMonth !== undefined) parseMonth(defaultMonth, "defaultMonth")
   if (month !== undefined) parseMonth(month, "month")
 
-  const initialMonth = defaultMonth ?? (typeof defaultValue === "string" ? defaultValue.slice(0, 7) : undefined) ?? formatMonth(new Date())
+  const initialMonth = (value ?? defaultMonth ?? defaultValue)?.slice(0, 7) ?? formatMonth(new Date())
   const [uncontrolledMonth, setUncontrolledMonth] = useState(initialMonth)
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue)
   const [focusValue, setFocusValue] = useState<string>()
@@ -129,6 +139,9 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
   const visibleMonthDate = parseMonth(visibleMonth, "month")
   const days = getMonthDays(visibleMonthDate)
   const selectedDate = selectedValue === undefined ? undefined : parseDate(selectedValue, "value")
+  if (selectedDate && !isSelectable(selectedDate, minDate, maxDate)) {
+    throw new RangeError("value must be within min and max")
+  }
   const firstSelectableDate = days.find((date) => isSelectable(date, minDate, maxDate))
   const activeValue = focusValue && formatMonth(parseDate(focusValue, "focusValue")) === visibleMonth && isSelectable(parseDate(focusValue, "focusValue"), minDate, maxDate)
     ? focusValue
@@ -141,6 +154,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
   }, [activeValue, focusValue])
 
   function requestValue(nextValue: string): void {
+    setFocusValue(undefined)
     if (value === undefined) setUncontrolledValue(nextValue)
     onValueChange?.(nextValue)
   }
@@ -212,6 +226,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
                   <button
                     ref={(node) => { if (node) dayRefs.current.set(dateValue, node); else dayRefs.current.delete(dateValue) }}
                     type="button"
+                    aria-label={dateFormatter.format(date)}
                     className="jdsb-calendar-day"
                     data-state={selected ? "selected" : "idle"}
                     disabled={!selectable}

@@ -44,6 +44,13 @@
   opacity: var(--jdsb-opacity-disabled);
 }
 
+@media (forced-colors: active) {
+  .jdsb-calendar-day[data-state="selected"] {
+    outline: var(--jdsb-size-border) solid CanvasText;
+    outline-offset: calc(var(--jdsb-size-border) * -1);
+  }
+}
+
 .jdsb-calendar-day:focus-visible,
 .jdsb-calendar-control:focus-visible {
   outline: var(--jdsb-size-focus) solid var(--jdsb-color-focus-ring);
