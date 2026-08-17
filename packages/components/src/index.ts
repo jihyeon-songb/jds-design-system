@@ -164,6 +164,15 @@ export {
   type DrawerTriggerProps,
 } from "./overlays/Drawer.js"
 export {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  type PopoverContentProps,
+  type PopoverProps,
+  type PopoverSide,
+  type PopoverTriggerProps,
+} from "./overlays/Popover.js"
+export {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
