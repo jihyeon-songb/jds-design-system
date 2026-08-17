@@ -22,6 +22,7 @@
 @import "./navigation/Tabs.css";
 @import "./overlays/Dialog.css";
 @import "./overlays/Drawer.css";
+@import "./overlays/DropdownMenu.css";
 @import "./overlays/Popover.css";
 @import "./overlays/Tooltip.css";
 
