@@ -74,6 +74,39 @@ describe("Popover", () => {
     expect(onOpenChange).toHaveBeenLastCalledWith(false)
   })
 
+  it("controlled native Popover는 close 요청 뒤 open prop을 DOM source로 유지한다", () => {
+    const showPopoverDescriptor = Object.getOwnPropertyDescriptor(HTMLElement.prototype, "showPopover")
+    Object.defineProperty(HTMLElement.prototype, "showPopover", {
+      configurable: true,
+      value(this: HTMLElement) {
+        this.setAttribute("data-native-open", "")
+      },
+    })
+
+    try {
+      const onOpenChange = vi.fn()
+      render(<Popover open onOpenChange={onOpenChange}><PopoverTrigger>설정</PopoverTrigger><PopoverContent>내용</PopoverContent></Popover>)
+      const content = screen.getByText("내용")
+      const toggleEvent = new Event("toggle")
+      Object.defineProperties(toggleEvent, {
+        newState: { value: "closed" },
+        oldState: { value: "open" },
+      })
+
+      content.removeAttribute("data-native-open")
+      fireEvent(content, toggleEvent)
+
+      expect(onOpenChange).toHaveBeenCalledWith(false)
+      expect(content).toHaveAttribute("data-native-open")
+    } finally {
+      if (showPopoverDescriptor) {
+        Object.defineProperty(HTMLElement.prototype, "showPopover", showPopoverDescriptor)
+      } else {
+        Reflect.deleteProperty(HTMLElement.prototype, "showPopover")
+      }
+    }
+  })
+
   it("외부 pointerdown만 닫기를 요청하고 취소된 Trigger click은 무시한다", async () => {
     const user = userEvent.setup()
     const onOpenChange = vi.fn()

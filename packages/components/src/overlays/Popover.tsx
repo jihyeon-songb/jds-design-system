@@ -43,6 +43,7 @@ export type PopoverContentProps = Omit<
 type PopoverContextValue = {
   contentId: string
   contentRef: RefObject<HTMLDivElement | null>
+  controlled: boolean
   open: boolean
   requestOpen: (nextOpen: boolean) => void
   triggerRef: RefObject<HTMLButtonElement | null>
@@ -81,7 +82,9 @@ export function Popover({ children, className, defaultOpen = false, onOpenChange
   }
 
   return (
-    <PopoverContext.Provider value={{ contentId, contentRef, open: isOpen, requestOpen, triggerRef }}>
+    <PopoverContext.Provider
+      value={{ contentId, contentRef, controlled: open !== undefined, open: isOpen, requestOpen, triggerRef }}
+    >
       <span {...props} className={["jdsb-popover", className].filter(Boolean).join(" ")}>
         {children}
       </span>
@@ -123,7 +126,7 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
   { className, side = "bottom", ...props },
   ref
 ) {
-  const { contentId, contentRef, open, requestOpen, triggerRef } = usePopoverContext()
+  const { contentId, contentRef, controlled, open, requestOpen, triggerRef } = usePopoverContext()
   const supportsNativePopover =
     typeof HTMLElement !== "undefined" && typeof HTMLElement.prototype.showPopover === "function"
 
@@ -139,7 +142,10 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
 
     if (typeof element.showPopover === "function") {
       const handleToggle = (event: Event): void => {
-        if ((event as ToggleEvent).newState === "closed" && open) closeAndRestoreFocus()
+        if ((event as ToggleEvent).newState === "closed" && open) {
+          closeAndRestoreFocus()
+          if (controlled && element.isConnected && !isNativePopoverOpen(element)) element.showPopover()
+        }
       }
 
       element.addEventListener("toggle", handleToggle)
