@@ -117,6 +117,20 @@ export {
 } from "./navigation/Tabs.js"
 export { Pagination, type PaginationProps } from "./navigation/Pagination.js"
 export {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  type BreadcrumbItemProps,
+  type BreadcrumbLinkProps,
+  type BreadcrumbListProps,
+  type BreadcrumbPageProps,
+  type BreadcrumbProps,
+  type BreadcrumbSeparatorProps,
+} from "./navigation/Breadcrumb.js"
+export {
   Dialog,
   DialogClose,
   DialogContent,
