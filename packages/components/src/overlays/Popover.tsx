@@ -10,6 +10,7 @@ import {
   type ForwardedRef,
   type RefObject,
 } from "react"
+import { Button } from "../actions/Button.js"
 
 type PopoverUncontrolledProps = {
   defaultOpen?: boolean
@@ -99,7 +100,7 @@ export const PopoverTrigger = forwardRef<HTMLButtonElement, PopoverTriggerProps>
   const { contentId, open, requestOpen, triggerRef } = usePopoverContext()
 
   return (
-    <button
+    <Button
       {...props}
       ref={(element) => {
         triggerRef.current = element

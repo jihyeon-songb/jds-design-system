@@ -53,6 +53,8 @@ describe("Popover", () => {
     const content = screen.getByText("내용")
 
     expect(trigger).toHaveAttribute("type", "button")
+    expect(trigger).toHaveClass("jdsb-button")
+    expect(trigger).toHaveAttribute("data-variant", "outline")
     expect(trigger).toHaveAttribute("aria-haspopup", "dialog")
     expect(content).toHaveAttribute("data-state", "closed")
     expect(content).toHaveAttribute("hidden")
