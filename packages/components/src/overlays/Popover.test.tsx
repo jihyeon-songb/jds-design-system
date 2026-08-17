@@ -36,12 +36,19 @@ describe("Popover", () => {
 
   it("uncontrolled Trigger가 popover를 열고 Escape 뒤 focus를 복귀한다", async () => {
     const user = userEvent.setup()
-    render(<Popover><PopoverTrigger>설정</PopoverTrigger><PopoverContent>내용</PopoverContent></Popover>)
+    const { rerender } = render(<Popover><PopoverTrigger>설정</PopoverTrigger><PopoverContent>내용</PopoverContent></Popover>)
     const trigger = screen.getByRole("button", { name: "설정" })
     const content = screen.getByText("내용")
 
+    expect(trigger).toHaveAttribute("type", "button")
+    expect(trigger).toHaveAttribute("aria-haspopup", "dialog")
     expect(content).toHaveAttribute("data-state", "closed")
     expect(content).toHaveAttribute("hidden")
+    expect(content).toHaveAttribute("popover", "auto")
+    expect(content).toHaveAttribute("data-side", "bottom")
+    const contentId = content.id
+    rerender(<Popover><PopoverTrigger>설정</PopoverTrigger><PopoverContent>내용</PopoverContent></Popover>)
+    expect(screen.getByText("내용")).toHaveAttribute("id", contentId)
     await user.click(trigger)
     expect(content).toHaveAttribute("data-state", "open")
     expect(trigger).toHaveAttribute("aria-expanded", "true")
