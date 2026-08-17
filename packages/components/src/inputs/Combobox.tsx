@@ -89,6 +89,7 @@ type ComboboxContextValue = {
   invalid: boolean
   listId: string
   open: boolean
+  optionsReady: boolean
   query: string
   required: boolean
   selectedValue: string | undefined
@@ -99,6 +100,7 @@ type ComboboxContextValue = {
   registerOption: (option: ComboboxOptionRecord) => () => void
   requestOpen: (open: boolean) => void
   requestValue: (value: string) => void
+  setOptionsReady: (ready: boolean) => void
 }
 
 const ComboboxContext = createContext<ComboboxContextValue | null>(null)
@@ -157,10 +159,12 @@ export function Combobox({
   const generatedListId = useId()
   const [activeOptionId, setActiveOptionId] = useState<string>()
   const [options, setOptions] = useState<ComboboxOptionRecord[]>([])
+  const [optionsReady, setOptionsReady] = useState(false)
   const [query, setQuery] = useState("")
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen)
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue)
   const inputRef = useRef<HTMLInputElement>(null)
+  const previousControlledValueRef = useRef(value)
   const selectedValue = value ?? uncontrolledValue
   const isOpen = !disabled && (open ?? uncontrolledOpen)
   const list = findChild(children, (child) => child.type === ComboboxList)
@@ -175,6 +179,11 @@ export function Combobox({
     option.text.toLocaleLowerCase().includes(query.toLocaleLowerCase())
   )
   const enabledOptions = visibleOptions.filter((option) => !option.disabled)
+  const reconciledActiveOptionId = !isOpen
+    ? undefined
+    : enabledOptions.some((option) => option.id === activeOptionId)
+      ? activeOptionId
+      : enabledOptions.find((option) => option.value === selectedValue)?.id ?? enabledOptions[0]?.id
 
   const registerOption = useCallback((option: ComboboxOptionRecord) => {
     setOptions((current) => [...current.filter((item) => item.id !== option.id), option])
@@ -197,7 +206,7 @@ export function Combobox({
   }
 
   function moveActive(direction: 1 | -1): void {
-    const currentIndex = enabledOptions.findIndex((option) => option.id === activeOptionId)
+    const currentIndex = enabledOptions.findIndex((option) => option.id === reconciledActiveOptionId)
     const nextIndex = currentIndex < 0
       ? direction === 1 ? 0 : enabledOptions.length - 1
       : Math.min(Math.max(currentIndex + direction, 0), enabledOptions.length - 1)
@@ -227,7 +236,7 @@ export function Combobox({
       requestOpen(true)
       moveToBoundary(event.key === "Home" ? "first" : "last")
     } else if (event.key === "Enter") {
-      const activeOption = enabledOptions.find((option) => option.id === activeOptionId)
+      const activeOption = enabledOptions.find((option) => option.id === reconciledActiveOptionId)
       if (!isOpen || !activeOption) return
       event.preventDefault()
       requestValue(activeOption.value)
@@ -240,26 +249,20 @@ export function Combobox({
   }
 
   useEffect(() => {
-    if (!isOpen) {
-      setActiveOptionId(undefined)
-      return
-    }
-    const selectedOption = enabledOptions.find((option) => option.value === selectedValue)
-    setActiveOptionId((currentId) =>
-      enabledOptions.some((option) => option.id === currentId)
-        ? currentId
-        : selectedOption?.id ?? enabledOptions[0]?.id
-    )
-  }, [isOpen, options, query, selectedValue])
+    if (previousControlledValueRef.current === value) return
+    previousControlledValueRef.current = value
+    if (value !== undefined) setQuery(selectedText ?? "")
+  }, [selectedText, value])
 
   return (
     <ComboboxContext.Provider
       value={{
-        activeOptionId,
+        activeOptionId: reconciledActiveOptionId,
         disabled,
         invalid,
         listId,
         open: isOpen,
+        optionsReady,
         query,
         required,
         selectedValue,
@@ -270,6 +273,7 @@ export function Combobox({
         registerOption,
         requestOpen,
         requestValue,
+        setOptionsReady,
       }}
     >
       <div
@@ -338,6 +342,16 @@ export const ComboboxList = forwardRef<HTMLDivElement, ComboboxListProps>(functi
   ref
 ) {
   const context = useComboboxContext()
+
+  useEffect(() => {
+    if (!context.open) {
+      context.setOptionsReady(false)
+      return
+    }
+    context.setOptionsReady(true)
+    return () => context.setOptionsReady(false)
+  }, [context.open, context.setOptionsReady])
+
   if (!context.open) return null
 
   return (
@@ -416,7 +430,7 @@ export const ComboboxEmpty = forwardRef<HTMLDivElement, ComboboxEmptyProps>(func
   ref
 ) {
   const context = useComboboxContext()
-  if (!context.open || context.visibleOptions.length > 0) return null
+  if (!context.open || !context.optionsReady || context.visibleOptions.length > 0) return null
 
   return (
     <div

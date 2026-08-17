@@ -84,6 +84,27 @@ describe("Combobox", () => {
     expect(screen.queryByRole("option")).not.toBeInTheDocument()
   })
 
+  it("does not mount the empty message before options register", async () => {
+    const user = userEvent.setup()
+    let emptyMounts = 0
+
+    render(
+      <Combobox>
+        <ComboboxInput aria-label="도시" />
+        <ComboboxList>
+          <ComboboxOption value="seoul">서울</ComboboxOption>
+          <ComboboxEmpty ref={(element) => { if (element) emptyMounts += 1 }}>
+            검색 결과가 없습니다.
+          </ComboboxEmpty>
+        </ComboboxList>
+      </Combobox>
+    )
+
+    await user.click(screen.getByRole("combobox", { name: "도시" }))
+
+    expect(emptyMounts).toBe(0)
+  })
+
   it("does not submit a hidden value without a name", () => {
     render(<form aria-label="도시 양식"><Combobox defaultValue="seoul">{cityOptions}</Combobox></form>)
 
@@ -122,6 +143,14 @@ describe("Combobox", () => {
     expect(screen.getByRole("listbox")).toBeVisible()
   })
 
+  it("updates the input text when the controlled value changes", () => {
+    const view = render(<Combobox value="seoul">{cityOptions}</Combobox>)
+
+    view.rerender(<Combobox value="busan">{cityOptions}</Combobox>)
+
+    expect(screen.getByRole("combobox", { name: "도시" })).toHaveValue("부산")
+  })
+
   it("keeps focus on input and selects the active enabled option", async () => {
     const user = userEvent.setup()
     render(<Combobox>{cityOptions}</Combobox>)
@@ -151,6 +180,65 @@ describe("Combobox", () => {
       "aria-activedescendant",
       screen.getByRole("option", { name: "서울" }).id
     )
+  })
+
+  it("reconciles the active option before filtering removes it", async () => {
+    const user = userEvent.setup()
+    let seoulId: string | undefined
+    let activeIdWhenSeoulWasRemoved: string | null | undefined
+
+    render(
+      <Combobox defaultOpen>
+        <ComboboxInput aria-label="도시" />
+        <ComboboxList>
+          <ComboboxOption
+            ref={(element) => {
+              if (element) seoulId = element.id
+              else if (seoulId) {
+                activeIdWhenSeoulWasRemoved = document.querySelector("[role=combobox]")
+                  ?.getAttribute("aria-activedescendant")
+              }
+            }}
+            value="seoul"
+          >
+            서울
+          </ComboboxOption>
+          <ComboboxOption value="busan">부산</ComboboxOption>
+        </ComboboxList>
+      </Combobox>
+    )
+
+    await user.type(screen.getByRole("combobox", { name: "도시" }), "부")
+
+    expect(activeIdWhenSeoulWasRemoved).toBe(screen.getByRole("option", { name: "부산" }).id)
+  })
+
+  it("clears the active option before closing removes the list", async () => {
+    const user = userEvent.setup()
+    let listMounted = false
+    let activeIdWhenListWasRemoved: string | null | undefined
+
+    render(
+      <Combobox defaultOpen>
+        <ComboboxInput aria-label="도시" />
+        <ComboboxList
+          ref={(element) => {
+            if (element) listMounted = true
+            else if (listMounted) {
+              activeIdWhenListWasRemoved = document.querySelector("[role=combobox]")
+                ?.getAttribute("aria-activedescendant")
+            }
+          }}
+        >
+          <ComboboxOption value="seoul">서울</ComboboxOption>
+        </ComboboxList>
+      </Combobox>
+    )
+
+    await user.click(screen.getByRole("combobox", { name: "도시" }))
+    await user.keyboard("{Escape}")
+
+    expect(activeIdWhenListWasRemoved).toBeNull()
   })
 
   it("restores the selected text and closes on Escape", async () => {
