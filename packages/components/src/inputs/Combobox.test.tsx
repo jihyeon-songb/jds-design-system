@@ -50,7 +50,7 @@ describe("Combobox", () => {
 
     expect(screen.getByRole("option", { name: "부산" })).toBeVisible()
     expect(screen.queryByRole("option", { name: "서울" })).not.toBeInTheDocument()
-    expect(new FormData(screen.getByRole("form", { name: "도시 양식" })).get("city")).toBe("seoul")
+    expect(new FormData(screen.getByRole("form", { name: "도시 양식" }) as HTMLFormElement).get("city")).toBe("seoul")
 
     await user.clear(input)
     await user.type(input, "서울")
@@ -87,7 +87,7 @@ describe("Combobox", () => {
   it("does not submit a hidden value without a name", () => {
     render(<form aria-label="도시 양식"><Combobox defaultValue="seoul">{cityOptions}</Combobox></form>)
 
-    expect(new FormData(screen.getByRole("form", { name: "도시 양식" })).entries().next().done).toBe(true)
+    expect(new FormData(screen.getByRole("form", { name: "도시 양식" }) as HTMLFormElement).entries().next().done).toBe(true)
   })
 
   it("omits disabled values from FormData and makes the input required", () => {
@@ -100,7 +100,7 @@ describe("Combobox", () => {
     const input = screen.getByRole("combobox", { name: "도시" })
     expect(input).toBeDisabled()
     expect(input).toBeRequired()
-    expect(new FormData(screen.getByRole("form", { name: "도시 양식" })).has("city")).toBe(false)
+    expect(new FormData(screen.getByRole("form", { name: "도시 양식" }) as HTMLFormElement).has("city")).toBe(false)
   })
 
   it("requests controlled value and open changes without replacing supplied state", async () => {
