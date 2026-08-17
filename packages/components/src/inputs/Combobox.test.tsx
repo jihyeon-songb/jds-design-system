@@ -31,6 +31,8 @@ describe("Combobox", () => {
     expect(input).toHaveAttribute("aria-haspopup", "listbox")
     expect(input).toHaveAttribute("aria-autocomplete", "list")
     expect(input).toHaveAttribute("aria-expanded", "true")
+    expect(input).toHaveAttribute("aria-controls")
+    expect(input.getAttribute("aria-controls")).not.toBe("")
     expect(screen.getByRole("listbox")).toHaveAttribute("id", input.getAttribute("aria-controls"))
   })
 
