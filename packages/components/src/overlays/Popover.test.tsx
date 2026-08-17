@@ -47,6 +47,7 @@ describe("Popover", () => {
     expect(content).toHaveAttribute("popover", "auto")
     expect(content).toHaveAttribute("data-side", "bottom")
     const contentId = content.id
+    expect(contentId).not.toBe("")
     rerender(<Popover><PopoverTrigger>설정</PopoverTrigger><PopoverContent>내용</PopoverContent></Popover>)
     expect(screen.getByText("내용")).toHaveAttribute("id", contentId)
     await user.click(trigger)
