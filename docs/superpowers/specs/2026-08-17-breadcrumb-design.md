@@ -54,10 +54,8 @@ export type BreadcrumbSeparatorProps = Omit<
 ```tsx
 <Breadcrumb aria-label="현재 위치">
   <BreadcrumbList>
-    <BreadcrumbItem><BreadcrumbLink href="/">홈</BreadcrumbLink></BreadcrumbItem>
-    <BreadcrumbSeparator>/</BreadcrumbSeparator>
-    <BreadcrumbItem><BreadcrumbLink href="/products">상품</BreadcrumbLink></BreadcrumbItem>
-    <BreadcrumbSeparator>/</BreadcrumbSeparator>
+    <BreadcrumbItem><BreadcrumbLink href="/">홈</BreadcrumbLink><BreadcrumbSeparator>/</BreadcrumbSeparator></BreadcrumbItem>
+    <BreadcrumbItem><BreadcrumbLink href="/products">상품</BreadcrumbLink><BreadcrumbSeparator>/</BreadcrumbSeparator></BreadcrumbItem>
     <BreadcrumbItem><BreadcrumbPage>상세</BreadcrumbPage></BreadcrumbItem>
   </BreadcrumbList>
 </Breadcrumb>
@@ -87,8 +85,10 @@ export type BreadcrumbSeparatorProps = Omit<
 `size.focus`, `space.field.content` semantic token만 재사용한다. Breadcrumb 전용 token은
 추가하지 않는다.
 
-- `BreadcrumbList`: 목록 기본 스타일을 제거하고, 항목과 구분자를 inline flex로
-  배치하며 기존 semantic spacing을 사용한다.
+- `BreadcrumbList`: 목록 기본 스타일을 제거하고 항목을 inline flex로 배치한다.
+- `BreadcrumbItem`: 링크 또는 현재 페이지와 그 뒤 구분자를 inline flex로 배치하며 기존
+  semantic spacing을 사용한다. 구분자는 반드시 이 항목 내부에 둬 `<ol>`의 직접 자식이
+  모두 `<li>`가 되게 한다.
 - `BreadcrumbLink`: action foreground와 underline으로 이동 가능함을 표시한다.
   `:focus-visible`에는 semantic focus outline을 적용한다.
 - `BreadcrumbPage`: field foreground로 현재 위치를 표시한다.

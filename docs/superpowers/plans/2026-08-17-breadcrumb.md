@@ -76,7 +76,7 @@ describe("Breadcrumb", () => {
   })
 
   it("renders named native navigation with a current page and hidden separator", () => {
-    render(<Breadcrumb aria-label="현재 위치"><BreadcrumbList><BreadcrumbItem><BreadcrumbLink href="/">홈</BreadcrumbLink></BreadcrumbItem><BreadcrumbSeparator>/</BreadcrumbSeparator><BreadcrumbItem><BreadcrumbPage>상세</BreadcrumbPage></BreadcrumbItem></BreadcrumbList></Breadcrumb>)
+    render(<Breadcrumb aria-label="현재 위치"><BreadcrumbList><BreadcrumbItem><BreadcrumbLink href="/">홈</BreadcrumbLink><BreadcrumbSeparator>/</BreadcrumbSeparator></BreadcrumbItem><BreadcrumbItem><BreadcrumbPage>상세</BreadcrumbPage></BreadcrumbItem></BreadcrumbList></Breadcrumb>)
     expect(screen.getByRole("navigation", { name: "현재 위치" })).toContainElement(screen.getByRole("list"))
     expect(screen.getByRole("link", { name: "홈" })).toHaveAttribute("href", "/")
     expect(screen.getByText("상세")).toHaveAttribute("aria-current", "page")
@@ -89,7 +89,7 @@ describe("Breadcrumb", () => {
     const pageRef = createRef<HTMLSpanElement>()
     const separatorRef = createRef<HTMLSpanElement>()
     const onClick = vi.fn()
-    render(<Breadcrumb aria-label="경로" className="consumer-nav" id="path" ref={navRef}><BreadcrumbList><BreadcrumbItem><BreadcrumbLink href="/products" className="consumer-link" onClick={onClick} ref={linkRef}>상품</BreadcrumbLink></BreadcrumbItem><BreadcrumbSeparator className="consumer-separator" ref={separatorRef}>/</BreadcrumbSeparator><BreadcrumbItem><BreadcrumbPage className="consumer-page" ref={pageRef}>상세</BreadcrumbPage></BreadcrumbItem></BreadcrumbList></Breadcrumb>)
+    render(<Breadcrumb aria-label="경로" className="consumer-nav" id="path" ref={navRef}><BreadcrumbList><BreadcrumbItem><BreadcrumbLink href="/products" className="consumer-link" onClick={onClick} ref={linkRef}>상품</BreadcrumbLink><BreadcrumbSeparator className="consumer-separator" ref={separatorRef}>/</BreadcrumbSeparator></BreadcrumbItem><BreadcrumbItem><BreadcrumbPage className="consumer-page" ref={pageRef}>상세</BreadcrumbPage></BreadcrumbItem></BreadcrumbList></Breadcrumb>)
     expect(navRef.current).toBe(screen.getByRole("navigation", { name: "경로" }))
     expect(navRef.current).toHaveAttribute("id", "path")
     expect(navRef.current).toHaveClass("jdsb-breadcrumb", "consumer-nav")
@@ -147,6 +147,7 @@ export const BreadcrumbSeparator = forwardRef<HTMLSpanElement, BreadcrumbSeparat
 
 ```css
 .jdsb-breadcrumb-list { align-items: center; display: flex; flex-wrap: wrap; gap: var(--jdsb-space-field-content); list-style: none; margin: 0; padding: 0; }
+.jdsb-breadcrumb-item { align-items: center; display: flex; gap: var(--jdsb-space-field-content); }
 .jdsb-breadcrumb-link { color: var(--jdsb-color-action-ghost-foreground); }
 .jdsb-breadcrumb-link:focus-visible { outline: var(--jdsb-size-focus) solid var(--jdsb-color-focus-ring); outline-offset: var(--jdsb-size-focus); }
 .jdsb-breadcrumb-page, .jdsb-breadcrumb-separator { color: var(--jdsb-color-field-foreground); }
@@ -193,7 +194,7 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 function Path({ label = "현재 위치" }: { label?: string }) {
-  return <Breadcrumb aria-label={label}><BreadcrumbList><BreadcrumbItem><BreadcrumbLink href="#home">홈</BreadcrumbLink></BreadcrumbItem><BreadcrumbSeparator>/</BreadcrumbSeparator><BreadcrumbItem><BreadcrumbLink href="#products">상품</BreadcrumbLink></BreadcrumbItem><BreadcrumbSeparator>/</BreadcrumbSeparator><BreadcrumbItem><BreadcrumbPage>상세</BreadcrumbPage></BreadcrumbItem></BreadcrumbList></Breadcrumb>
+  return <Breadcrumb aria-label={label}><BreadcrumbList><BreadcrumbItem><BreadcrumbLink href="#home">홈</BreadcrumbLink><BreadcrumbSeparator>/</BreadcrumbSeparator></BreadcrumbItem><BreadcrumbItem><BreadcrumbLink href="#products">상품</BreadcrumbLink><BreadcrumbSeparator>/</BreadcrumbSeparator></BreadcrumbItem><BreadcrumbItem><BreadcrumbPage>상세</BreadcrumbPage></BreadcrumbItem></BreadcrumbList></Breadcrumb>
 }
 
 export const Default: Story = {
@@ -209,7 +210,7 @@ export const Default: Story = {
   },
 }
 
-export const LongPath: Story = { render: () => <Breadcrumb aria-label="현재 위치"><BreadcrumbList><BreadcrumbItem><BreadcrumbLink href="#home">홈</BreadcrumbLink></BreadcrumbItem><BreadcrumbSeparator>/</BreadcrumbSeparator><BreadcrumbItem><BreadcrumbLink href="#catalog">매우 긴 카탈로그 이름</BreadcrumbLink></BreadcrumbItem><BreadcrumbSeparator>/</BreadcrumbSeparator><BreadcrumbItem><BreadcrumbPage>매우 긴 현재 페이지 이름</BreadcrumbPage></BreadcrumbItem></BreadcrumbList></Breadcrumb> }
+export const LongPath: Story = { render: () => <Breadcrumb aria-label="현재 위치"><BreadcrumbList><BreadcrumbItem><BreadcrumbLink href="#home">홈</BreadcrumbLink><BreadcrumbSeparator>/</BreadcrumbSeparator></BreadcrumbItem><BreadcrumbItem><BreadcrumbLink href="#catalog">매우 긴 카탈로그 이름</BreadcrumbLink><BreadcrumbSeparator>/</BreadcrumbSeparator></BreadcrumbItem><BreadcrumbItem><BreadcrumbPage>매우 긴 현재 페이지 이름</BreadcrumbPage></BreadcrumbItem></BreadcrumbList></Breadcrumb> }
 export const LocalizedLabel: Story = { render: () => <Path label="You are here" /> }
 ```
 

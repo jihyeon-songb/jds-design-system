@@ -22,10 +22,8 @@ function Path({ label = "현재 위치" }: { label?: string }) {
   return (
     <Breadcrumb aria-label={label}>
       <BreadcrumbList>
-        <BreadcrumbItem><BreadcrumbLink href="#home">홈</BreadcrumbLink></BreadcrumbItem>
-        <BreadcrumbSeparator>/</BreadcrumbSeparator>
-        <BreadcrumbItem><BreadcrumbLink href="#products">상품</BreadcrumbLink></BreadcrumbItem>
-        <BreadcrumbSeparator>/</BreadcrumbSeparator>
+        <BreadcrumbItem><BreadcrumbLink href="#home">홈</BreadcrumbLink><BreadcrumbSeparator>/</BreadcrumbSeparator></BreadcrumbItem>
+        <BreadcrumbItem><BreadcrumbLink href="#products">상품</BreadcrumbLink><BreadcrumbSeparator>/</BreadcrumbSeparator></BreadcrumbItem>
         <BreadcrumbItem><BreadcrumbPage>상세</BreadcrumbPage></BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
@@ -50,10 +48,8 @@ export const LongPath: Story = {
   render: () => (
     <Breadcrumb aria-label="현재 위치">
       <BreadcrumbList>
-        <BreadcrumbItem><BreadcrumbLink href="#home">홈</BreadcrumbLink></BreadcrumbItem>
-        <BreadcrumbSeparator>/</BreadcrumbSeparator>
-        <BreadcrumbItem><BreadcrumbLink href="#catalog">매우 긴 카탈로그 이름</BreadcrumbLink></BreadcrumbItem>
-        <BreadcrumbSeparator>/</BreadcrumbSeparator>
+        <BreadcrumbItem><BreadcrumbLink href="#home">홈</BreadcrumbLink><BreadcrumbSeparator>/</BreadcrumbSeparator></BreadcrumbItem>
+        <BreadcrumbItem><BreadcrumbLink href="#catalog">매우 긴 카탈로그 이름</BreadcrumbLink><BreadcrumbSeparator>/</BreadcrumbSeparator></BreadcrumbItem>
         <BreadcrumbItem><BreadcrumbPage>매우 긴 현재 페이지 이름</BreadcrumbPage></BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>

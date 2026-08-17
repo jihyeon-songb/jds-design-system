@@ -8,6 +8,12 @@
   padding: 0;
 }
 
+.jdsb-breadcrumb-item {
+  align-items: center;
+  display: flex;
+  gap: var(--jdsb-space-field-content);
+}
+
 .jdsb-breadcrumb-link {
   color: var(--jdsb-color-action-ghost-foreground);
 }
