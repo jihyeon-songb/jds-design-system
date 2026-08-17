@@ -127,6 +127,18 @@ describe("Calendar", () => {
     )
   })
 
+  it("rejects a malformed minimum date", () => {
+    expect(() => render(<Calendar aria-label="예약 날짜" min="2026-02-30" />)).toThrow(
+      "min must be a valid date"
+    )
+  })
+
+  it("rejects a malformed maximum date", () => {
+    expect(() => render(<Calendar aria-label="예약 날짜" max="2026-02-30" />)).toThrow(
+      "max must be a valid date"
+    )
+  })
+
   it("rejects malformed months", () => {
     expect(() => render(<Calendar aria-label="예약 날짜" defaultMonth="2026-13" />)).toThrow(
       "defaultMonth must be a valid month"
@@ -161,5 +173,20 @@ describe("Calendar", () => {
     rerender(<Calendar aria-label="예약 날짜" defaultMonth="2026-08" locale="ko-KR" min="2026-08-10" />)
 
     expect(within(screen.getByRole("gridcell", { name: /2026년 8월 10일/ })).getByRole("button")).toHaveFocus()
+  })
+
+  it("preserves existing focus when the calendar first renders", () => {
+    const { rerender } = render(<button type="button">날짜 선택 열기</button>)
+    const trigger = screen.getByRole("button", { name: "날짜 선택 열기" })
+    trigger.focus()
+
+    rerender(
+      <>
+        <button type="button">날짜 선택 열기</button>
+        <Calendar aria-label="예약 날짜" defaultMonth="2026-08" locale="ko-KR" />
+      </>
+    )
+
+    expect(trigger).toHaveFocus()
   })
 })

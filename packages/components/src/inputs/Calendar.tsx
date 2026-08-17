@@ -137,8 +137,8 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
       : firstSelectableDate && formatDate(firstSelectableDate)
 
   useEffect(() => {
-    if (activeValue) dayRefs.current.get(activeValue)?.focus()
-  }, [activeValue])
+    if (focusValue && activeValue) dayRefs.current.get(activeValue)?.focus()
+  }, [activeValue, focusValue])
 
   function requestValue(nextValue: string): void {
     if (value === undefined) setUncontrolledValue(nextValue)
