@@ -1,4 +1,4 @@
-import { createRef } from "react"
+import { createRef, type MouseEvent } from "react"
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { userEvent } from "@testing-library/user-event"
 import { afterEach, describe, expect, expectTypeOf, it, vi } from "vitest"
@@ -60,7 +60,7 @@ describe("Breadcrumb", () => {
     const linkRef = createRef<HTMLAnchorElement>()
     const pageRef = createRef<HTMLSpanElement>()
     const separatorRef = createRef<HTMLSpanElement>()
-    const onClick = vi.fn()
+    const onClick = vi.fn((event: MouseEvent<HTMLAnchorElement>) => event.preventDefault())
 
     render(
       <Breadcrumb aria-label="경로" className="consumer-nav" id="path" ref={navRef}>
@@ -102,7 +102,13 @@ describe("Breadcrumb", () => {
       <Breadcrumb aria-label="경로">
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/" onClick={onClick}>
+            <BreadcrumbLink
+              href="/"
+              onClick={(event) => {
+                event.preventDefault()
+                onClick()
+              }}
+            >
               홈
             </BreadcrumbLink>
           </BreadcrumbItem>
