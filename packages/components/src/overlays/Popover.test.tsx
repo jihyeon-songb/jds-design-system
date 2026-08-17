@@ -169,6 +169,7 @@ describe("Popover", () => {
 })
 
 describe("native Popover API", () => {
+  const originalMatches = HTMLElement.prototype.matches
   const showPopover = vi.fn(function (this: HTMLElement) {
     this.setAttribute("data-native-open", "")
   })
@@ -179,6 +180,9 @@ describe("native Popover API", () => {
   beforeEach(() => {
     Object.defineProperty(HTMLElement.prototype, "showPopover", { configurable: true, value: showPopover })
     Object.defineProperty(HTMLElement.prototype, "hidePopover", { configurable: true, value: hidePopover })
+    vi.spyOn(HTMLElement.prototype, "matches").mockImplementation(function (this: HTMLElement, selector: string) {
+      return selector === ":popover-open" ? this.hasAttribute("data-native-open") : originalMatches.call(this, selector)
+    })
   })
 
   afterEach(() => {
@@ -206,6 +210,24 @@ describe("native Popover API", () => {
 
     expect(onOpenChange).toHaveBeenCalledWith(false)
     expect(screen.getByRole("button", { name: "설정" })).toHaveFocus()
+  })
+
+  it("open prop이 false로 바뀌면 native Popover를 닫는다", () => {
+    const { rerender } = render(
+      <Popover open>
+        <PopoverTrigger>설정</PopoverTrigger>
+        <PopoverContent>내용</PopoverContent>
+      </Popover>
+    )
+
+    rerender(
+      <Popover open={false}>
+        <PopoverTrigger>설정</PopoverTrigger>
+        <PopoverContent>내용</PopoverContent>
+      </Popover>
+    )
+
+    expect(hidePopover).toHaveBeenCalledOnce()
   })
 })
 
