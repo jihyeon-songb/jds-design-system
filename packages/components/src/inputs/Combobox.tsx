@@ -86,6 +86,8 @@ type ComboboxOptionRecord = {
 type ComboboxContextValue = {
   activeOptionId: string | undefined
   disabled: boolean
+  filtering: boolean
+  inputId: string
   invalid: boolean
   listId: string
   open: boolean
@@ -156,11 +158,21 @@ export function Combobox({
   value,
   ...props
 }: ComboboxProps) {
+  const input = findChild(children, (child) => child.type === ComboboxInput)
+  const initialSelectedValue = value ?? defaultValue
   const generatedListId = useId()
+  const generatedInputId = useId()
   const [activeOptionId, setActiveOptionId] = useState<string>()
+  const [filtering, setFiltering] = useState(false)
   const [options, setOptions] = useState<ComboboxOptionRecord[]>([])
   const [optionsReady, setOptionsReady] = useState(false)
-  const [query, setQuery] = useState("")
+  const [query, setQuery] = useState(() => {
+    const selected = findChild(
+      children,
+      (child) => child.type === ComboboxOption && child.props.value === initialSelectedValue
+    )
+    return selected ? getTextContent(selected.props.children) : ""
+  })
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen)
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -173,11 +185,12 @@ export function Combobox({
     (child) => child.type === ComboboxOption && child.props.value === selectedValue
   )
   const listId = list?.props.id ?? generatedListId
+  const inputId = input?.props.id ?? generatedInputId
   const selectedText = options.find((option) => option.value === selectedValue)?.text
     ?? (selectedChild ? getTextContent(selectedChild.props.children) : undefined)
-  const visibleOptions = options.filter((option) =>
-    option.text.toLocaleLowerCase().includes(query.toLocaleLowerCase())
-  )
+  const visibleOptions = filtering
+    ? options.filter((option) => option.text.toLocaleLowerCase().includes(query.toLocaleLowerCase()))
+    : options
   const enabledOptions = visibleOptions.filter((option) => !option.disabled)
   const reconciledActiveOptionId = !isOpen
     ? undefined
@@ -202,6 +215,7 @@ export function Combobox({
     const nextText = value === undefined
       ? options.find((option) => option.value === nextValue)?.text
       : selectedText
+    setFiltering(false)
     setQuery(nextText ?? "")
   }
 
@@ -220,6 +234,7 @@ export function Combobox({
   }
 
   function onInputChange(event: ChangeEvent<HTMLInputElement>): void {
+    setFiltering(true)
     setQuery(event.currentTarget.value)
     requestOpen(true)
   }
@@ -243,6 +258,7 @@ export function Combobox({
       requestOpen(false)
     } else if (event.key === "Escape") {
       event.preventDefault()
+      setFiltering(false)
       setQuery(selectedText ?? "")
       requestOpen(false)
     }
@@ -251,7 +267,10 @@ export function Combobox({
   useEffect(() => {
     if (previousControlledValueRef.current === value) return
     previousControlledValueRef.current = value
-    if (value !== undefined) setQuery(selectedText ?? "")
+    if (value !== undefined) {
+      setFiltering(false)
+      setQuery(selectedText ?? "")
+    }
   }, [selectedText, value])
 
   return (
@@ -259,6 +278,8 @@ export function Combobox({
       value={{
         activeOptionId: reconciledActiveOptionId,
         disabled,
+        filtering,
+        inputId,
         invalid,
         listId,
         open: isOpen,
@@ -319,6 +340,7 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComboboxInputProps>(fu
       aria-invalid={context.invalid ? true : ariaInvalid}
       className={["jdsb-combobox-input", className].filter(Boolean).join(" ")}
       disabled={context.disabled || disabled}
+      id={context.inputId}
       required={context.required || required}
       value={context.query}
       onChange={(event) => {
@@ -338,7 +360,7 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComboboxInputProps>(fu
 })
 
 export const ComboboxList = forwardRef<HTMLDivElement, ComboboxListProps>(function ComboboxList(
-  { className, id, ...props },
+  { "aria-label": ariaLabel, "aria-labelledby": ariaLabelledby, className, id, ...props },
   ref
 ) {
   const context = useComboboxContext()
@@ -358,6 +380,8 @@ export const ComboboxList = forwardRef<HTMLDivElement, ComboboxListProps>(functi
     <div
       {...props}
       ref={ref}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledby ?? (ariaLabel ? undefined : context.inputId)}
       className={["jdsb-combobox-list", className].filter(Boolean).join(" ")}
       id={id ?? context.listId}
       role="listbox"
@@ -386,8 +410,9 @@ export const ComboboxOption = forwardRef<HTMLDivElement, ComboboxOptionProps>(fu
   const isDisabled = context.disabled || disabled
   const selected = context.selectedValue === value
   const active = context.activeOptionId === id
-  const visible = text.toLocaleLowerCase().includes(context.query.toLocaleLowerCase())
-  const state = isDisabled ? "disabled" : active ? "active" : selected ? "selected" : "enabled"
+  const visible = !context.filtering
+    || text.toLocaleLowerCase().includes(context.query.toLocaleLowerCase())
+  const state = isDisabled ? "disabled" : active ? "active" : selected ? "selected" : "idle"
 
   useEffect(
     () => context.registerOption({ disabled: isDisabled, id, ref: optionRef, text, value }),
@@ -436,7 +461,10 @@ export const ComboboxEmpty = forwardRef<HTMLDivElement, ComboboxEmptyProps>(func
     <div
       {...props}
       ref={ref}
+      aria-disabled="true"
+      aria-selected="false"
       className={["jdsb-combobox-empty", className].filter(Boolean).join(" ")}
+      role="option"
     />
   )
 })

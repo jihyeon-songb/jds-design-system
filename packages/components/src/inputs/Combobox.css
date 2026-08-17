@@ -9,10 +9,15 @@
   border: var(--jdsb-size-border) solid var(--jdsb-color-field-border);
   border-radius: var(--jdsb-radius-control);
   box-sizing: border-box;
+  color: var(--jdsb-color-field-foreground);
   font: inherit;
   min-height: var(--jdsb-size-control-input-md-height);
   padding-inline: var(--jdsb-space-input-inline);
   width: 100%;
+}
+
+.jdsb-combobox:not([data-state="invalid"]) .jdsb-combobox-input:hover:not(:disabled) {
+  border-color: var(--jdsb-color-field-hover-border);
 }
 
 .jdsb-combobox[data-state="invalid"] .jdsb-combobox-input {
@@ -34,6 +39,7 @@
   border: var(--jdsb-size-border) solid var(--jdsb-color-field-border);
   border-radius: var(--jdsb-radius-control);
   box-sizing: border-box;
+  color: var(--jdsb-color-field-foreground);
   inset-block-start: 100%;
   inset-inline-start: 0;
   position: absolute;
@@ -50,6 +56,15 @@
 
 .jdsb-combobox-option {
   cursor: pointer;
+}
+
+.jdsb-combobox-option:hover:not([data-state="disabled"]) {
+  background: var(--jdsb-color-action-secondary-hover);
+}
+
+.jdsb-combobox-option[data-state="selected"],
+.jdsb-combobox-option[data-state="active"] {
+  background: var(--jdsb-color-action-secondary-background);
 }
 
 .jdsb-combobox-option[data-state="disabled"] {

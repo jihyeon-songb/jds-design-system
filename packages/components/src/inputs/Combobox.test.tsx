@@ -28,12 +28,29 @@ describe("Combobox", () => {
     render(<Combobox defaultOpen>{cityOptions}</Combobox>)
 
     const input = screen.getByRole("combobox", { name: "도시" })
+    const listbox = screen.getByRole("listbox", { name: "도시" })
     expect(input).toHaveAttribute("aria-haspopup", "listbox")
     expect(input).toHaveAttribute("aria-autocomplete", "list")
     expect(input).toHaveAttribute("aria-expanded", "true")
     expect(input).toHaveAttribute("aria-controls")
     expect(input.getAttribute("aria-controls")).not.toBe("")
-    expect(screen.getByRole("listbox")).toHaveAttribute("id", input.getAttribute("aria-controls"))
+    expect(listbox).toHaveAttribute("id", input.getAttribute("aria-controls"))
+    expect(listbox).toHaveAttribute("aria-labelledby", input.id)
+  })
+
+  it.each([
+    ["value", <Combobox value="seoul">{cityOptions}</Combobox>],
+    ["defaultValue", <Combobox defaultValue="seoul">{cityOptions}</Combobox>],
+  ])("shows the selected option text for an initial %s", (_prop, combobox) => {
+    render(combobox)
+
+    expect(screen.getByRole("combobox", { name: "도시" })).toHaveValue("서울")
+  })
+
+  it("exposes idle state for a normal option", () => {
+    render(<Combobox defaultOpen>{cityOptions}</Combobox>)
+
+    expect(screen.getByRole("option", { name: "부산" })).toHaveAttribute("data-state", "idle")
   })
 
   it("filters text case-insensitively and submits the selected value", async () => {
@@ -80,8 +97,10 @@ describe("Combobox", () => {
     await user.click(screen.getByRole("combobox", { name: "도시" }))
     await user.type(screen.getByRole("combobox", { name: "도시" }), "인천광역시")
 
-    expect(screen.getByText("검색 결과가 없습니다.")).toBeVisible()
-    expect(screen.queryByRole("option")).not.toBeInTheDocument()
+    expect(screen.getByRole("option", { name: "검색 결과가 없습니다." })).toHaveAttribute(
+      "aria-disabled",
+      "true"
+    )
   })
 
   it("does not mount the empty message before options register", async () => {

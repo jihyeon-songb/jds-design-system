@@ -12,7 +12,7 @@ import {
 const cityOptions = (
   <>
     <ComboboxInput aria-label="도시" />
-    <ComboboxList>
+    <ComboboxList aria-label="도시 목록">
       <ComboboxOption value="seoul">서울</ComboboxOption>
       <ComboboxOption value="busan">부산</ComboboxOption>
       <ComboboxOption value="jeju">제주</ComboboxOption>
@@ -71,7 +71,7 @@ export const DisabledOption: Story = {
   render: () => (
     <Combobox defaultOpen>
       <ComboboxInput aria-label="도시" />
-      <ComboboxList>
+      <ComboboxList aria-label="도시 목록">
         <ComboboxOption value="seoul">서울</ComboboxOption>
         <ComboboxOption value="busan" disabled>부산</ComboboxOption>
         <ComboboxOption value="jeju">제주</ComboboxOption>
