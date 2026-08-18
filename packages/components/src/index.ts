@@ -80,6 +80,7 @@ export {
   type LabelProps,
 } from "./forms/Field.js"
 export { Checkbox, type CheckboxProps } from "./inputs/Checkbox.js"
+export { Calendar, type CalendarProps } from "./inputs/Calendar.js"
 export {
   Combobox,
   ComboboxEmpty,
