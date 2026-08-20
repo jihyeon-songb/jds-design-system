@@ -16,6 +16,7 @@ export type ToastVariant = "success" | "info" | "warning" | "error"
 
 export type ToastOptions = {
   message: ReactNode
+  title?: ReactNode
   variant?: ToastVariant
 }
 
@@ -31,15 +32,17 @@ export type ToastProviderProps = ComponentPropsWithoutRef<"div"> & {
   children: ReactNode
 }
 
-export type ToastProps = Omit<ComponentPropsWithoutRef<"div">, "children" | "role"> & {
+export type ToastProps = Omit<ComponentPropsWithoutRef<"div">, "children" | "role" | "title"> & {
   message: ReactNode
   onDismiss: () => void
+  title?: ReactNode
   variant: ToastVariant
 }
 
 type ToastRecord = {
   id: string
   message: ReactNode
+  title?: ReactNode
   variant: ToastVariant
 }
 
@@ -51,8 +54,19 @@ export function useToast(): ToastApi {
   return context
 }
 
+function ToastIcon({ variant }: { variant: ToastVariant }) {
+  const path = {
+    success: <path d="m5 12.5 4.5 4.5L19 7.5" />,
+    info: <><path d="M12 11v6" /><path d="M12 7h.01" /></>,
+    warning: <><path d="M12 7v6" /><path d="M12 17h.01" /></>,
+    error: <><path d="m8 8 8 8" /><path d="m16 8-8 8" /></>,
+  }[variant]
+
+  return <span aria-hidden="true" data-slot="icon"><svg fill="none" viewBox="0 0 24 24">{path}</svg></span>
+}
+
 export const Toast = forwardRef<HTMLDivElement, ToastProps>(function Toast(
-  { className, message, onDismiss, variant, ...props },
+  { className, message, onDismiss, title, variant, ...props },
   ref
 ) {
   return (
@@ -64,7 +78,11 @@ export const Toast = forwardRef<HTMLDivElement, ToastProps>(function Toast(
       data-variant={variant}
       role="status"
     >
-      <div data-slot="message">{message}</div>
+      <ToastIcon variant={variant} />
+      <div data-slot="content">
+        {title != null ? <strong data-slot="title">{title}</strong> : null}
+        <div data-slot="message">{message}</div>
+      </div>
       <button aria-label="닫기" data-slot="close" onClick={onDismiss} type="button">
         ×
       </button>
@@ -143,7 +161,7 @@ export const ToastProvider = forwardRef<HTMLDivElement, ToastProviderProps>(func
         {children}
         <div aria-label="알림" className="jdsb-toast-viewport" role="region">
           {records.map((record) => (
-            <Toast key={record.id} message={record.message} onDismiss={() => dismiss(record.id)} variant={record.variant} />
+            <Toast key={record.id} message={record.message} onDismiss={() => dismiss(record.id)} title={record.title} variant={record.variant} />
           ))}
         </div>
       </div>

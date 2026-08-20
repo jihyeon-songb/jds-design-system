@@ -19,7 +19,7 @@
   display: flex;
   font: inherit;
   justify-content: space-between;
-  min-block-size: var(--jdsb-size-alert-close);
+  min-block-size: var(--jdsb-size-control-alert-close);
   padding: var(--jdsb-space-button-inline);
   text-align: start;
   width: 100%;

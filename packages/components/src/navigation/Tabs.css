@@ -11,8 +11,8 @@
   color: var(--jdsb-color-action-ghost-foreground);
   cursor: pointer;
   margin-block-end: calc(var(--jdsb-size-border) * -1);
-  min-block-size: var(--jdsb-size-alert-close);
-  min-inline-size: var(--jdsb-size-alert-close);
+  min-block-size: var(--jdsb-size-control-alert-close);
+  min-inline-size: var(--jdsb-size-control-alert-close);
   padding-block: var(--jdsb-space-field-content);
   padding-inline: var(--jdsb-space-button-inline);
 }

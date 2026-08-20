@@ -25,7 +25,6 @@ export const Default: Story = {
 export const NumericData: Story = {
   render: () => (
     <Table>
-      <TableCaption>월별 사용량</TableCaption>
       <TableHeader><TableRow><TableHead scope="col">월</TableHead><TableHead scope="col">사용량</TableHead></TableRow></TableHeader>
       <TableBody><TableRow><TableCell>8월</TableCell><TableCell>8.4 GB</TableCell></TableRow></TableBody>
     </Table>

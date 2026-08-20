@@ -6,6 +6,16 @@ import { Calendar } from "./Calendar.js"
 afterEach(cleanup)
 
 describe("Calendar", () => {
+  it("shows adjacent-month dates as muted grid placeholders", () => {
+    render(<Calendar aria-label="예약 날짜" defaultMonth="2026-08" locale="ko-KR" />)
+
+    const previousMonthDay = screen.getByRole("gridcell", { name: /2026년 7월 26일/ })
+    const nextMonthDay = screen.getByRole("gridcell", { name: /2026년 9월 5일/ })
+
+    expect(within(previousMonthDay).getByText("26")).toHaveAttribute("data-outside", "true")
+    expect(within(nextMonthDay).getByText("5")).toHaveAttribute("data-outside", "true")
+  })
+
   it("renders the labelled grid with its selected day as the tab stop", () => {
     render(
       <Calendar
@@ -165,7 +175,7 @@ describe("Calendar", () => {
     expect(onValueChange).toHaveBeenCalledWith("2026-08-14")
     expect(screen.getByRole("gridcell", { name: /2026년 8월 13일/ })).toHaveAttribute("aria-selected", "true")
     expect(onMonthChange).toHaveBeenCalledWith("2026-09")
-    expect(screen.queryByRole("gridcell", { name: /2026년 9월 1일/ })).not.toBeInTheDocument()
+    expect(within(screen.getByRole("gridcell", { name: /2026년 9월 1일/ })).queryByRole("button")).not.toBeInTheDocument()
   })
 
   it("rejects malformed dates", () => {

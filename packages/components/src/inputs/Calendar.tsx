@@ -84,10 +84,8 @@ function isSelectable(date: Date, min?: Date, max?: Date): boolean {
 }
 
 function getMonthDays(month: Date): Date[] {
-  return Array.from(
-    { length: getDaysInMonth(month) },
-    (_, index) => createDate(month.getFullYear(), month.getMonth(), index + 1)
-  )
+  const firstDay = createDate(month.getFullYear(), month.getMonth(), 1)
+  return Array.from({ length: 42 }, (_, index) => addDays(firstDay, index - firstDay.getDay()))
 }
 
 function getMonthControlLabel(locale: string | undefined, direction: "previous" | "next"): string {
@@ -142,7 +140,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
   if (selectedDate && !isSelectable(selectedDate, minDate, maxDate)) {
     throw new RangeError("value must be within min and max")
   }
-  const firstSelectableDate = days.find((date) => isSelectable(date, minDate, maxDate))
+  const firstSelectableDate = days.find((date) => formatMonth(date) === visibleMonth && isSelectable(date, minDate, maxDate))
   const activeValue = focusValue && formatMonth(parseDate(focusValue, "focusValue")) === visibleMonth && isSelectable(parseDate(focusValue, "focusValue"), minDate, maxDate)
     ? focusValue
     : selectedDate && formatMonth(selectedDate) === visibleMonth && isSelectable(selectedDate, minDate, maxDate)
@@ -187,7 +185,8 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
   }
 
   function monthHasSelectableDays(candidate: Date): boolean {
-    return getMonthDays(candidate).some((date) => isSelectable(date, minDate, maxDate))
+    const candidateMonth = formatMonth(candidate)
+    return getMonthDays(candidate).some((date) => formatMonth(date) === candidateMonth && isSelectable(date, minDate, maxDate))
   }
 
   const previousMonth = addMonths(visibleMonthDate, -1)
@@ -199,11 +198,11 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
     <div {...props} ref={forwardedRef} className={["jdsb-calendar", className].filter(Boolean).join(" ")}>
       <div className="jdsb-calendar-header">
         <button type="button" className="jdsb-calendar-control" aria-label={getMonthControlLabel(locale, "previous")} disabled={!monthHasSelectableDays(previousMonth)} onClick={() => requestMonth(formatMonth(previousMonth))}>
-          {getMonthControlLabel(locale, "previous")}
+          <span aria-hidden="true">‹</span>
         </button>
         <span className="jdsb-calendar-month">{new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" }).format(visibleMonthDate)}</span>
         <button type="button" className="jdsb-calendar-control" aria-label={getMonthControlLabel(locale, "next")} disabled={!monthHasSelectableDays(nextMonth)} onClick={() => requestMonth(formatMonth(nextMonth))}>
-          {getMonthControlLabel(locale, "next")}
+          <span aria-hidden="true">›</span>
         </button>
       </div>
       <div role="grid" aria-label={ariaLabel} className="jdsb-calendar-grid">
@@ -212,13 +211,16 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
             <span key={day} role="columnheader">{weekdayFormatter.format(new Date(2023, 0, day + 1))}</span>
           ))}
         </div>
-        {Array.from({ length: Math.ceil((visibleMonthDate.getDay() + days.length) / 7) }, (_, week) => (
+        {Array.from({ length: days.length / 7 }, (_, week) => (
           <div key={week} role="row" className="jdsb-calendar-week">
-            {Array.from({ length: 7 }, (_, weekday) => {
-              const dayIndex = week * 7 + weekday - visibleMonthDate.getDay()
-              if (dayIndex < 0 || dayIndex >= days.length) return <span key={weekday} role="gridcell" aria-hidden="true" />
+          {Array.from({ length: 7 }, (_, weekday) => {
+              const dayIndex = week * 7 + weekday
               const date = days[dayIndex]
               const dateValue = formatDate(date)
+              const outside = formatMonth(date) !== visibleMonth
+              if (outside) {
+                return <div key={dateValue} role="gridcell" aria-label={dateFormatter.format(date)}><span className="jdsb-calendar-outside-day" data-outside="true">{date.getDate()}</span></div>
+              }
               const selected = selectedValue === dateValue
               const selectable = isSelectable(date, minDate, maxDate)
               return (
