@@ -17,12 +17,13 @@ describe("buildTokens", () => {
     expect(result.declarations).toContain('"color.action"')
   })
 
-  it("resolves neutral outline foreground and border", () => {
+  it("publishes the monochrome primary, focus, and field tokens", () => {
     const source = JSON.parse(readFileSync(new URL("../src/jdsb.tokens.json", import.meta.url), "utf8"))
     const result = buildTokens(source)
 
-    expect(result.css).toContain("--jdsb-color-action-outline-foreground: #17212b;")
-    expect(result.css).toContain("--jdsb-color-action-outline-border: #c9ced3;")
+    expect(result.css).toContain("--jdsb-color-action-primary-background: #000000;")
+    expect(result.css).toContain("--jdsb-color-focus-ring: #000000;")
+    expect(result.css).toContain("--jdsb-color-field-border: #d4d4d4;")
   })
 
   it("publishes the 14px component typography token", () => {
@@ -32,19 +33,26 @@ describe("buildTokens", () => {
     expect(result.css).toContain("--jdsb-typography-body-font-size: 14px;")
   })
 
+  it("publishes the 12px Badge typography token", () => {
+    const source = JSON.parse(readFileSync(new URL("../src/jdsb.tokens.json", import.meta.url), "utf8"))
+    const result = buildTokens(source)
+
+    expect(result.css).toContain("--jdsb-typography-badge-font-size: 12px;")
+  })
+
   it("publishes the Skeleton background token", () => {
     const source = JSON.parse(readFileSync(new URL("../src/jdsb.tokens.json", import.meta.url), "utf8"))
     const result = buildTokens(source)
 
-    expect(result.css).toContain("--jdsb-color-skeleton-background: #f1f3f5;")
+    expect(result.css).toContain("--jdsb-color-skeleton-background: #f5f5f5;")
   })
 
   it("publishes Progress colors", () => {
     const source = JSON.parse(readFileSync(new URL("../src/jdsb.tokens.json", import.meta.url), "utf8"))
     const result = buildTokens(source)
 
-    expect(result.css).toContain("--jdsb-color-progress-track: #f1f3f5;")
-    expect(result.css).toContain("--jdsb-color-progress-indicator: #0057d9;")
+    expect(result.css).toContain("--jdsb-color-progress-track: #f5f5f5;")
+    expect(result.css).toContain("--jdsb-color-progress-indicator: #000000;")
   })
 
   it("rejects unknown token aliases", () => {

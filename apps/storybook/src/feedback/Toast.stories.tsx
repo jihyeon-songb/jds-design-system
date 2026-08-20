@@ -24,10 +24,10 @@ function ToastButtons() {
 
   return (
     <>
-      <Button onClick={() => toast.success({ message: "저장했습니다." })}>성공 알림</Button>
-      <Button onClick={() => toast.info({ message: "새 버전을 사용할 수 있습니다." })}>정보 알림</Button>
-      <Button onClick={() => toast.warning({ message: "입력한 내용을 다시 확인해 주세요." })}>경고 알림</Button>
-      <Button onClick={() => toast.error({ message: "저장에 실패했습니다." })}>오류 알림</Button>
+      <Button onClick={() => toast.success({ message: "변경 사항이 저장되었습니다.", title: "저장했습니다." })}>성공 알림</Button>
+      <Button onClick={() => toast.info({ message: "새 버전을 사용할 수 있습니다.", title: "업데이트됨" })}>정보 알림</Button>
+      <Button onClick={() => toast.warning({ message: "입력한 내용을 다시 확인해 주세요.", title: "확인 필요" })}>경고 알림</Button>
+      <Button onClick={() => toast.error({ message: "잠시 후 다시 시도해 주세요.", title: "저장에 실패했습니다." })}>오류 알림</Button>
     </>
   )
 }

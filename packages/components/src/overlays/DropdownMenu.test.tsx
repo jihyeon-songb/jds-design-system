@@ -1,4 +1,6 @@
 import { createRef } from "react"
+import { readFileSync } from "node:fs"
+import { resolve } from "node:path"
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { userEvent } from "@testing-library/user-event"
 import { afterEach, describe, expect, expectTypeOf, it, vi } from "vitest"
@@ -158,6 +160,33 @@ describe("DropdownMenu", () => {
     )
     expect(() => render(<DropdownMenuContent>내용</DropdownMenuContent>)).toThrow(
       "DropdownMenu compound components must be used within DropdownMenu"
+    )
+  })
+
+  it("item label을 한 줄로 표시하는 스타일을 제공한다", () => {
+    const styles = readFileSync(resolve(process.cwd(), "packages/components/src/overlays/DropdownMenu.css"), "utf8")
+
+    expect(styles).toMatch(
+      /\.jdsb-dropdown-menu-item\s*\{[^}]*display:\s*flex;[^}]*white-space:\s*nowrap;[^}]*\}/s
+    )
+  })
+
+  it("content를 가장 긴 menu item 폭에 맞춘다", () => {
+    const styles = readFileSync(resolve(process.cwd(), "packages/components/src/overlays/DropdownMenu.css"), "utf8")
+
+    expect(styles).toMatch(
+      /\.jdsb-dropdown-menu-content\s*\{[^}]*width:\s*max-content;[^}]*\}/s
+    )
+  })
+
+  it("Trigger에 field 표면과 visible focus 스타일을 제공한다", () => {
+    const styles = readFileSync(resolve(process.cwd(), "packages/components/src/overlays/DropdownMenu.css"), "utf8")
+
+    expect(styles).toMatch(
+      /\.jdsb-dropdown-menu-trigger\s*\{[^}]*background:\s*var\(--jdsb-color-field-background\);[^}]*border:\s*var\(--jdsb-size-border\) solid var\(--jdsb-color-field-border\);[^}]*min-height:\s*var\(--jdsb-size-control-input-md-height\);[^}]*\}/s
+    )
+    expect(styles).toMatch(
+      /\.jdsb-dropdown-menu-trigger:focus-visible\s*\{[^}]*outline:\s*var\(--jdsb-size-focus\) solid var\(--jdsb-color-focus-ring\);[^}]*\}/s
     )
   })
 })

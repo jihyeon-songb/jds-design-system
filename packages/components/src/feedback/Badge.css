@@ -6,6 +6,7 @@
   color: var(--jdsb-color-badge-neutral-foreground);
   display: inline-flex;
   font: inherit;
+  font-size: var(--jdsb-typography-badge-font-size);
   padding: var(--jdsb-space-badge-block) var(--jdsb-space-badge-inline);
   white-space: nowrap;
 }

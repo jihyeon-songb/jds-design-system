@@ -105,7 +105,7 @@ describe("ToastProvider", () => {
 
     expect(screen.queryByText("저장했습니다.")).not.toBeInTheDocument()
     expect(screen.getAllByRole("status")).toHaveLength(3)
-    expect(screen.getAllByRole("status").map((toast) => toast.textContent)).toEqual(["정보×", "경고×", "오류×"])
+    expect(screen.getAllByRole("status").map((toast) => toast.querySelector('[data-slot="message"]')?.textContent)).toEqual(["정보", "경고", "오류"])
   })
 
   it("does not add a toast when all three visible toasts are errors", () => {
@@ -147,6 +147,13 @@ describe("ToastProvider", () => {
     expect(ref.current).toHaveAttribute("data-consumer", "value")
     expect(ref.current).toHaveClass("jdsb-toast")
     expect(ref.current).toHaveAttribute("role", "status")
+  })
+
+  it("renders an optional title above the message", () => {
+    render(<Toast message="업데이트 내용을 확인하세요." onDismiss={() => undefined} title="업데이트됨" variant="info" />)
+
+    expect(screen.getByText("업데이트됨")).toHaveAttribute("data-slot", "title")
+    expect(screen.getByText("업데이트 내용을 확인하세요.")).toHaveAttribute("data-slot", "message")
   })
 
   it("closes from the focused close button with Enter and Space", async () => {
