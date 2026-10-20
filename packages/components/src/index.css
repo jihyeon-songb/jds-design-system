@@ -32,3 +32,11 @@
 [class*=" jdsb-"] {
   font-size: var(--jdsb-typography-body-font-size);
 }
+
+/* Same specificity as the body rule above, so it must come after it. */
+.jdsb-input,
+.jdsb-textarea [data-slot="control"],
+.jdsb-select-trigger,
+.jdsb-combobox-input {
+  font-size: var(--jdsb-typography-control-font-size);
+}

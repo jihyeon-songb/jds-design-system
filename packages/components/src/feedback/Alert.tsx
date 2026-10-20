@@ -1,3 +1,5 @@
+"use client"
+
 import { forwardRef, useState, type ComponentPropsWithoutRef, type ReactNode } from "react"
 
 export type AlertVariant = "info" | "success" | "warning" | "error"

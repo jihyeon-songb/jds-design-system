@@ -6,6 +6,7 @@
   --jdsb-color-neutral-0: #ffffff;
   --jdsb-color-neutral-100: #f5f5f5;
   --jdsb-color-neutral-300: #d4d4d4;
+  --jdsb-color-neutral-500: #8a8a8a;
   --jdsb-color-neutral-700: #525252;
   --jdsb-color-neutral-800: #262626;
   --jdsb-color-neutral-900: #000000;
@@ -17,7 +18,7 @@
   --jdsb-color-action-secondary-hover: #d4d4d4;
   --jdsb-color-action-outline-background: #ffffff;
   --jdsb-color-action-outline-foreground: #000000;
-  --jdsb-color-action-outline-border: #d4d4d4;
+  --jdsb-color-action-outline-border: #8a8a8a;
   --jdsb-color-action-outline-hover: #f5f5f5;
   --jdsb-color-action-ghost-background: transparent;
   --jdsb-color-action-ghost-foreground: #000000;
@@ -54,7 +55,7 @@
   --jdsb-color-badge-error-border: #c9372c;
   --jdsb-color-card-background: #ffffff;
   --jdsb-color-card-foreground: #000000;
-  --jdsb-color-card-border: #d4d4d4;
+  --jdsb-color-card-border: #8a8a8a;
   --jdsb-color-card-description: #525252;
   --jdsb-color-skeleton-background: #f5f5f5;
   --jdsb-color-progress-track: #f5f5f5;
@@ -62,11 +63,13 @@
   --jdsb-color-focus-ring: #000000;
   --jdsb-color-field-background: #ffffff;
   --jdsb-color-field-foreground: #000000;
-  --jdsb-color-field-border: #d4d4d4;
+  --jdsb-color-field-border: #8a8a8a;
+  --jdsb-color-field-description: #525252;
   --jdsb-color-field-hover-border: #525252;
   --jdsb-color-field-invalid-border: #c9372c;
   --jdsb-typography-body-font-size: 14px;
   --jdsb-typography-badge-font-size: 12px;
+  --jdsb-typography-control-font-size: 16px;
   --jdsb-size-avatar-sm: 32px;
   --jdsb-size-avatar-md: 36px;
   --jdsb-size-avatar-lg: 40px;
