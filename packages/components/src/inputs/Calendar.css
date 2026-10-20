@@ -1,0 +1,89 @@
+.jdsb-calendar {
+  background: var(--jdsb-color-field-background);
+  border: var(--jdsb-size-border) solid var(--jdsb-color-field-border);
+  border-radius: var(--jdsb-radius-control);
+  box-sizing: border-box;
+  color: var(--jdsb-color-field-foreground);
+  display: grid;
+  gap: var(--jdsb-space-field-item);
+  padding: var(--jdsb-space-button-inline);
+  width: max-content;
+}
+
+.jdsb-calendar-header,
+.jdsb-calendar-weekdays,
+.jdsb-calendar-week {
+  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--jdsb-space-button-gap);
+}
+
+.jdsb-calendar-header {
+  grid-template-columns: auto 1fr auto;
+}
+
+.jdsb-calendar-month {
+  text-align: center;
+}
+
+.jdsb-calendar-day,
+.jdsb-calendar-control {
+  background: var(--jdsb-color-action-ghost-background);
+  border: var(--jdsb-size-border) solid var(--jdsb-color-action-ghost-background);
+  border-radius: var(--jdsb-radius-control);
+  color: var(--jdsb-color-action-ghost-foreground);
+  cursor: pointer;
+  font: inherit;
+  min-block-size: var(--jdsb-size-control-button-md-height);
+}
+
+.jdsb-calendar-day {
+  aspect-ratio: 1;
+  inline-size: var(--jdsb-size-control-button-md-height);
+}
+
+.jdsb-calendar-control {
+  align-items: center;
+  display: inline-flex;
+  inline-size: var(--jdsb-size-control-button-md-height);
+  justify-content: center;
+}
+
+.jdsb-calendar-day[data-state="selected"] {
+  background: var(--jdsb-color-action-primary-background);
+  color: var(--jdsb-color-action-primary-foreground);
+}
+
+.jdsb-calendar-day:disabled,
+.jdsb-calendar-control:disabled {
+  cursor: not-allowed;
+  opacity: var(--jdsb-opacity-disabled);
+}
+
+.jdsb-calendar-weekdays,
+.jdsb-calendar-outside-day {
+  color: var(--jdsb-color-field-description);
+}
+
+.jdsb-calendar-weekdays,
+.jdsb-calendar-week {
+  justify-items: center;
+}
+
+.jdsb-calendar-outside-day {
+  opacity: var(--jdsb-opacity-disabled);
+}
+
+@media (forced-colors: active) {
+  .jdsb-calendar-day[data-state="selected"] {
+    outline: var(--jdsb-size-border) solid CanvasText;
+    outline-offset: calc(var(--jdsb-size-border) * -1);
+  }
+}
+
+.jdsb-calendar-day:focus-visible,
+.jdsb-calendar-control:focus-visible {
+  outline: var(--jdsb-size-focus) solid var(--jdsb-color-focus-ring);
+  outline-offset: var(--jdsb-size-focus);
+}

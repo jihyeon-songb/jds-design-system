@@ -1,0 +1,19 @@
+.jdsb-progress {
+  accent-color: var(--jdsb-color-progress-indicator);
+  background: var(--jdsb-color-progress-track);
+}
+
+.jdsb-progress::-webkit-progress-bar {
+  background: var(--jdsb-color-progress-track);
+}
+
+.jdsb-progress::-webkit-progress-value,
+.jdsb-progress::-moz-progress-bar {
+  background: var(--jdsb-color-progress-indicator);
+}
+
+@media (forced-colors: active) {
+  .jdsb-progress {
+    forced-color-adjust: auto;
+  }
+}

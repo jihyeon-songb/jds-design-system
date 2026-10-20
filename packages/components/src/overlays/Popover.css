@@ -1,0 +1,48 @@
+.jdsb-popover {
+  display: inline-flex;
+  position: relative;
+}
+
+.jdsb-popover-content {
+  background: var(--jdsb-color-field-background);
+  border: var(--jdsb-size-border) solid var(--jdsb-color-field-border);
+  border-radius: var(--jdsb-radius-control);
+  color: var(--jdsb-color-field-foreground);
+  inset: auto;
+  margin: 0;
+  padding: var(--jdsb-space-field-item);
+  position: absolute;
+}
+
+.jdsb-popover-content:focus-visible {
+  outline: var(--jdsb-size-focus) solid var(--jdsb-color-focus-ring);
+  outline-offset: var(--jdsb-size-focus);
+}
+
+@supports (position-area: block-end) {
+  .jdsb-popover-content[data-side="top"] {
+    margin-block-end: var(--jdsb-space-field-content);
+    position-area: block-start;
+  }
+
+  .jdsb-popover-content[data-side="right"] {
+    margin-inline-start: var(--jdsb-space-field-content);
+    position-area: inline-end;
+  }
+
+  .jdsb-popover-content[data-side="bottom"] {
+    margin-block-start: var(--jdsb-space-field-content);
+    position-area: block-end;
+  }
+
+  .jdsb-popover-content[data-side="left"] {
+    margin-inline-end: var(--jdsb-space-field-content);
+    position-area: inline-start;
+  }
+}
+
+@media (forced-colors: active) {
+  .jdsb-popover-content {
+    forced-color-adjust: auto;
+  }
+}
