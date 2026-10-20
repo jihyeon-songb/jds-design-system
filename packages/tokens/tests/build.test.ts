@@ -23,7 +23,28 @@ describe("buildTokens", () => {
 
     expect(result.css).toContain("--jdsb-color-action-primary-background: #000000;")
     expect(result.css).toContain("--jdsb-color-focus-ring: #000000;")
-    expect(result.css).toContain("--jdsb-color-field-border: #d4d4d4;")
+    expect(result.css).toContain("--jdsb-color-field-border: #8a8a8a;")
+  })
+
+  it("keeps control borders at 3:1 contrast against light surfaces (WCAG 1.4.11)", () => {
+    const source = JSON.parse(readFileSync(new URL("../src/jdsb.tokens.json", import.meta.url), "utf8"))
+    const { css } = buildTokens(source)
+    const value = (name: string) => css.match(new RegExp(`--jdsb-${name}: (#[0-9a-f]{6});`))![1]
+    const luminance = (hex: string) => {
+      const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
+        .map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4))
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b
+    }
+    const contrast = (a: string, b: string) => {
+      const [high, low] = [luminance(a), luminance(b)].sort((x, y) => y - x)
+      return (high + 0.05) / (low + 0.05)
+    }
+
+    for (const border of ["color-field-border", "color-action-outline-border", "color-card-border"]) {
+      for (const surface of ["color-neutral-0", "color-neutral-100"]) {
+        expect(contrast(value(border), value(surface)), `${border} on ${surface}`).toBeGreaterThanOrEqual(3)
+      }
+    }
   })
 
   it("publishes the 14px component typography token", () => {
