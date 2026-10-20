@@ -8,6 +8,7 @@ import {
   useEffect,
   useId,
   useImperativeHandle,
+  useLayoutEffect,
   useRef,
   useState,
   type ComponentPropsWithoutRef,
@@ -531,7 +532,8 @@ export const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(function S
   useImperativeHandle(ref, () => itemRef.current as HTMLDivElement)
 
   // 각 SelectItem이 마운트/업데이트될 때마다 자신의 메타데이터를 부모 Select의 items 배열에 등록하는 역할
-  useEffect(
+  // 페인트 전에 등록해야 렌더 직후 입력한 typeahead도 항목을 찾을 수 있음
+  useLayoutEffect(
     () => context.registerItem({
       value,
       text: itemRef.current?.textContent ?? "",
