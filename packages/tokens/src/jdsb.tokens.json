@@ -5,11 +5,11 @@
       "foreground": { "$value": "{color.action.secondary.foreground}", "$type": "color" }
     },
     "red": { "600": { "$value": "#c9372c", "$type": "color" }, "700": { "$value": "#a52a22", "$type": "color" } },
-    "neutral": { "0": { "$value": "#ffffff", "$type": "color" }, "100": { "$value": "#f5f5f5", "$type": "color" }, "300": { "$value": "#d4d4d4", "$type": "color" }, "700": { "$value": "#525252", "$type": "color" }, "800": { "$value": "#262626", "$type": "color" }, "900": { "$value": "#000000", "$type": "color" } },
+    "neutral": { "0": { "$value": "#ffffff", "$type": "color" }, "100": { "$value": "#f5f5f5", "$type": "color" }, "300": { "$value": "#d4d4d4", "$type": "color" }, "500": { "$value": "#8a8a8a", "$type": "color" }, "700": { "$value": "#525252", "$type": "color" }, "800": { "$value": "#262626", "$type": "color" }, "900": { "$value": "#000000", "$type": "color" } },
     "action": {
       "primary": { "background": { "$value": "{color.neutral.900}", "$type": "color" }, "foreground": { "$value": "{color.neutral.0}", "$type": "color" }, "hover": { "$value": "{color.neutral.800}", "$type": "color" } },
       "secondary": { "background": { "$value": "{color.neutral.100}", "$type": "color" }, "foreground": { "$value": "{color.neutral.900}", "$type": "color" }, "hover": { "$value": "{color.neutral.300}", "$type": "color" } },
-      "outline": { "background": { "$value": "{color.neutral.0}", "$type": "color" }, "foreground": { "$value": "{color.neutral.900}", "$type": "color" }, "border": { "$value": "{color.neutral.300}", "$type": "color" }, "hover": { "$value": "{color.neutral.100}", "$type": "color" } },
+      "outline": { "background": { "$value": "{color.neutral.0}", "$type": "color" }, "foreground": { "$value": "{color.neutral.900}", "$type": "color" }, "border": { "$value": "{color.neutral.500}", "$type": "color" }, "hover": { "$value": "{color.neutral.100}", "$type": "color" } },
       "ghost": { "background": { "$value": "transparent", "$type": "color" }, "foreground": { "$value": "{color.neutral.900}", "$type": "color" }, "hover": { "$value": "{color.neutral.100}", "$type": "color" } },
       "destructive": { "background": { "$value": "{color.red.600}", "$type": "color" }, "foreground": { "$value": "{color.neutral.0}", "$type": "color" }, "hover": { "$value": "{color.red.700}", "$type": "color" } }
     },
@@ -38,7 +38,7 @@
     "field": {
       "background": { "$value": "{color.neutral.0}", "$type": "color" },
       "foreground": { "$value": "{color.neutral.900}", "$type": "color" },
-      "border": { "$value": "{color.neutral.300}", "$type": "color" },
+      "border": { "$value": "{color.neutral.500}", "$type": "color" },
       "hover-border": { "$value": "{color.neutral.700}", "$type": "color" },
       "invalid-border": { "$value": "{color.red.600}", "$type": "color" }
     }

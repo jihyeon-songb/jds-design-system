@@ -9,6 +9,7 @@
   background: var(--jdsb-color-action-ghost-background);
   block-size: var(--jdsb-switch-target-block);
   border: none;
+  border-radius: calc(var(--jdsb-switch-target-block) / 2);
   box-sizing: border-box;
   inline-size: var(--jdsb-switch-track-inline);
   margin: 0;
