@@ -64,6 +64,7 @@ export const tokens = {
   "color.field.background": "#ffffff",
   "color.field.foreground": "#000000",
   "color.field.border": "#8a8a8a",
+  "color.field.description": "#525252",
   "color.field.hover-border": "#525252",
   "color.field.invalid-border": "#c9372c",
   "typography.body.font-size": "14px",

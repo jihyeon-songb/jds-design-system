@@ -39,6 +39,7 @@
       "background": { "$value": "{color.neutral.0}", "$type": "color" },
       "foreground": { "$value": "{color.neutral.900}", "$type": "color" },
       "border": { "$value": "{color.neutral.500}", "$type": "color" },
+      "description": { "$value": "{color.neutral.700}", "$type": "color" },
       "hover-border": { "$value": "{color.neutral.700}", "$type": "color" },
       "invalid-border": { "$value": "{color.red.600}", "$type": "color" }
     }

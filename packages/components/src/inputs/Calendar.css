@@ -71,10 +71,6 @@
   justify-items: center;
 }
 
-.jdsb-calendar-outside-day {
-  opacity: var(--jdsb-opacity-disabled);
-}
-
 @media (forced-colors: active) {
   .jdsb-calendar-day[data-state="selected"] {
     outline: var(--jdsb-size-border) solid CanvasText;
