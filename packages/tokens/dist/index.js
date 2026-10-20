@@ -69,6 +69,7 @@ export const tokens = {
   "color.field.invalid-border": "#c9372c",
   "typography.body.font-size": "14px",
   "typography.badge.font-size": "12px",
+  "typography.control.font-size": "16px",
   "size.avatar.sm": "32px",
   "size.avatar.md": "36px",
   "size.avatar.lg": "40px",

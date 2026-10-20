@@ -1,3 +1,5 @@
+"use client"
+
 import { forwardRef, useId, useState, type ComponentPropsWithoutRef, type ChangeEvent } from "react"
 
 export type TextareaSize = "sm" | "md" | "lg"

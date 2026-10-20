@@ -54,6 +54,13 @@ describe("buildTokens", () => {
     expect(result.css).toContain("--jdsb-typography-body-font-size: 14px;")
   })
 
+  it("publishes the 16px form control typography token to prevent iOS focus zoom", () => {
+    const source = JSON.parse(readFileSync(new URL("../src/jdsb.tokens.json", import.meta.url), "utf8"))
+    const result = buildTokens(source)
+
+    expect(result.css).toContain("--jdsb-typography-control-font-size: 16px;")
+  })
+
   it("publishes the 12px Badge typography token", () => {
     const source = JSON.parse(readFileSync(new URL("../src/jdsb.tokens.json", import.meta.url), "utf8"))
     const result = buildTokens(source)

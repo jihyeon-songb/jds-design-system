@@ -1,3 +1,5 @@
+"use client"
+
 import { forwardRef, useState, type ComponentPropsWithoutRef } from "react"
 
 export type AvatarSize = "sm" | "md" | "lg" | "xl"
